@@ -11,7 +11,7 @@
 | 6.4 | Final commit; tag `v1.0-submission` | Claude |
 | 6.5 | Flip repo **public** (`gh repo edit --visibility public`) — end of D5 | Pablo confirms, Claude runs |
 | 6.6 | Incognito review of the public repo: README renders, videos play, prompts folder navigable — the reviewer's first 5 minutes, simulated | Both |
-| 6.6b | If D9 confirmed: build the thin Notion landing page (intro, embedded videos, reviewer's tour, links into repo); verify it opens logged-out; it becomes the single submission link | Both |
+| 6.6b | Build the thin Notion landing page per D9 (intro, embedded videos, reviewer's tour, links into repo); verify it opens logged-out; it becomes the single submission link | Both |
 | 6.7 | Submission email to gerdrn+hiring@gmail.com: single link (Notion landing per D9, else repo), working contact email (pablo@bevelion.com), 3-line body | Pablo sends (Claude drafts) |
 | 6.8 | Confirm the email left the outbox; archive a copy of the final state | Pablo |
 
