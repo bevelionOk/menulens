@@ -1,0 +1,29 @@
+# Phase 2 — BMAD Planning (Aug 21)
+
+**Goal**: complete the full BMAD planning chain with real decisions, ending in a
+PASS at the sprint-planning gate. These artifacts are the 25%-weight deliverable.
+
+## Pre-task (outside this repo)
+
+| Task | Owner |
+|---|---|
+| 30–45 min practice run in `~/dev/bmad-sandbox` (toy idea, e.g. a recipe organizer) to feel the facilitation style. Nothing from the sandbox is logged or committed here. | Pablo |
+
+## Tasks (in order, all in this repo, every prompt logged)
+
+| # | Task | Skill | Key decisions to force | Output |
+|---|---|---|---|---|
+| 2.1 | Product brief | `/bmad-product-brief` | Who the user is (menu reviewer/operator), what "done" means, explicit non-goals | `_bmad-output/planning-artifacts/` brief |
+| 2.2 | PRD | `/bmad-prd` | **Resolve D4** (confidence-flag semantics from the user's perspective); scope of "clean UI" (submit → results table; history list yes/no); sync vs async extraction UX; error states (bad URL, non-menu content, huge file) | PRD |
+| 2.3 | Architecture | `/bmad-architecture` | Single Fastify service (guardrail); URL fetching strategy (server-side fetch → text vs render); PDF path (text extraction vs page-to-image + vision); model choice per input type; Drizzle schema; Zod at all boundaries; **which single test type** and why | Architecture doc |
+| 2.4 | Epics & stories | `/bmad-create-epics-and-stories` | Expect 1 epic, ~4–6 stories, each shippable | Stories |
+| 2.5 | Sprint planning gate | `/bmad-sprint-planning` | Readiness verdict; if CONCERNS/FAIL → fix planning, re-gate | Sprint status |
+| 2.6 | Log decisions + commit artifacts | — | DECISIONS.md entries for D4 resolution, test choice, architecture trade-offs | Commit |
+
+**Deliberately skipped**: `/bmad-prfaq` (brief is enough — challenge is pre-scoped),
+`/bmad-ux` full workflow (UI is one form + one table; UX decisions fit inside the PRD).
+Skips recorded in DECISIONS.md — cuts are scored.
+
+**Pablo's role**: product owner in every session — answers are decisive, cuts are named.
+**Exit criteria**: gate = PASS; D4 closed; artifacts + prompts committed; story list
+approved by Pablo before Phase 3 starts.

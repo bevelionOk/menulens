@@ -26,3 +26,8 @@ Each file is one prompt (or one tightly-coupled exchange), named
 
 Prompts are logged as written — including typos and Spanish/English mixing — because
 the point is to show the real working process, not a polished afterthought.
+
+**Language convention**: all repo documents are English; prompts are preserved verbatim in
+the language they were actually written in (mostly Spanish — the author's native language).
+Each entry's metadata, intent and outcome notes are in English so a reviewer can follow
+the sequence without translating anything.

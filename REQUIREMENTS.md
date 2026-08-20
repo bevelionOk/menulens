@@ -84,4 +84,5 @@ The brief: *"Effort is your call. We want to see judgment, not hours."* We will 
 - ☐ Both videos recorded, uploaded, linked and playable in incognito
 - ☐ DECISIONS.md covers: single-test justification, confidence-flag logic, production failure modes, cuts
 - ☐ BUSINESS.md exactly one paragraph
+- ☐ All repo documents in English (prompts stay verbatim in their original language)
 - ☐ Single link opens to everything; submission email sent
