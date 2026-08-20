@@ -23,11 +23,20 @@ in doubt, say less but make it traceable.
 
 ## 2. The product framing to carry in (decided, bring it — don't improvise)
 
+> **Updated 2026-08-20 after the brief session** — the ratified brief
+> (`_bmad-output/planning-artifacts/briefs/brief-full-stack-challenge-2026-08-20/`) is
+> canonical; this section mirrors it.
+
 - **Persona**: operations person at a food-ordering platform onboarding restaurant menus
   ("Ana, onboarding ops"). She needs structured dish data fast, but is accountable for
   allergen correctness — she reviews before publishing.
 - **Job to be done**: turn any menu (URL/PDF/photo) into reviewable structured rows in
-  under a minute, with her attention directed only at the uncertain rows.
+  **~3 minutes end-to-end** (D10 — retracted from "under a minute"), with her attention
+  **routed by doubt**: uncertain rows inspected with evidence in view, reliable rows
+  skimmed and batch-confirmed (not "only look at uncertain" — the brief explains why).
+- **Operating principle (governs everything)**: *the system never claims more than it can
+  prove, and everything it cannot prove is handed to Ana with the evidence in view.*
+  Loop: Extract → Triage → Review → Confirm.
 - **Why this framing wins**: it makes the confidence flag *load-bearing* (a review queue
   needs it) instead of decorative — and it feeds BUSINESS.md (her time is the value).
 - **Non-goals to state explicitly**: menu editing/publishing, user accounts, multi-tenant,
@@ -62,11 +71,11 @@ edge cases, acceptance criteria, scope lines.
 
 | Decision | Recommended position to open with |
 |---|---|
-| **D4: confidence flag semantics** | "uncertain" = fails any verifiable check: missing/implausible price, allergens not literally traceable to source text, dish name not traceable, description synthesized from nothing. Binary flag; per-check reasons stored so the UI can show *why*. Model self-reported confidence: not used (evidence in DECISIONS.md D4). |
+| **D4: confidence flag semantics** | Opening position from the brief's ADR (addendum has the full options table): the model extracts, tags each allergen `declared\|inferred` (dish-level `unknown` when none found — "none found" ≠ "none present"), and self-flags doubts against **explicit criteria** in the prompt; **deterministic post-hoc rules are the final arbiter** and enforce the allergen gate (any inferred/unknown allergen ⇒ row `uncertain`, no exceptions). Binary flag; per-check reasons stored so the UI can show *why*. Raw self-reported confidence remains untrusted (smoke-test evidence, D4) — criteria-anchored self-assessment is admissible only as input. Cut: dual extraction, per-field logprobs (D4 progress note). |
 | Sync vs async UX | Synchronous request with visible progress state; no job queue (guardrail). Timeout ~60 s with clear error. |
 | History | A simple list of past extractions (persistence must be *visible* to prove R7). No search/filter/pagination beyond basics. |
 | Error states | Non-menu URL, unreachable URL, oversized file, unsupported type, zero dishes found — each gets defined UI copy. |
-| "Clean UI" scope | One page: input (URL field + file drop) → results table (name, price, allergens as badges, description, confidence badge) + history list. Nothing else. |
+| "Clean UI" scope | One page: input (URL field + file drop) → results table (name, price, allergens as badges **with declared/inferred/unknown distinction**, description, confidence badge) + **review actions** (confirm / mark doubtful, single and batch; menu "done" when every row resolved) + history list. UI wording: "auto-checked" / "needs review" — never "safe"/"verified". Nothing else. |
 
 **NFRs — keep only the real ones**: extraction latency target, cost/menu envelope (from D3),
 no PII stored, allergen disclaimer in UI ("AI-extracted — verify before publishing").
@@ -82,7 +91,7 @@ no PII stored, allergen disclaimer in UI ("AI-extracted — verify before publis
 | PDF path | Text extraction (e.g. pdf-parse). Scanned/no-text-layer PDFs: not supported in v1 — UI suggests uploading a photo instead (vision path). Avoids native system deps that would endanger the <5-min README (R-10). |
 | Image path | Vision via data URL, budget model first (D3). |
 | LLM contract | JSON mode + **Zod validation** of the response, shared schema FE/BE; one retry on invalid JSON; then error state. |
-| Schema | `menus` (id, source type/ref, status, timestamps) + `dishes` (menu_id, name, price, currency, allergens[], description, confidence, confidence_reasons[]). Real Drizzle migration committed (R2). |
+| Schema | `menus` (id, source type/ref, status, timestamps) + `dishes` (menu_id, name, price, currency, allergens **with per-allergen provenance `declared\|inferred` (representation TBD here) + dish-level `unknown` state**, description, confidence, confidence_reasons[], **review_status + reviewed_at** — status + timestamp only, no identity (no auth, D11)). Real Drizzle migration committed (R2). |
 | **The one test** | Integration/golden-master: POST a fixture menu through the real API route with a **mocked OpenAI client** and real Postgres → assert persisted rows incl. confidence derivation. Justification: crosses every layer we wrote (route→service→validation→DB), deterministic, zero API cost; unit tests would cover less per test and E2E would mostly test the LLM, which we don't control. |
 
 ### 3.4 `/bmad-create-epics-and-stories` (~30 min)
