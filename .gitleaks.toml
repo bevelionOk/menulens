@@ -1,0 +1,11 @@
+# Gitleaks config — extends the default ruleset.
+# One allowlisted path: BMAD's install manifest stores a sha256 checksum per
+# installed file; the generic-api-key entropy rule flags those hashes. They are
+# content checksums, not credentials (verified 2026-08-21, D12).
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "BMAD install manifest: sha256 content checksums, not secrets"
+paths = ['''_bmad/_config/files-manifest\.csv''']

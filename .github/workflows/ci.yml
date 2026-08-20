@@ -1,0 +1,22 @@
+# CI — grows with the repo (rationale and cuts: DECISIONS.md D12).
+# Today: secret scan over the full git history, guarding the challenge's
+# "secrets in repo" auto-reject tripwire (REQUIREMENTS R12 / §7) continuously
+# instead of as a one-shot manual check before submission.
+# When the app scaffold lands: add a `checks` job (typecheck + the single test).
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  secret-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # full history — the tripwire includes past commits
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

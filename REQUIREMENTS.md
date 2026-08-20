@@ -63,6 +63,10 @@ The brief: *"Effort is your call. We want to see judgment, not hours."* We will 
 - **Zod** — named in the rubric ("idiomatic React/Fastify/Drizzle/Zod"): validate API I/O and LLM JSON output with Zod schemas
 - **TanStack Query** — their frontend stack; natural fit for fetch/poll state
 - **Playwright** — their E2E tool; the candidate if the single test is E2E
+- **GitHub Actions** — named in their infra stack (JOB.md), not a deliverable: one minimal
+  CI workflow (secret scan over full history now; typecheck + the single test once code
+  exists). Anything beyond — deploy pipelines, matrices, branch-protection ceremony — is
+  over-engineering for this slice (D12)
 - Crisp written communication — their stated working mode (build → explain → review → ship)
 
 ## 6. Rubric map (where the points are)

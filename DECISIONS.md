@@ -139,3 +139,30 @@ already provided multi-perspective scrutiny (ADR panel, stakeholder rotation, pr
 inversion) plus a 2×2 coverage audit against all challenge docs; convening a multi-agent
 roundtable on an already-audited 2-page brief is heavy process on a small artifact (D2's
 rationale). Party mode stays available for a genuinely stuck PRD decision, if one appears.
+
+## D12 · 2026-08-21 — GitHub setup: one minimal CI workflow, nothing else
+
+**Context**: GitHub Actions is **not** in the challenge's hard requirements — it appears in
+JOB.md only as part of the company's infra stack ("Docker, GitHub Actions, Datadog"). So:
+does CI map to the lighthouse at all, and if so, how much of it?
+**Options**: (a) no CI — defensible, it isn't required; (b) minimal CI — a secret scan over
+full git history now, plus a typecheck + single-test job once the scaffold exists; (c) a
+full pipeline — build matrix, caching, deploy workflow, branch protection, Dependabot.
+**Decision**: (b). One workflow (`.github/workflows/ci.yml`); over the repo's life, two
+jobs: `secret-scan` (gitleaks, full history, on every push/PR) from day one; `checks`
+(typecheck + the one test) added when code lands — adding it today would just fail on a
+repo with no `package.json`.
+**Why**: the secret scan directly guards an auto-reject tripwire ("secrets in repo", R12) —
+and §7 requires a history scan before submission anyway, so automating it turns a one-shot
+manual check into a continuous guarantee. The workflow also demonstrates the company's own
+infra stack (alignment signal, stack row) at ~20 lines of YAML. (c) is deployment infra for
+an app with no deployment target — the over-engineering the brief names as auto-reject.
+**Cut**: branch protection rules, CODEOWNERS, PR/issue templates, Dependabot, release
+workflows, environments — solo repo, 4-day window; each is process ceremony with no rubric
+row behind it.
+**Verified during setup (2026-08-21)**: `.env` never entered git history; local `main` in
+sync with origin; upstream challenge repo unchanged (HEAD `6be4b93`, still no public Q&A);
+`gh` authenticated with `workflow` scope. First local gitleaks run flagged 1 finding —
+a **false positive**: BMAD's install manifest (`_bmad/_config/files-manifest.csv`) stores
+sha256 content checksums per installed file, which trip the generic-api-key entropy rule.
+Allowlisted that one path in `.gitleaks.toml`; re-scan of all 15 commits: no leaks.
