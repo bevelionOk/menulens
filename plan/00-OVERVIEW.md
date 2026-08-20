@@ -47,9 +47,13 @@ scope is cut (and the cut documented in DECISIONS.md) — the date does not move
 | BUSINESS.md (one paragraph) | Draft exists; distilled in 6 |
 | Public repo + submission email | Phase 6 |
 
-## Top risks
+## Detailed guides
 
-- **Fixed deadline, 5 days**: mitigated by daily exit criteria + scope-cut policy.
-- **Videos in English, single-take comfort**: mitigated by outlines + practice run in Phase 5.
-- **LLM extraction quality on messy menus**: mitigated by confidence-flag design (D4)
-  and a small set of test menus assembled in Phase 3.
+The phase files above are at-a-glance checklists. Depth lives in:
+
+- [RISKS.md](RISKS.md) — full risk register (likelihood/impact, mitigation, contingency),
+  reviewed at the start of each phase
+- [guides/bmad-playbook.md](guides/bmad-playbook.md) — Phase 2 session-by-session guide:
+  what each BMAD skill asks, example exchanges, positions to bring, scenarios and moves
+- [guides/implementation-playbook.md](guides/implementation-playbook.md) — Phase 3:
+  build-loop mechanics, technical baseline, story DoD, iteration protocol, cut ladder

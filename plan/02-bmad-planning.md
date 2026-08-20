@@ -3,6 +3,11 @@
 **Goal**: complete the full BMAD planning chain with real decisions, ending in a
 PASS at the sprint-planning gate. These artifacts are the 25%-weight deliverable.
 
+> **This phase is the REAL challenge run** — every session happens in this repo and is
+> logged. Practice happens only in the sandbox pre-task below. Detailed session-by-session
+> instructions, example exchanges, positions to bring, and failure scenarios:
+> **[guides/bmad-playbook.md](guides/bmad-playbook.md)** — read it before starting.
+
 ## Pre-task (outside this repo)
 
 | Task | Owner |

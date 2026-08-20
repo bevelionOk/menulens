@@ -3,6 +3,10 @@
 **Goal**: working app, story by story through `/bmad-build`
 (clarify → plan → implement → review → present), committed per story.
 
+> Detailed mechanics — technical baseline, per-story definition of done, extraction
+> iteration protocol, pre-agreed cut ladder, and build-session scenarios:
+> **[guides/implementation-playbook.md](guides/implementation-playbook.md)**.
+
 ## Expected story shape (final list comes from Phase 2)
 
 | # | Likely story | Notes / guardrails |

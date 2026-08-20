@@ -1,0 +1,19 @@
+# Risk Register
+
+Living document. Each risk: likelihood × impact, **mitigation** (preventive, active now)
+and **contingency** (what we do if it fires). Reviewed at the start of each phase.
+
+| ID | Risk | L | I | Mitigation (preventive) | Contingency (if it fires) |
+|---|---|---|---|---|---|
+| R-01 | Schedule slip — 5-day window, fixed deadline | M | H | Daily exit criteria per phase; plan approved before execution; Aug 25 kept as buffer | D8: ship as-is with documented gaps; pre-agreed cut ladder (see implementation playbook §6) |
+| R-02 | LLM extraction quality poor on messy real menus | M | H | Test-menu set from day one of implementation; prompt-iteration protocol (playbook §5); model upgrade path luna→terra (D3) | Narrow the demo to formats that work; document failure classes honestly in DECISIONS.md + walkthrough (turns a weakness into a Critical-Thinking point) |
+| R-03 | URL fetching fails on JS-rendered / bot-blocking sites | H | M | Server-side fetch with realistic headers, size/time caps; test set includes a hostile URL | No headless browser (guardrail) — clear UI error + documented limitation; PDF/image upload is the fallback path we point users to |
+| R-04 | OpenAI outage / rate limits / key exhaustion near deadline | L | H | $20 credit loaded (>4× projected need); budget-tier default; one-retry policy, no loops | Wait-and-retry for demo recording; if extended outage on Aug 24–25, record walkthrough on cached results and say so on camera |
+| R-05 | Secret leak into repo | L | **Auto-reject** | `.gitignore` before first commit (verified); `.env.example` only; key never in chat context | Rotate key immediately; rewrite history before repo goes public (private until submission makes this recoverable) |
+| R-06 | Over-engineering creep | M | **Auto-reject** | REQUIREMENTS.md guard question before every task; guardrail lists per story; Pablo's standing rule | Cut on discovery, record the cut in DECISIONS.md |
+| R-07 | BMAD reads as cosmetic — generic artifacts, template-filling | M | **Auto-reject** | Playbook forces real decisions per session (named positions, cuts, D4 resolution inside PRD); artifacts must reference each other; decisive answers from Pablo | If an artifact reads generic on review: re-run the session's weak section with sharper inputs before moving on — never hand-edit the artifact to fake depth |
+| R-08 | Prompt log gaps (sessions not captured) | M | H | Logging is part of finishing every task (standing rule); phase 4.7 audit | Reconstruct same-day from session transcripts, flagged as reconstructed — never silently backfill |
+| R-09 | Video discomfort in English / weak takes | M | M | Outlines not scripts; practice take budgeted (phase 5); recorded Aug 24, not deadline day | Accept authentic-but-imperfect (brief: "judgment, not hours"); re-record only the weakest segment, max 2 takes (D-rule in plan 05) |
+| R-10 | Reviewer can't run the app in <5 min | M | H | README fresh-clone test done by Pablo alone (4.5); Docker Compose only for Postgres; no exotic system deps (a factor in PDF-path decision) | Fix README before submission; if a step is unavoidable, front-load it in README line 1 with expected duration |
+| R-11 | Local API/tooling instability mid-session (this machine has a history of stalled agents) | M | M | Single-threaded sessions (D2) reduce exposure; commit early and often — small increments | Resume from last commit; BMAD artifacts are files on disk, sessions are resumable |
+| R-12 | Scope misread — building something the brief didn't ask | L | H | REQUIREMENTS.md written from the brief verbatim on day one; PRD checked against it in-session | Public Q&A channel (gerdrn+hiring@gmail.com) exists for genuine ambiguity — use only if blocking, answers are shared with all candidates |
