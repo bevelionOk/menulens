@@ -25,8 +25,14 @@ PASS at the sprint-planning gate. These artifacts are the 25%-weight deliverable
 | 2.5 | Sprint planning gate | `/bmad-sprint-planning` | Readiness verdict; if CONCERNS/FAIL → fix planning, re-gate | Sprint status |
 | 2.6 | Log decisions + commit artifacts | — | DECISIONS.md entries for D4 resolution, test choice, architecture trade-offs | Commit |
 
-**Deliberately skipped**: `/bmad-prfaq` (brief is enough — challenge is pre-scoped),
-`/bmad-ux` full workflow (UI is one form + one table; UX decisions fit inside the PRD).
+**Deliberately skipped**: `/bmad-prfaq`, `/bmad-brainstorming`, `/bmad-market-research`,
+`/bmad-domain-research` (all are discover-the-product skills — this product is pre-scoped
+by the challenge brief, and the brief says domain knowledge earns nothing), and the full
+`/bmad-ux` workflow (UI is one form + one table; UX decisions fit inside the PRD).
+If an agent offers any of these mid-session: decline *with the reason stated in-session*
+— the reasoned refusal in the transcript is Independent-Judgment evidence. Exception:
+a short, targeted `advanced elicitation` pass on a weak section (e.g. PRD edge cases)
+is allowed — it deepens an answer we need rather than opening scope we don't.
 Skips recorded in DECISIONS.md — cuts are scored.
 
 **Pablo's role**: product owner in every session — answers are decisive, cuts are named.
