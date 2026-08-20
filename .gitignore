@@ -1,0 +1,14 @@
+# Secrets — never committed (challenge auto-reject)
+.env
+.env.*
+!.env.example
+
+# Dependencies & builds
+node_modules/
+dist/
+build/
+coverage/
+
+# OS / editor noise
+.DS_Store
+*.log
