@@ -66,3 +66,21 @@ zero benefit; the full commit history remains intact and visible once public.
 **Context**: walkthrough video must be 5–10 min; Loom's free tier caps recordings at 5 min.
 **Decision**: record with OBS (screen + camera), host as unlisted link.
 **Why**: no length cap, no paid dependency, same reviewer experience.
+
+## D7 · 2026-08-20 — Both videos in English
+
+**Context**: candidate's native language is Spanish; the role is async written/spoken
+communication in English with an English-speaking reviewer.
+**Options**: (a) record in Spanish (maximum comfort); (b) record in English.
+**Decision**: (b), approved by Pablo.
+**Why**: the videos double as evidence for the Communication rubric row — recording in
+the role's working language is the signal itself; accent or minor slips cost nothing,
+a language the reviewer can't follow costs everything.
+
+## D8 · 2026-08-20 — Deadline policy: ship with documented gaps, never slip
+
+**Context**: hard deadline 2026-08-25 in an open competition; 5-day window.
+**Decision**: submission goes out mid-afternoon Aug 25 regardless of state; anything
+unfinished ships as-is with the gap named in DECISIONS.md. Approved by Pablo.
+**Why**: a documented gap demonstrates judgment (Critical Thinking row); a missed
+deadline scores zero on every row.
