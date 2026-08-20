@@ -53,6 +53,22 @@ cost — cross-run consistency.
 **Resolution**: deferred to PRD (needs product framing: what does "uncertain" mean to the
 user reviewing a menu?).
 
+**Progress (2026-08-20, product-brief session)** — still OPEN, but the product framing now
+exists and an opening position is on the table. The brief fixed the *principle*: the flag is
+an attention router ("uncertain" = inspect with evidence in view; "reliable" = eligible for
+batch confirmation — never rendered as "safe/verified"), and allergen certainty dominates
+the row via an asymmetric gate (any `inferred` or `unknown` allergen ⇒ row cannot be
+reliable), guaranteed by deterministic code, not model promises. An ADR-style elicitation
+pass produced the opening position for the PRD: **guided self-assessment as input**
+(explicit uncertainty criteria in the prompt, per-allergen `declared|inferred` provenance
+tags) **+ deterministic post-hoc rules as final arbiter**. This *evolves* the earlier
+"self-reported confidence: not used" stance: raw self-confidence remains untrusted (the
+smoke-test evidence stands), but criteria-anchored self-assessment is admissible as one
+input when deterministic rules hold final authority. Considered and **cut**: dual
+extraction + agreement (2× cost/latency — over-engineering for this slice) and per-field
+logprobs (impractical with JSON mode). Full options table: the brief workspace addendum
+(`_bmad-output/planning-artifacts/briefs/brief-full-stack-challenge-2026-08-20/addendum.md`).
+
 ## D5 · 2026-08-20 — Repo private during development, public at submission
 
 **Context**: this is an **open competition** with a public deadline; the deliverable is a
@@ -96,3 +112,30 @@ Phases 5–6 once videos exist (task 6.6b). The Notion URL becomes the single su
 **Why thin**: reviewers are engineers and every rubric item is a repo artifact; a Notion
 mirror would drift and double maintenance during the tightest days. A landing layer adds
 communication polish (10% row) at near-zero risk; a content mirror adds risk with no points.
+
+## D10 · 2026-08-20 — Retraction: "menu → rows in under a minute" → "~3 minutes per menu"
+
+**Context**: the playbook (§2) framed the job-to-be-done as "reviewable rows in under a
+minute". During the product-brief session this was pressure-tested: LLM extraction of a
+large menu can alone take 30–90 s, and the real bottleneck is not clock speed but where
+Ana's attention goes (the uncertain rows).
+**Decision**: target retracted to **~3 minutes per menu end-to-end** — realistic, with
+margin, still ~10× better than the 15–30 min status quo. The success metric shifts from
+raw speed to triage calibration (see brief: Success Criteria).
+**Why**: a brief that promises a number its own demo can't hit contradicts itself in front
+of reviewers scoring critical thinking; a visible, reasoned course-correction is worth more
+than an ambitious round number.
+
+## D11 · 2026-08-20 — Brief-session cuts and restraint (recorded per R-06/R-07)
+
+**Cut — reviewer identity in the audit trail**: persisting *who* confirmed each row implies
+user accounts → violates the no-auth guardrail (REQUIREMENTS §4). Reduced to review status +
+timestamp per row; single-operator context.
+**Cut — anti-alarm-fatigue as a measured metric**: tracking flag-rates over time is
+analytics infrastructure (a stated non-goal). Kept as a qualitative health condition in the
+brief's success criteria.
+**Restraint — party-mode roundtable declined for brief validation**: the elicitation pass
+already provided multi-perspective scrutiny (ADR panel, stakeholder rotation, pre-mortem,
+inversion) plus a 2×2 coverage audit against all challenge docs; convening a multi-agent
+roundtable on an already-audited 2-page brief is heavy process on a small artifact (D2's
+rationale). Party mode stays available for a genuinely stuck PRD decision, if one appears.
