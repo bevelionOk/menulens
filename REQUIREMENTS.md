@@ -1,6 +1,8 @@
 # Requirements Lighthouse — Annex
 
-Single-page checklist distilled from the challenge brief ([README](https://github.com/roenschg/vibe-coder-challenge)) and JOB.md.
+Single-page checklist distilled from the challenge brief and job description — pinned
+verbatim copies live in [docs/challenge/](docs/challenge/) (BRIEF.md + JOB.md, commit
+`6be4b93`), with our reading in [docs/challenge/INTERPRETATION.md](docs/challenge/INTERPRETATION.md).
 Purpose: **a lighthouse to steer by** — nothing required gets missed, nothing beyond it gets built.
 Re-read before every phase; every task must map to a line here or it gets cut.
 

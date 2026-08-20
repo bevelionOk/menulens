@@ -4,6 +4,7 @@
 
 | # | Task | Owner |
 |---|---|---|
+| 6.0 | Diff upstream challenge repo against our pinned copy (`docs/challenge/`, commit `6be4b93`) — catch late clarifications or public Q&A answers; if changed, update INTERPRETATION.md + REQUIREMENTS.md before anything else | Claude |
 | 6.1 | Distill BUSINESS.md working notes into the required **single paragraph** (price + why); remove the draft scaffolding | Both |
 | 6.2 | Final DECISIONS.md pass: every OPEN item closed or explicitly deferred with reasoning | Claude |
 | 6.3 | Run the full REQUIREMENTS.md §7 pre-submission checklist, line by line | Both |
