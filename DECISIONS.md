@@ -84,3 +84,15 @@ a language the reviewer can't follow costs everything.
 unfinished ships as-is with the gap named in DECISIONS.md. Approved by Pablo.
 **Why**: a documented gap demonstrates judgment (Critical Thinking row); a missed
 deadline scores zero on every row.
+
+## D9 · 2026-08-20 — **OPEN**: submission front door — thin Notion landing page over the repo?
+
+**Context**: the brief accepts "a single link (repo or Notion page) that contains
+everything". Pablo has Notion and proposed using it for presentation quality.
+**Recommendation on the table**: yes, but strictly as a **thin landing page** — a short
+personal intro, both videos embedded, a "reviewer's 5-minute tour" and a deliverables map,
+all linking into the repo. The repo remains canonical for every artifact.
+**Why thin**: reviewers are engineers and every rubric item is a repo artifact; a Notion
+mirror would drift and double maintenance during the tightest days. A landing layer adds
+communication polish (10% row) at near-zero risk; a content mirror adds risk with no points.
+**Resolution**: pending Pablo's OK; built in Phases 5–6 once videos exist.
