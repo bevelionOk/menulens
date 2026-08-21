@@ -37,3 +37,11 @@ Collected by build reviews for later focused attention. Append-only.
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-3-persist-first-run-lifecycle-api.md`
   summary: The 1.8 golden-master should cover the terminal-state read path — a `done` run older than the threshold reads `state: 'done'` (never `interrupted`) and does not 409 the next POST.
   evidence: Verification-gap review — every run the 1.3 manual verification created stayed `processing`; dropping the `status === 'processing'` guard in `deriveState` or the gate query would pass every curl in the spec's Verification list and only surface once 1.4–1.6 finish runs.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-1-4-source-acquisition-class-decision.md`
+  summary: Story 1.8 should pin the SSRF refusal rule (`server/src/core/ssrf.ts` `isRefusedAddress`) with a table-driven check inside the single test file — or argue in DECISIONS.md why the security rule stays manual-only — covering 127/8, 10/8, 172.16–31, 169.254.169.254, 0/8, `::1`, `::`, fc00::/7, fe80::/10, `::ffff:10.0.0.1`, unparseable input, and two public addresses.
+  evidence: Verification-gap review — narrowing `b <= 31` to `b < 31`, dropping the mapped-v4 branch, or flipping the unparseable default to `false` compiles cleanly and no check in the repo (CI = typecheck + gitleaks) would observe it; the rule is the story's whole security claim (AD-11, AC1/AC2).
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-1-4-source-acquisition-class-decision.md`
+  summary: The 1.8 golden-master must observe the route→pipeline wiring and the upload-bytes preservation — after POSTing the fixture, assert `stage`/`source_class`/`failure_reason` per the 1.4 matrix row exercised and that `length(source_artifacts.bytes)` is unchanged by acquisition (`upsertArtifact` omits `bytes` from the conflict set only when `undefined`).
+  evidence: Verification-gap review — deleting `void runPipeline(...)` in `routes/runs.ts` reproduces the pre-1.4 behaviour (every run `interrupted`) with typecheck green, and replacing the conditional `set` with `{ ...rest, bytes: bytes ?? null }` types fine yet would wipe every uploaded file's bytes on acquisition; nothing in the repo would fail.

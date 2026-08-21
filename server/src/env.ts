@@ -8,6 +8,9 @@ const envSchema = z.object({
   // AD-10 staleness threshold: a `processing` run whose stage_changed_at is older than
   // this reads as derived `interrupted` and stops blocking new runs. Default 3 min.
   RUN_STALE_AFTER_MS: z.coerce.number().int().positive().default(180000),
+  // AD-6 class threshold: usable chars at/above this ⇒ `text` (PDF) / usable (URL).
+  // Default 200 is calibration data, not an invariant.
+  SOURCE_MIN_TEXT_CHARS: z.coerce.number().int().positive().default(200),
 });
 
 const parsed = envSchema.safeParse(process.env);
