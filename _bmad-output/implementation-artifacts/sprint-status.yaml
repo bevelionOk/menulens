@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 08-21-2026 21:05
-last_updated: 08-22-2026 00:45
+last_updated: 08-22-2026 01:10
 project: full-stack-challenge
 project_key: NOKEY
 tracking_system: file-system
@@ -39,7 +39,7 @@ development_status:
   1-1-project-scaffold-foundations: review
   1-2-shared-contract-data-layer: review
   1-3-persist-first-run-lifecycle-api: review
-  1-4-source-acquisition-class-decision: backlog
+  1-4-source-acquisition-class-decision: in-progress
   1-5-extraction-adapter-the-openai-seam: backlog
   1-6-triage-core-the-deterministic-arbiter: backlog
   1-7-submit-watch-an-honest-waiting-ui: backlog
