@@ -2,7 +2,7 @@
 title: 'Story 1.4 — Source Acquisition & Class Decision'
 type: 'feature'
 created: '2026-08-22'
-status: 'in-progress'
+status: 'done'
 review_loop_iteration: 0
 baseline_commit: '06949b615b931b5062f5765448354ec21585299b'
 context:
@@ -76,18 +76,18 @@ context:
 ## Tasks & Acceptance
 
 **Execution:**
-- [ ] `server/package.json` -- add `pdfjs-dist` (^6.2.108) -- the only new dependency; confirm `node_modules/@napi-rs/canvas` exists after `npm install`.
-- [ ] `server/src/limits.ts` -- `export const MAX_SOURCE_BYTES = 10 * 1024 * 1024` -- one cap for upload and fetch; `app.ts` imports it.
-- [ ] `server/src/env.ts` + `.env.example` -- `SOURCE_MIN_TEXT_CHARS` (default 200) -- the single class threshold (AC4/AC5).
-- [ ] `server/src/core/class-decision.ts` -- pure `decideSourceClass(input: { kind: 'url' | 'pdf' | 'image'; text_chars: number }, minChars): SourceClass` plus `hasUsableText(text_chars, minChars)` used by the URL E3 check — one threshold, both decisions (AD-6).
-- [ ] `server/src/core/html-to-text.ts` -- pure `htmlToText(html): string` (strip script/style/noscript/template/comments/tags, decode entities, collapse whitespace) and `collapseWhitespace(text)` — the "usable chars" measure.
-- [ ] `server/src/core/ssrf.ts` -- pure `isRefusedAddress(ip: string): boolean` (ranges in Boundaries, v4-mapped unwrapping) — pure so the rule is reviewable in isolation; resolution stays in the shell.
-- [ ] `server/src/pipeline/fetch-url.ts` -- shell `fetchSource(url, log): Promise<{ content_type, bytes, final_url }>`; per hop: scheme check → host validate (`net.isIP` or `dns.lookup all`) → `fetch(redirect:'manual', headers, signal)` → 3xx: resolve `Location` against current URL, hop++ (max 5) → non-2xx: throw `UnreachableUrl` → stream body with the byte cap. Throws a typed `AcquisitionError(reason: 'unreachable_url')` for every E2 cause.
-- [ ] `server/src/pipeline/pdf-text.ts` -- shell `extractPdfText(bytes): Promise<string>`; catches every pdfjs throw → `''` with an `info` log.
-- [ ] `server/src/pipeline/acquire-source.ts` -- `acquireSource(log, run, artifact | null)` → `{ source_class, content_type, bytes?, acquired_text }` or throws `AcquisitionError('unreachable_url' | 'no_usable_text')`; branches on `run.source_type` then on final content type (URL); calls the core functions above.
-- [ ] `server/src/db/runs-repo.ts` + `source-artifacts-repo.ts` -- `setSourceClass`, `upsertArtifact` -- the two persistence writes (AC7), guarded/1:1 as noted in the Code Map.
-- [ ] `server/src/pipeline/run-pipeline.ts` -- `runPipeline(log, runId)`: load run (+ artifact for uploads) → `transitionStage('fetching_source')` → `acquireSource` → one `db.transaction` (`setSourceClass` + `upsertArtifact`) → `log.info({ run_id, source_class, content_type, text_chars }, 'source acquired')`; `AcquisitionError` → `finishRun({ status:'failed', failure_reason })`; any other throw → `log.error` only. Nothing after acquisition (1.5 appends `extracting`).
-- [ ] `server/src/routes/runs.ts` -- `void runPipeline(request.log, created.id)` after the create transaction -- the run starts moving without the request holding the process (AD-4).
+- [x] `server/package.json` -- add `pdfjs-dist` (^6.2.108) -- the only new dependency; confirm `node_modules/@napi-rs/canvas` exists after `npm install`.
+- [x] `server/src/limits.ts` -- `export const MAX_SOURCE_BYTES = 10 * 1024 * 1024` -- one cap for upload and fetch; `app.ts` imports it.
+- [x] `server/src/env.ts` + `.env.example` -- `SOURCE_MIN_TEXT_CHARS` (default 200) -- the single class threshold (AC4/AC5).
+- [x] `server/src/core/class-decision.ts` -- pure `decideSourceClass(input: { kind: 'url' | 'pdf' | 'image'; text_chars: number }, minChars): SourceClass` plus `hasUsableText(text_chars, minChars)` used by the URL E3 check — one threshold, both decisions (AD-6).
+- [x] `server/src/core/html-to-text.ts` -- pure `htmlToText(html): string` (strip script/style/noscript/template/comments/tags, decode entities, collapse whitespace) and `collapseWhitespace(text)` — the "usable chars" measure.
+- [x] `server/src/core/ssrf.ts` -- pure `isRefusedAddress(ip: string): boolean` (ranges in Boundaries, v4-mapped unwrapping) — pure so the rule is reviewable in isolation; resolution stays in the shell.
+- [x] `server/src/pipeline/fetch-url.ts` -- shell `fetchSource(url, log): Promise<{ content_type, bytes, final_url }>`; per hop: scheme check → host validate (`net.isIP` or `dns.lookup all`) → `fetch(redirect:'manual', headers, signal)` → 3xx: resolve `Location` against current URL, hop++ (max 5) → non-2xx: throw `UnreachableUrl` → stream body with the byte cap. Throws a typed `AcquisitionError(reason: 'unreachable_url')` for every E2 cause.
+- [x] `server/src/pipeline/pdf-text.ts` -- shell `extractPdfText(bytes): Promise<string>`; catches every pdfjs throw → `''` with an `info` log.
+- [x] `server/src/pipeline/acquire-source.ts` -- `acquireSource(log, run, artifact | null)` → `{ source_class, content_type, bytes?, acquired_text }` or throws `AcquisitionError('unreachable_url' | 'no_usable_text')`; branches on `run.source_type` then on final content type (URL); calls the core functions above.
+- [x] `server/src/db/runs-repo.ts` + `source-artifacts-repo.ts` -- `setSourceClass`, `upsertArtifact` -- the two persistence writes (AC7), guarded/1:1 as noted in the Code Map.
+- [x] `server/src/pipeline/run-pipeline.ts` -- `runPipeline(log, runId)`: load run (+ artifact for uploads) → `transitionStage('fetching_source')` → `acquireSource` → one `db.transaction` (`setSourceClass` + `upsertArtifact`) → `log.info({ run_id, source_class, content_type, text_chars }, 'source acquired')`; `AcquisitionError` → `finishRun({ status:'failed', failure_reason })`; any other throw → `log.error` only. Nothing after acquisition (1.5 appends `extracting`).
+- [x] `server/src/routes/runs.ts` -- `void runPipeline(request.log, created.id)` after the create transaction -- the run starts moving without the request holding the process (AD-4).
 
 **Acceptance Criteria:**
 - Given a real public restaurant menu URL, when POSTed, then within seconds GET shows `stage: 'fetching_source'`, `source_class: 'text'`, and `SELECT length(acquired_text), content_type FROM source_artifacts` shows the stripped text; after `RUN_STALE_AFTER_MS` it reads `interrupted` with the class and text intact (AC7 + honest end state).
@@ -109,6 +109,8 @@ context:
 
 **Threshold default 200** — calibration data (spine Deferred): a one-screen menu in HTML strips to several hundred chars; a JS shell strips to a title and a cookie banner. Adjust from dev menus in 1.8's fixture work; the rule, not the number, is the invariant.
 
+**Post-review amendments (3 layers, ~70 raw findings → 9 patch / 2 defer / rest rejected):** charset from the final `Content-Type` now drives decoding (`TextDecoder`, utf-8 fallback) — a Latin-1 menu no longer reaches the model as mojibake; the HTML4 Latin-1 entity table decodes `&eacute;`/`&ntilde;`; NUL and lone surrogates are stripped before the AC7 transaction (Postgres `text` would have thrown and left the run stuck `processing`); redirect hops carrying userinfo are refused; a 0-byte 2xx body is E3; `task.destroy()` can no longer discard extracted text; PDF lines follow `hasEOL`; the failure log keeps the `AcquisitionError` intact under `err` with `details` beside it. Deferred with owners (1.8): a table pin for `isRefusedAddress`, and upload-bytes preservation + route→pipeline wiring observed by the golden. Rejected under the guard: refusal ranges beyond AC1's list (100.64/10, NAT64, 6to4), PDF page caps, excluding `<head>` from the count, a body-read timer (undici aborts the stream with the same signal), an IP-pinned agent, tests in the repo (R8).
+
 ## Verification
 
 **Commands:**
@@ -120,3 +122,71 @@ context:
 - `curl -F file=@digital.pdf`, `-F file=@scanned.pdf`, `-F file=@photo.jpg` -- expected: classes `text`/`visual`/`visual`; `length(bytes)` unchanged before/after acquisition.
 - `grep -rn "node:\|from '\.\./pipeline\|from '\.\./db" server/src/core` -- expected: no matches.
 - `git diff --stat main` -- expected: only files named in Tasks (+ `package-lock.json`).
+
+## Suggested Review Order
+
+**The pipeline: one real stage, fire-and-forget**
+
+- Entry point — `fetching_source` → acquire → one transaction; `AcquisitionError` is the only path to `failed`.
+  [`run-pipeline.ts:14`](../../server/src/pipeline/run-pipeline.ts#L14)
+
+- Unexpected throw: logged, run left `processing` → the staleness net reads `interrupted` (AD-14).
+  [`run-pipeline.ts:50`](../../server/src/pipeline/run-pipeline.ts#L50)
+
+- Started after the create transaction, never awaited by the request (AD-4).
+  [`runs.ts:87`](../../server/src/routes/runs.ts#L87)
+
+**SSRF guard: validate before every request**
+
+- Scheme, userinfo, IP literal or every resolved address — per hop, before the GET.
+  [`fetch-url.ts:36`](../../server/src/pipeline/fetch-url.ts#L36)
+
+- The pure refusal rule: listed ranges + IPv4-mapped unwrapping; unparseable is refused.
+  [`ssrf.ts:49`](../../server/src/core/ssrf.ts#L49)
+
+- Manual redirects, 5 hops max — a redirect into a private range dies at re-validation.
+  [`fetch-url.ts:101`](../../server/src/pipeline/fetch-url.ts#L101)
+
+- Streamed 10 MB cap shared with the upload limit; empty 2xx body is E3.
+  [`fetch-url.ts:55`](../../server/src/pipeline/fetch-url.ts#L55)
+
+**Class decision: final content-type, one threshold**
+
+- Branch on `source_type`, then on the final content type — never the URL's extension (AD-6).
+  [`acquire-source.ts:37`](../../server/src/pipeline/acquire-source.ts#L37)
+
+- URLs are text-class by definition: too little text is E3, never `visual`.
+  [`acquire-source.ts:64`](../../server/src/pipeline/acquire-source.ts#L64)
+
+- The pure rule — one `minChars` for the PDF class and the URL E3 check.
+  [`class-decision.ts:19`](../../server/src/core/class-decision.ts#L19)
+
+- Charset-aware decoding (review patch) — Latin-1 menus decode correctly.
+  [`acquire-source.ts:25`](../../server/src/pipeline/acquire-source.ts#L25)
+
+**Ground text**
+
+- Dependency-free HTML → text; `collapseWhitespace` is the "usable chars" measure (NUL stripped).
+  [`html-to-text.ts:65`](../../server/src/core/html-to-text.ts#L65)
+
+- pdfjs legacy build, all pages, `hasEOL` line breaks; any throw ⇒ `''` ⇒ `visual`.
+  [`pdf-text.ts:9`](../../server/src/pipeline/pdf-text.ts#L9)
+
+**Persistence (AC7)**
+
+- Upsert: URL runs insert, uploads update — `bytes` omitted from the set when undefined.
+  [`source-artifacts-repo.ts:14`](../../server/src/db/source-artifacts-repo.ts#L14)
+
+- Class write guarded on `processing`; no anchor bump — not a stage transition.
+  [`runs-repo.ts:58`](../../server/src/db/runs-repo.ts#L58)
+
+**Peripherals**
+
+- The single class threshold, validated at boot; default 200 = calibration data.
+  [`env.ts:13`](../../server/src/env.ts#L13)
+
+- One 10 MB cap for upload and fetch.
+  [`limits.ts:3`](../../server/src/limits.ts#L3)
+
+- Two deferrals for 1.8: SSRF table pin, bytes preservation + wiring in the golden.
+  [`deferred-work.md:41`](deferred-work.md#L41)
