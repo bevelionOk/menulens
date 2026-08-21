@@ -6,6 +6,7 @@ import { createRun, findLatestProcessingRun, getRunWithDishes, type NewRun } fro
 import { insertArtifact } from '../db/source-artifacts-repo';
 import { env } from '../env';
 import { ApiError } from '../errors';
+import type { ExtractFn } from '../pipeline/extraction-adapter';
 import { runPipeline } from '../pipeline/run-pipeline';
 
 // FR1 accept set. `image/heic` is deliberately absent (epic: its presence would stop the
@@ -30,8 +31,10 @@ const unsupportedFile = (message?: string) =>
       'Unsupported file type. Use a PDF, JPG, PNG or WebP — for HEIC photos, export as JPEG or take a screenshot.',
   );
 
+export type RunsRoutesOptions = { extract: ExtractFn };
+
 // Validation order (AD-4): input → seriality (409) → insert. No DB access before step 2.
-export const runsRoutes: FastifyPluginAsync = async (app) => {
+export const runsRoutes: FastifyPluginAsync<RunsRoutesOptions> = async (app, { extract }) => {
   app.post('/api/runs', async (request, reply) => {
     let run: NewRun;
     let upload: { content_type: string; bytes: Buffer } | null = null;
@@ -84,7 +87,7 @@ export const runsRoutes: FastifyPluginAsync = async (app) => {
 
     request.log.info({ run_id: created.id }, 'run created');
     // AD-4: the pipeline starts after the commit and is never awaited by the request.
-    void runPipeline(request.log, created.id);
+    void runPipeline(request.log, created.id, extract);
     return reply.status(201).send({ id: created.id, status: created.status });
   });
 
