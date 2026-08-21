@@ -11,9 +11,11 @@ Prompts are grouped by phase so a reviewer can follow the thought sequence:
 |---|---|
 | `01-planning/` | Reconnaissance of the brief, environment setup, methodology decisions |
 | `02-bmad-analysis/` | BMAD product brief + PRD |
-| `03-bmad-architecture/` | BMAD architecture + story breakdown |
-| `04-implementation/` | Dev prompts (backend, frontend, LLM extraction, tests) |
-| `05-review-hardening/` | Code review, edge cases, production-risk analysis |
+| `03-bmad-architecture/` | BMAD architecture spine |
+| `04-bmad-epics-stories/` | BMAD epic & story breakdown |
+| `05-bmad-sprint-planning/` | BMAD readiness gate + sprint tracking |
+| `06-implementation/` | Dev prompts (backend, frontend, LLM extraction, tests) |
+| `07-review-hardening/` | Code review, edge cases, production-risk analysis |
 
 ## File format
 
