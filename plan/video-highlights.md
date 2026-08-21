@@ -316,3 +316,41 @@ isn't only this machine's; a read-race I rejected without saying why. Not-consid
 rightly: check constraints, indexes, cascades, reconnect logic, `.refine()`s that would
 have broken T6's downgrade path, and "there are no tests" (R8). The misses were small and
 named — asking the four questions is what makes them small.
+
+## Session 8 — Story 1.3: Persist-First Run Lifecycle API (2026-08-22)
+
+**41. A run is born before anything happens to it** `[WHY]`
+`POST /api/runs` validates, checks seriality, writes one transaction (row + uploaded
+bytes) and answers with an id — nothing else. The stage is `null` at birth on purpose:
+the first real transition belongs to the fetcher, and a stage name with nothing behind
+it would be the theatrical progress FR4 bans. Close the tab and the run is still there;
+until the pipeline exists, every run ends `interrupted` by the staleness net, which is
+the honest answer for a system that accepted work it cannot yet do.
+
+**42. One rule, two callers — and the review caught the code lying about it** `[JUDGMENT]`
+The spec's frozen intent said the 409 gate and the read path use the same pure function
+for "active". The first implementation re-encoded the rule in SQL for the gate; both
+paths agreed on every manual check, so nothing failed. A verification-gap reviewer read
+the comment that claimed the route calls `isActive`, grepped, and found it didn't. Fixed
+by making the repo return data and the route decide — the kind of drift that only
+becomes a bug in 1.5 when someone changes stage semantics in one place and not the other.
+
+**43. What breaks in production: `constructor` as a mimetype** `[BREAKS]`
+An accept-list written as a plain object does a prototype-chain lookup: a multipart part
+labeled `constructor` returns a function, skips the 415, and reaches the insert with
+garbage. A `Map` fixes it in one line — the point is not the fix but that an adversarial
+pass over a twelve-line validation found a hole two careful readings missed. Same family,
+deferred with owners: two model attempts at 120 s each outlast the 3-minute staleness
+threshold, so a live run could read as interrupted and admit a second one — a budget
+1.5 has to keep, now written down instead of discovered in a demo.
+
+**44. The 2×2 audit, third run** `[PERSONAL]` `[JUDGMENT]`
+Considered-and-should: scope checked against the neighbouring stories before planning
+(list → 3.1, artifact → 2.4), the four design calls surfaced at the checkpoint instead of
+buried in code, the whole matrix re-run by me after the worker. Considered-and-shouldn't:
+a partial unique index for the seriality race — atomic, and a permanent deadlock after
+one crash. Missed-and-should: the spec told the implementer to write the gate in SQL
+(Code Map) while the frozen block said "same function" — the drift was mine before it was
+the worker's. Not-considered-and-rightly: response schemas, sniffing, statement
+timeouts, a stage heartbeat, a second test. The drift is the lesson: the Code Map is
+the implementer's map, and it has to agree with the intent above it.

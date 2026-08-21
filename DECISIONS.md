@@ -441,3 +441,50 @@ Postgres on the dev machine; the session ran the challenge DB on 5433 through a 
 override kept outside the repo. Compose stays on 5432 — an evaluator with a local
 Postgres hits the same clash; recorded as a known limitation for the README, not
 parametrized (D21's rejection stands).
+
+## D23 · 2026-08-22 — Build session 3 (Story 1.3): the lifecycle API, one rule for the gate and the read, review triage
+
+**Context**: third `bmad-build` session (worktree `bmad/build-1-3`, from main `8dbe392`).
+The story makes runs persistent and observable: `POST /api/runs` (URL JSON or multipart
+upload) and `GET /api/runs/:id`, the logged stage-transition primitive the pipeline
+stories will call, the derived `interrupted` state, and the error envelope. Scope was
+checked against neighbouring stories before planning: the list endpoint belongs to 3.1,
+the artifact endpoint to 2.4, the pipeline to 1.4.
+**Decisions ratified at the checkpoint**:
+- **`stage = null` at birth.** The row proves the run exists; `fetching_source` is the
+  pipeline's first *real* transition. Writing it at creation, with nothing fetching,
+  would be the theatrical sub-stage FR4 bans. Until 1.4 lands every run ends
+  `interrupted` through the staleness net — exactly what the epic predicts.
+- **`internal_error` joins the envelope enum** — the one addition to the enum D22
+  narrowed, on D22's own criterion: it is the single 5xx an endpoint actually emits
+  (Postgres down → honest 500 within 5 s via `connectionTimeoutMillis`, closing 1.2's
+  deferral). Without it the 500 would leave the envelope.
+- **Seriality race documented, not engineered.** Check-then-insert is not atomic; the
+  atomic guard (partial unique index on `status = 'processing'`) turns a crashed run
+  into a permanent lock — the deadlock AD-10 forbids. Single operator + disabled submit
+  makes the race theoretical; recorded as "what breaks in production" material.
+- **Status per code**: 400 `invalid_url`/`invalid_request`, 413 `file_too_large`
+  (message names the 10 MB cap), 415 `unsupported_file` (HEIC included), 409
+  `run_active`, 404 `not_found`, 500 `internal_error`.
+**Review triage (3 layers, ~55 raw findings → 6 patch / 3 defer / rest reject)**: the
+finding that mattered most was a spec-vs-code drift the verification-gap reviewer caught —
+the frozen intent said the 409 gate and the read path use *one* pure function, but the
+first cut re-encoded the staleness rule in SQL (`stage_changed_at > cutoff`). Patched:
+the repo returns the newest `processing` row, the route decides with `isActive`; one
+encoding, which 1.4–1.6 can change in one place. The edge-case reviewer found a real
+input hole: a plain-object accept set resolves prototype names (`constructor` as a
+mimetype passed the 415) — now a `Map` after normalization. Other patches: 0-byte
+uploads and credential-bearing URLs rejected pre-run, stage/terminal writes guarded on
+`status = 'processing'` (a late write can no longer flip `failed` → `done`), an error
+handler that survives non-object throws. Deferred with owners: the `extracting` stage
+budget vs the 3-min threshold (two 120 s model attempts exceed it — 1.5 must keep the
+worst case under the threshold or bump the anchor), atomic `done` + dishes (1.6), and a
+terminal-state read in the golden (1.8 — every run this session created stayed
+`processing`, so a regression in the `status === 'processing'` guard would pass every
+manual check). Rejected under the guard: partial index / advisory lock, response
+schemas, magic-byte sniffing, `statement_timeout` (FR6: one timeout), a stage heartbeat,
+`Location` headers, SSRF (1.4), tests (R8).
+**Process note**: the spec ran ~2.2k tokens against the 1.6k guideline; kept whole on
+precedent (1.2 was the same size and the single-goal test holds). The implementer was
+re-engaged with context intact for the patch round — cheaper and more coherent than a
+fresh dispatch.
