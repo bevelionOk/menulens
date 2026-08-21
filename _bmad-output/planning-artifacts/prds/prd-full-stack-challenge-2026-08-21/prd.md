@@ -99,9 +99,10 @@ Contract → Triage → Review & Confirmation → History → Failure States.
   public menu URL (http/https), an uploaded PDF, or an uploaded image (JPG/PNG/WebP).
   iPhone HEIC photos are expected to arrive as JPEG via the OS's automatic conversion on
   upload; a raw `.heic` file gets E4's clear error (FG6) suggesting export or screenshot.
-  `[VERIFY AT ARCHITECTURE]` the auto-conversion behavior — and if verification fails, the
-  answer stays E4's error: no conversion library enters the project (RISKS.md R-10;
-  gate cut).
+  *Verified at architecture (2026-08-21):* Safari auto-converts when the input's accept
+  list **excludes** HEIC (listing `image/heic` triggers a Safari 17+ pitfall that converts
+  *to* HEIC — spine Uploads convention). No conversion library enters the project (RISKS.md
+  R-10; gate cut stands).
 - **FR2 — Upload caps.** Uploads over the size cap are rejected *before* processing
   starts, with the cap stated in the message. Cap: 10 MB for both PDF and image — generous
   by design: Ana never fights the system. (No image-processing machinery hides behind it —
@@ -197,22 +198,25 @@ lives in the [addendum ADR](addendum.md), not here.*
     allergen state `unknown`.
   - **T2 —** `price_value` empty (absent / range / ambiguous).
   - **T3 —** non-EUR or mixed currency detected.
-  - **T4 —** dish name empty; or — on text sources — not traceable to the source text.
+  - **T4 —** dish name empty; or — on text-class sources — not traceable to the source
+    text. (*Source classes `text | visual` — by presence of a usable text layer, not file
+    type — defined at architecture: spine AD-6.*)
   - **T5 —** model self-flag raised.
   - **T6 — Evidence verification:** a `declared` allergen with **no evidence quote** is
     downgraded to `inferred` on every source type; a quote that **cannot be found in the
-    source text** downgrades likewise on text sources (URL/PDF). Image sources carry no
-    ground text — their quotes are verified by *Ana*, visually, against the photo in the
-    evidence panel (FR19, FR23). Downgrades fire T1. The gate never trusts an unverified
-    "declared" further than it can prove it.
+    source text** downgrades likewise on text-class sources (URL, or PDF with a usable
+    text layer). Visual-class sources (images, scanned PDFs) carry no ground text — their
+    quotes are verified by *Ana*, visually, against the original in the evidence panel
+    (FR19, FR23). Downgrades fire T1. The gate never trusts an unverified "declared"
+    further than it can prove it.
 - **FR18 — Self-flag criteria** (explicit in the extraction prompt): ambiguous price,
   doubtful OCR/legibility, unclear dish boundaries (one dish or a section?), allergen not
   literal in the text. When in doubt, flag — doubt always resolves toward `uncertain`.
 - **FR19 — Evidence quotes.** Every `declared` allergen carries the verbatim quote where
-  it was read (text or the EU allergen code as printed). For URL/PDF sources the quote is
-  machine-verified against the source text (T6). For image sources there is no ground
-  text: the quote is shown to Ana as evidence but not machine-verified — a documented,
-  honest limitation. Quotes double as FG4's evidence-in-view.
+  it was read (text or the EU allergen code as printed). For text-class sources the quote
+  is machine-verified against the source text (T6). For visual-class sources there is no
+  ground text: the quote is shown to Ana as evidence but not machine-verified — a
+  documented, honest limitation. Quotes double as FG4's evidence-in-view.
 - **FR20 — Menu-level honesty notice.** A menu that ends with zero `declared` allergens
   shows a notice above the table: *"This menu declares no allergen information — all rows
   need review."* It explains the wall of `uncertain` before it looks like a malfunction,
@@ -295,7 +299,7 @@ state; never a silent empty table.
 | E3 | URL loads but yields no usable text (JS-rendered / bot-blocked site) | documented limitation: suggest the PDF/photo path |
 | E4 | Unsupported file type (incl. raw `.heic`) | suggest export or screenshot |
 | E5 | File over 10 MB | rejected pre-run with the cap stated (FR2) |
-| E6 | Scanned PDF with no text layer | not supported in v1: suggest uploading a photo (vision path) — standing only until the zero-dep native-PDF check in Open items resolves |
+| E6 | *Retired at architecture (2026-08-21).* Scanned PDF with no text layer | now supported: classified a *visual* source (spine AD-6) and sent as native PDF input; evidence is Ana-verified against the original, as with photos. No longer a failure state |
 | E7 | Model failure — timeout (~120 s), API error, invalid JSON after one retry | `failed` with a visible reason + retry |
 | E8 | Interrupted (staleness rule, FR7) | shown as interrupted + retry |
 | E9 | **Zero dishes extracted** | an honest terminal state (`empty`), *distinct from failure*: the run worked and found nothing — "I couldn't find dishes in this source — is it a menu? Try another path." A provable "I couldn't" (brief). |
@@ -361,13 +365,23 @@ Recorded here for traceability; formal DECISIONS.md entries land at session clos
 - **Evidence panel — corrected in session.** From "show what the system read" to
   Original-first with a system-view tab, on the omission-blindness argument.
 
+## Amendments — architecture session (2026-08-21)
+
+Surgical updates from the ratified architecture spine
+(`../../architecture/architecture-full-stack-challenge-2026-08-21/ARCHITECTURE-SPINE.md`),
+so upstream and spine don't diverge: **E6 retired** (scanned PDFs are visual-class
+sources, AD-6); **T4/T6/FR19 re-scoped by source class** `text | visual` (class = usable
+ground text, not file type); **FR1 HEIC verified** (accept-list mechanism). The
+single-test front-runner evolved to an integration golden-master (DECISIONS.md D16,
+spine AD-13).
+
 ## Open items
 
 | Item | Owner / where it closes |
 |---|---|
-| HEIC auto-conversion behavior on upload (FR1) | verify at architecture; fallback: dependency-free conversion lib |
+| ~~HEIC auto-conversion behavior on upload (FR1)~~ | **closed at architecture** — verified; spine Uploads convention |
 | Staleness threshold 3 min (FR7) | measure during testing |
 | Expectation copy "30–90 s" (FR5) | calibrate on dev test menus |
-| Single-test choice + formal justification (T1–T6 arbiter is the leading candidate — addendum) | architecture phase, DECISIONS.md (R8) |
-| SSRF guard mechanics — private/internal address blocklist for URL fetch (FR36) | architecture phase |
-| Scanned-PDF path — verify OpenAI native PDF input (a zero-dep yes would eliminate E6); until then E6 stands, justification recorded (native deps endanger the 5-min README) | architecture phase, DECISIONS.md |
+| ~~Single-test choice + formal justification~~ | **closed at architecture** — integration golden-master; DECISIONS.md D16, spine AD-13 |
+| ~~SSRF guard mechanics (FR36)~~ | **closed at architecture** — spine AD-11 (DNS rebinding = documented residual) |
+| ~~Scanned-PDF path / native PDF input~~ | **closed at architecture** — verified; E6 retired via source classes, spine AD-6 |

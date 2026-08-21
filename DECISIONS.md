@@ -239,3 +239,70 @@ architecture — a yes eliminates E6), and two speculative mechanisms (image dow
 a HEIC conversion-lib fallback) were cut. A Build Priority ladder (P0 = the challenge's
 letter; P1 = what makes it a product; P1 falls entirely before P0 loses a line) now feeds
 the D8 deadline policy.
+
+## D16 · 2026-08-21 — The single test (R8): integration golden-master, superseding the unit-arbiter front-runner
+
+**Context**: the PRD left the single-test choice open with the pure T1–T6 arbiter unit
+test as front-runner. During architecture, Pablo challenged it: with a budget of exactly
+one test, breadth of *meaningful* coverage is the variable to maximize.
+**Options**: (a) unit test over the pure arbiter — sharpest signal on the core promise,
+but blind to every boundary (API contract, persist-first lifecycle, Zod at the LLM
+boundary, the Drizzle/JSONB round-trip); (b) Playwright E2E — the company's tool, but it
+rides the real OpenAI API: uncontrollable non-determinism, a flaky test in a challenge
+repo; (c) **integration golden-master** — POST a fixture through the real API with the
+OpenAI client mocked at its injected seam and a real Postgres, poll to completion, assert
+the normalized final payload against one golden.
+**Decision**: (c), with discipline that keeps the arbiter's coverage embedded: the mocked
+model response is crafted to fire **every rule T1–T6 including the T6 downgrade, plus one
+fully reliable row**; golden normalization is pinned (ids/timestamps frozen, ordering by
+`position`); **one scenario, one fixture, one golden** — it reads as one test because it
+is one. CI runs it against a Postgres service container (still D12-minimal).
+**Why**: the one-test budget rewards crossing every critical boundary at once; the fixture
+*is* the arbiter test in disguise, and the golden's diff still names the rule that broke.
+A visible course-correction in the D10 style. Spine: AD-13.
+
+## D17 · 2026-08-21 — PDF path: hybrid by source class; E6 retired
+
+**Context**: web verification confirmed OpenAI's native PDF input (Responses API
+`input_file`) — but revealed the PRD's "a yes eliminates E6" was not free: sending PDFs
+natively leaves no local ground text, which would silently kill T6 machine-verification
+and the FR23 "what the system read" tab on the most common menu format.
+**Options**: (a) text-layer extraction only (PRD literal — E6 stands); (b) native-only
+(zero deps, but the gate weakens on *all* PDFs); (c) **hybrid by class**: pdfjs-dist
+extracts the text layer (ms-scale, negligible vs the 30–90 s model call); a PDF with
+usable text is a **text-class** source (text to the model, T6 verifies, tab complete); a
+scanned PDF joins the **visual class** that photos already occupy (native PDF to the
+model, Ana verifies against the original).
+**Decision**: (c). The invariant got *cleaner*: T6 scope, model input, and the evidence
+tab all key on **class (usable ground text), never file type** — and E6 disappears as a
+failure state instead of being "supported" by weakening the gate. Coherence note argued
+at the gate: accepting pdfjs while having cut the HEIC lib is consistent — deps are
+allowed on *required* input paths (R5), not on speculative edge cases with a free OS
+fallback. Caveat verified by execution: pdfjs-dist v6 needs its prebuilt optional
+`@napi-rs/canvas` in Node (npm-only holds; never install with `--omit=optional`; Node
+≥22.13). Also recorded: **structured outputs (`zodTextFormat`, strict JSON schema) are
+the current form of the brief's "JSON mode"** — same guarantee, stronger contract;
+verified working with Zod 4 by execution. Spine: AD-6, AD-12; PRD amended in place.
+
+## D18 · 2026-08-21 — Architecture session gate: ratified under attack, rectified by addition
+
+**Context**: per session plan, the full decision set went through a 5-method advanced
+elicitation pass (Assumption Audit, Critical Perspective, Second-Order, Cascading
+Failure, Boundary Sweep) plus the spine Reviewer Gate — 6 bounded subagents (3 input
+reconcilers + rubric walker + web-verification lens + adversarial two-units lens),
+heartbeat-watched per R-11.
+**Outcome**: 6/6 pass-with-fixes, zero critical, zero over-engineering findings, zero
+contradictions. The set was **ratified** (no decision reversed) and **rectified by
+addition**: 9 seam-closing rules from elicitation (class threshold, pinned T6
+normalization, content-type-decides-source, schema-family derivation, artifact isolation,
+server-side seriality, test/prompt discipline, SSRF residual named, failure containment +
+PRD-update sequencing), then ~20 gate fixes. The adversarial lens caught a **real
+specification bug**: "strip diacritics" *after* NFKC is a no-op — the pinned order is now
+NFKC → lowercase → NFD → remove combining marks → collapse whitespace; without it, two
+builders would produce different confidence flags on identical Spanish menus. Other
+notable closures: pre-run rejections (E1/E4/E5) never create run rows; "active run" for
+the 409 is bounded by the staleness threshold (deadlock fix); one review-mutation
+endpoint (single = batch of one, reopen included); T6 match offsets persisted so the
+frontend never re-implements matching; acquired text served `text/plain` (stored-XSS).
+New risk logged as R-13 (fresh-major toolchain convergence). Full reports:
+`_bmad-output/planning-artifacts/architecture/architecture-full-stack-challenge-2026-08-21/reviews/`.
