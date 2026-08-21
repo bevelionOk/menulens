@@ -1,0 +1,43 @@
+import { z } from 'zod';
+import { failureReasonSchema, reviewActionSchema } from './enums';
+import { runSchema, runSummarySchema } from './run';
+
+// Error envelope codes: the AD-14 enum plus the three HTTP-only codes AD-14 has no
+// word for (409 active run, 404, malformed body). `runs.failure_reason` stays closed.
+export const apiErrorCodeSchema = z.enum([
+  ...failureReasonSchema.options,
+  'run_active',
+  'not_found',
+  'invalid_request',
+]);
+export type ApiErrorCode = z.infer<typeof apiErrorCodeSchema>;
+
+export const errorEnvelopeSchema = z.object({
+  error: z.object({
+    code: apiErrorCodeSchema,
+    message: z.string(),
+  }),
+});
+export type ErrorEnvelope = z.infer<typeof errorEnvelopeSchema>;
+
+// POST /api/runs — the row exists before processing starts (AD-4).
+export const createRunResponseSchema = runSchema.pick({ id: true, status: true });
+export type CreateRunResponse = z.infer<typeof createRunResponseSchema>;
+
+// GET /api/runs — newest first (FR29).
+export const runListResponseSchema = z.object({
+  runs: z.array(runSummarySchema),
+});
+export type RunListResponse = z.infer<typeof runListResponseSchema>;
+
+// POST /api/runs/:id/reviews — a single review is a batch of one (AD-9).
+export const reviewRequestSchema = z.object({
+  decisions: z.array(
+    z.object({
+      dish_id: z.uuid(),
+      action: reviewActionSchema,
+      note: z.string().nullable(),
+    }),
+  ),
+});
+export type ReviewRequest = z.infer<typeof reviewRequestSchema>;
