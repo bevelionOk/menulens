@@ -23,6 +23,13 @@ messages: `feat(server): …`, `feat(web): …`, `test: …`, `docs: …`.
 
 ## 2. Technical baseline (pre-agreed, so build sessions don't relitigate)
 
+> **Phase-2 sync (2026-08-21)**: the ratified canon supersedes several positions below —
+> plain **npm** workspaces (no pnpm); the contract lives in the **`shared/` package**
+> (AD-2), not `server/src/schemas/`; OpenAI uses **structured outputs via `zodTextFormat`**
+> (AD-12), not `response_format: json_object`; CI (D12) carries a `checks` job that
+> **lands with the scaffold**. The §3 story numbering predates `epics.md` (3 epics,
+> 13 stories) — map rows by topic; real DoD comes from sprint-status + the story specs.
+
 - **Layout**: plain npm/pnpm workspace — `server/` (Fastify+TS) and `web/` (Vite+React+TS).
   Shared Zod schemas in `server/src/schemas/` exported to web via workspace import or a
   small `shared/` folder — whichever the architecture session picked. No Nx/Turbo.
@@ -45,7 +52,7 @@ messages: `feat(server): …`, `feat(web): …`, `test: …`, `docs: …`.
 
 | Story | Definition of done | Watch out for |
 |---|---|---|
-| 3.1 Scaffolding | Both apps boot; compose brings up Postgres; lint/typecheck scripts exist; README skeleton | Don't add CI, husky, commitlint — none of it is asked (§7) |
+| 3.1 Scaffolding | Both apps boot; compose brings up Postgres; lint/typecheck scripts exist; README skeleton | Superseded by D12/Story 1.1 AC5: the CI `checks` job (typecheck) DOES land with the scaffold — the one test joins in 1.8; husky/commitlint still banned. **Ratified done 2026-08-21** (session 6, spec `1-1-project-scaffold-foundations`, D21) |
 | 3.2 Schema + migration | Tables per architecture; generated SQL file in repo; migrate script idempotent | Hand-written SQL instead of generated = fine too, but it must be a *file*, not just `db push` |
 | 3.3 Intake endpoints | `POST /api/menus` accepts `{url}` or multipart file; validates type/size; creates `menus` row with status | Reject early with typed errors; no queue — request handles it (guardrail) |
 | 3.4 Extraction service | URL→text / PDF→text / image→vision paths; JSON-mode call; Zod-validated dishes; **confidence derivation per D4** with stored reasons; rows persisted | This is the core story — take the time here. Prompt text lives in one file (it's part of what reviewers read) |
@@ -65,7 +72,7 @@ dev, by the golden-master fixture, and by the walkthrough demo.
 1. Freeze one failing menu as the working case; keep the others as regression checks.
 2. Change **one thing at a time**: prompt wording → few-shot example → input reduction
    (cleaner text) → model tier (luna→terra). Re-run all set members after each change.
-3. Log each iteration in `prompts/04-implementation/` (the iteration sequence is
+3. Log each iteration in `prompts/06-implementation/` (the iteration sequence is
    exactly what "prompt quality — 20%" wants to see).
 4. Timebox: ~90 min. Residual failure classes → DECISIONS.md + walkthrough material.
 

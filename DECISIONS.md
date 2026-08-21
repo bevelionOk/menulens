@@ -357,3 +357,35 @@ ARIA semantics) is the decision; single named desktop operator, not requested by
 challenge, and a custom a11y epic would violate the over-engineering guard. (Completes
 the session-start UX audit: visual identity = stock shadcn, desktop-first — both already
 decided upstream.)
+
+## D21 · 2026-08-21 — Build session 1 (Story 1.1): scaffold-pin resolutions and review triage
+
+**Context**: first `bmad-build` session (worktree `bmad/build-1-1`) — official scaffolds
+on the fresh-major stack (R-13), then the workflow's three-layer adversarial review.
+**Scaffold-time resolutions (R-13 applied: toward the default, never custom)**:
+TypeScript landed **6.0.3** (create-vite's pin), not the spine snapshot's 7.0.2 — the
+snapshot is a reference, never a target; `baseUrl` dropped from the shadcn guide snippet
+(TS 6 hard-errors on it, `paths` alone suffices); `import.meta.dirname` over `__dirname`
+(Vite 8 deprecates it for its native config loader). Two official scaffolds collided —
+the Tailwind/shadcn init replaces `index.css`, orphaning the Vite demo's CSS variables —
+resolved by **deleting** the demo remnants, not configuring around them.
+**Review triage (18 findings → 7 patch / 3 defer / 8 reject)**: patches all
+correctness-shaped (phantom `zod` dep caught by all three layers, `--env-file-if-exists`
+so a fresh clone reaches the Zod message instead of ENOENT, env-schema tightening
+(postgres scheme, trimmed key, bounded port), loopback-only Postgres bind, `@types/node`
+aligned to runtime 22, demo trim, proxy-coupling comment). Deferred with owners in
+`_bmad-output/implementation-artifacts/deferred-work.md`: the env fail-fast branch has
+**no automated observer** and even 1.8's golden-master (valid env only) will never
+execute it — Story 1.8 must either fold a sub-assertion into the single test file or
+record the branch as manual-only here (the sharpest finding of the session); compose
+healthcheck waits for the first DB consumer (1.2); `server/test` tsconfig include widens
+when the test lands (1.8). Rejected under the guard, each naming its rule: engine-strict/
+.nvmrc, CI boot/build steps beyond AC5, oxlint wiring, a synthetic `shared` import (1.2
+exercises the seam for real), `--kill-others-on-fail` (a no-op under tsx watch — the
+suggested fix doesn't do what it promises), compose port parametrization for a
+machine-local conflict, credential-drift machinery.
+**Name ratified post-audit**: the close-out 2×2 flagged `<title>MenuLens</title>` as an
+unratified naming decision smuggled into a review patch. Verified against the challenge
+docs: naming is nowhere a requirement (BRIEF's "name" is a dish field; the task is
+"deliberately unrelated to our actual product"), and the repo was already `menulens`.
+Pablo ratified keeping it (2026-08-21).
