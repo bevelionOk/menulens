@@ -92,7 +92,7 @@ context:
 
 **Dish-level `unknown`** (FR13/FR21) = empty `allergens` array; no column.
 
-**Error-code gap (surfaced for Pablo):** conventions say envelope codes come from the AD-14 enum, but AD-14 has no code for 409 (active run), 404, or a malformed review body. Resolution: `apiErrorCodeSchema = failureReasonSchema ∪ 'run_active' | 'not_found' | 'invalid_request'`; the run `failure_reason` enum itself stays closed (AC3). Record as a DECISIONS.md addendum at close.
+**Error-code gap (surfaced for Pablo):** conventions say envelope codes come from the AD-14 enum, but AD-14 has no code for 409 (active run), 404, or a malformed review body. Resolution: `apiErrorCodeSchema = failureReasonSchema ∪ 'run_active' | 'not_found' | 'invalid_request'`; the run `failure_reason` enum itself stays closed (AC3). Record as a DECISIONS.md addendum at close. *Post-review amendment (accepted by Pablo): narrowed to `preRunFailureReasonSchema ∪` the three HTTP codes — stored reasons travel in `runs.failure_reason`, never in an envelope, so the wider enum claimed codes no endpoint can emit.*
 
 **Timestamps:** repos return `Date`; Fastify serializes to ISO; the wire schema is the string — no mapping layer.
 

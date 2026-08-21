@@ -1,11 +1,13 @@
 import { z } from 'zod';
-import { failureReasonSchema, reviewActionSchema } from './enums';
+import { preRunFailureReasonSchema, reviewActionSchema } from './enums';
 import { runSchema, runSummarySchema } from './run';
 
-// Error envelope codes: the AD-14 enum plus the three HTTP-only codes AD-14 has no
-// word for (409 active run, 404, malformed body). `runs.failure_reason` stays closed.
+// Error envelope codes — only what an endpoint can actually emit: the pre-run 4xx
+// reasons (no run row exists) plus the three HTTP-only codes AD-14 has no word for
+// (409 active run, 404, malformed body). Pipeline failures never travel in an
+// envelope: they are persisted in `runs.failure_reason` and read via GET (AD-4/AD-14).
 export const apiErrorCodeSchema = z.enum([
-  ...failureReasonSchema.options,
+  ...preRunFailureReasonSchema.options,
   'run_active',
   'not_found',
   'invalid_request',

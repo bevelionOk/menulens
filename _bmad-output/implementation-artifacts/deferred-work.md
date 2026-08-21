@@ -21,3 +21,7 @@ Collected by build reviews for later focused attention. Append-only.
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-2-shared-contract-data-layer.md`
   summary: When Story 1.3 issues the first request-path query, decide a `connectionTimeoutMillis` for the pg Pool (fail fast with an honest 5xx when Postgres is unreachable) instead of the driver default of waiting indefinitely.
   evidence: Edge-case review — `server/src/db/client.ts` creates `new Pool({ connectionString })` with no connection timeout; with Postgres down, route handlers would hang rather than fail, which contradicts AD-14 failure containment ("what breaks in production" material).
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-1-2-shared-contract-data-layer.md`
+  summary: The CI `checks` job (1.8) must export a dummy `OPENAI_API_KEY` for `db:migrate` — the runner imports `env.ts`, whose fail-fast schema requires the key even though migrations never use it.
+  evidence: Implementation note — `server/src/db/migrate.ts` imports `./client`, which imports `../env`; without the variable the process exits 1 naming `OPENAI_API_KEY` before any migration runs.
