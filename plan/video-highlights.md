@@ -70,4 +70,68 @@ the handoff."
 
 ---
 
-<!-- Session 2 (PRD) appends here -->
+## Session 2 · 2026-08-21 — PRD (`/bmad-prd`)
+
+**10. D4 closed: the arbiter has six rules and none of them is "trust the model"** `[WHY]` `[JUDGMENT]`
+The flag's derivation — the challenge's explicitly scored open question — closed as T1–T6:
+model supplies signals (provenance, evidence quotes, criteria-anchored self-flag),
+deterministic code arbitrates. The camera line: "the model votes; the code decides."
+Traceable from the brief's handoff through the ADR to FR15–FR21.
+
+**11. T6, or: the gate's inputs were model output too** `[WHY]` `[BREAKS]`
+Mid-session catch: T1 guaranteed the allergen gate "by code" — over provenance tags the
+*model* wrote. If it mislabels `declared`, the gate processes a lie with full rigor. Fix:
+every declared allergen carries the verbatim quote it was read from; code greps the quote
+against the source text; unverifiable ⇒ downgraded ⇒ uncertain. "The gate never trusts an
+unverified declared." On photos there's no ground text — quote shown, Ana verifies against
+the image; named as a production limitation, on the record.
+
+**12. The flag is structurally blind to omissions** `[BREAKS]`
+A dish the extractor never saw has no row — and a row that doesn't exist can't be
+uncertain. No confidence system can route attention to missing dishes; only the original
+menu beside the table lets Ana catch one. Born from Pablo pushing back on the room's
+"show what the system read" panel. Prime "what breaks in production" material.
+
+**13. The timeout that dissolved instead of being tuned** `[WHY]` `[JUDGMENT]`
+Pablo distrusted timeouts; five elicitation methods later, the answer wasn't a better
+number — it was removing the long-lived request: the menu row is born persistent at
+submit, extraction continues in-process, the browser polls state. "La fila nace antes que
+el proceso; el navegador mira, no sostiene." One technical timeout survives (the model
+call). Durability-as-resumability was cut by Pablo's own scope rule — on camera, that's
+"I asked for durability and then discarded half of my own ask."
+
+**14. The honest waiting room** `[WHY]`
+The operating principle applied to the progress UI: a progress claim is a claim. Real
+stages only, measured elapsed time, a calibrated "typically 30–90 s" — percentage bars
+and dynamic ETAs banned as lies the product would tell while promising never to lie.
+
+**15. "100% uncertain is honesty, not failure"** `[JUDGMENT]` `[BREAKS]`
+A menu that declares nothing goes fully uncertain — and that's correct: the gate never
+relaxes because the menu is poor. The counterweight is a menu-level notice ("this menu
+declares no allergen information") that doubles as Ana's actionable message to the
+restaurant — the worst case converted into the reprint opportunity. Pablo's line: "el
+sistema debe reconocer sus virtudes y sus limitaciones."
+
+**16. No inline editing — because editing would falsify the evidence** `[WHY]`
+A persisted row is *what the system extracted* plus *Ana's verdict on it*. Let her fix a
+price in the cell and the audit trail starts lying about the extraction. Wrong value ⇒
+mark for follow-up, with a note. The strongest "why not?" answer in the demo.
+
+**17. The gate that audited the auditors** `[JUDGMENT]` `[PERSONAL]`
+Eight bounded reviewers (5 reconcilers vs every input + rubric + over-engineering hawk +
+BMAD-fluency auditor) ran against the finished draft — and found real things: the T4/T6
+image blind spot, an input path (scanned PDF) cut without a recorded reason, two
+speculative mechanisms that got cut on the spot. Verdict "genuine, not cosmetic" — with
+receipts in the repo (`review-*.md`). Plus the 2×2 coverage audit ritual, second session
+running.
+
+**18. The build ladder: P1 falls entirely before P0 loses a line** `[NEXT]` `[JUDGMENT]`
+36 FRs vs a 4-day runway is itself an over-engineering risk ("a half-shipped ambitious
+PRD is the rejection"). The PRD now carries its own degradation order, wired to the D8
+deadline policy. Next: architecture (`/bmad-architecture`), where the single test (T1–T6
+is the front-runner), the schema, and the pending verifications (native-PDF input, HEIC,
+SSRF mechanics) close.
+
+---
+
+<!-- Session 3 (architecture) appends here -->

@@ -38,7 +38,7 @@ proportional benefit for structured extraction.
 **Why**: total projected spend stays under $5 while keeping a quality upgrade path;
 unit cost per extraction feeds BUSINESS.md pricing directly.
 
-## D4 · 2026-08-20 — **OPEN**: confidence flag derivation (reliable / uncertain per dish)
+## D4 · 2026-08-20 — **CLOSED 2026-08-21**: confidence flag derivation (reliable / uncertain per dish)
 
 **Context**: the brief leaves the derivation to us — it is an explicitly scored judgment call.
 **Evidence captured during infra smoke test**: sent a locally generated 1×1 pure-red PNG to
@@ -68,6 +68,21 @@ input when deterministic rules hold final authority. Considered and **cut**: dua
 extraction + agreement (2× cost/latency — over-engineering for this slice) and per-field
 logprobs (impractical with JSON mode). Full options table: the brief workspace addendum
 (`_bmad-output/planning-artifacts/briefs/brief-full-stack-challenge-2026-08-20/addendum.md`).
+
+**Resolution (2026-08-21, PRD session) — CLOSED.** The hybrid ratified and hardened:
+the model supplies *signals only* (per-allergen provenance `declared|inferred`, an
+**evidence quote** for every declared allergen, a self-flag raised against explicit
+prompt criteria); **deterministic rules T1–T6 are the final arbiter** — T1 allergen gate
+(any inferred/unknown ⇒ uncertain, dominant), T2 unparseable price, T3 non-EUR/mixed
+currency, T4 empty/untraceable name, T5 self-flag, **T6 evidence verification** (a
+declared allergen whose quote is missing — or, on text sources, not found in the source
+text — is downgraded to inferred, firing T1: the gate never trusts an unverified
+"declared", closing the hole where the gate's own inputs were model output). T4/T6
+verification is scoped to text sources; on images the quote is shown and verified by Ana
+against the photo — a documented limitation. A menu with no allergen info going 100%
+uncertain is **correct behavior**, softened by a menu-level notice, never by the flag.
+Full spec: PRD FG3 (FR15–FR21); mechanics: PRD addendum. T1–T6 is the leading candidate
+for the single test (R8) — formal justification lands in the architecture phase.
 
 ## D5 · 2026-08-20 — Repo private during development, public at submission
 
@@ -166,3 +181,61 @@ sync with origin; upstream challenge repo unchanged (HEAD `6be4b93`, still no pu
 a **false positive**: BMAD's install manifest (`_bmad/_config/files-manifest.csv`) stores
 sha256 content checksums per installed file, which trip the generic-api-key entropy rule.
 Allowlisted that one path in `.gitleaks.toml`; re-scan of all 15 commits: no leaks.
+
+## D13 · 2026-08-21 — Extraction processing model: persist-first + polling, one technical timeout
+
+**Context**: the playbook's opening position was "synchronous request with visible
+progress, timeout ~60 s". Pablo distrusts timeouts from experience and asked whether the
+process could be durable without queue infrastructure (a guardrail). Explored in the PRD
+session via advanced elicitation — five methods run and integrated.
+**Options**: (a) pure sync; (b) persist-first: the menu row is created at submit
+(status + stage columns), extraction continues as an in-process promise, the client polls;
+(c) SSE/WebSocket progress; (d) a real queue.
+**Decision**: (b). One technical timeout in the whole system — the OpenAI call (~120 s);
+staleness (>3 min without a stage transition) is derived at read time; retry = a new
+cheap run. The waiting UI obeys the operating principle: real stages, measured elapsed
+time, a static calibrated expectation — no percentage bars, no dynamic ETAs.
+**Why**: two inherited assumptions fell under first principles — the guardrail bans queue
+*infrastructure*, not in-process async; and a 60 s timeout would fail exactly the large
+menus that most need the tool. "Durability" split in two: durability-as-resumability was
+**cut** (it protects ~$0.003 and a minute of waiting with auto-reject machinery);
+durability-as-honest-state is in and costs a status column plus polling. The browser
+watches state; it does not hold the process.
+**Cut**: queue/worker, SSE/WebSocket, dynamic ETA, percentage bars, resumable extraction,
+idempotency keys, background reaper. Full ADR: PRD addendum.
+
+## D14 · 2026-08-21 — Descriptions: from "never generated" to provenance-labeled
+
+**Context**: Pablo's opening position was extractive-only — the model never writes a
+description; absence is reported as absence. A party-mode roundtable countered with R6
+evidence: the challenge requires a one-line description per dish, and most real menus
+describe nothing — the required column would sit empty on most rows.
+**Decision**: reuse the allergen-provenance pattern — a description is `extracted` when
+the menu provides one, `generated` (visibly labeled) when the model wrote it. Description
+provenance never touches the confidence gate: triage asymmetry belongs to allergens alone.
+**Why**: the system may say things the menu doesn't *only by confessing it* — a labeled
+`generated` is more honest than an empty cell, which can't distinguish "the menu has none"
+from "nobody looked". A visible position change under evidence, adopted because the
+counter-argument used the product's own pattern.
+
+## D15 · 2026-08-21 — PRD finalize gate: 8 bounded subagents, heartbeat-watched (R-11)
+
+**Context**: the PRD's Finalize step prescribes reviewer/reconciler subagents. D2 keeps
+multi-agent orchestration out of the critical path, and this machine has a history of
+stalled agents (R-11); Pablo's standing rule: tooling like this must be documented in the
+files, never tacit.
+**Decision**: run the gate as 8 bounded, single-purpose subagents (5 input reconcilers +
+rubric walker + over-engineering hawk + BMAD-fluency auditor), watched by a 5-minute
+active heartbeat that stats each worker's transcript and resumes any that stall
+(mitigation now recorded in RISKS.md R-11). D2 stands: the planning conversation itself
+remains single-threaded; these are BMAD's own finalize reviewers, not a parallel build
+swarm. Also recorded: web/market research was deliberately omitted this session — the
+product is fixed by the challenge and domain research earns nothing (INTERPRETATION.md).
+**Outcome**: verdicts strong / pass-with-fixes / pass-genuine; the gate caught real
+issues — T4/T6 assumed source text that photos don't have (fixed by scoping), the scanned
+PDF cut (E6) lacked a recorded justification (now here: native system deps endanger the
+5-minute README; a zero-dep OpenAI native-PDF input is queued for verification in
+architecture — a yes eliminates E6), and two speculative mechanisms (image downscaling,
+a HEIC conversion-lib fallback) were cut. A Build Priority ladder (P0 = the challenge's
+letter; P1 = what makes it a product; P1 falls entirely before P0 loses a line) now feeds
+the D8 deadline policy.
