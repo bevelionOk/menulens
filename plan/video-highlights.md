@@ -237,4 +237,39 @@ parser's two warnings (both benign — summary headings, not lost stories). Plan
 closed; next conversation is `bmad-build` on Story 1.1, and if epics change mid-build,
 the skill re-runs and refreshes tracking without downgrading any story already in flight.
 
-<!-- Session 6 (build) appends here -->
+**33. The spec is the only thing the implementer ever saw** `[WHY]` `[JUDGMENT]`
+First build session (Story 1.1, worktree `bmad/build-1-1`). The build workflow's shape:
+investigation drains into a ~1.4k-token spec, the human approves it at a checkpoint, and
+a fresh-context subagent implements from the spec alone — no conversation history, no
+accumulated context to rot. The spec's Boundaries carried the guard explicitly ("Never:
+Drizzle (1.2), router wiring (1.7), the test (1.8), config polishing") so scope was
+enforced by the artifact, not by vigilance.
+
+**34. R-13 played out on day one — and the answer was deletion, not configuration** `[JUDGMENT]` `[BREAKS]`
+The fresh-majors risk logged at architecture time materialized immediately: the official
+scaffold pinned TypeScript 6.0.3, not the spine snapshot's 7.0.2 (snapshot = reference,
+never a target — took the scaffold's pin); TS 6 hard-errors on the shadcn guide's
+`baseUrl` (dropped it, `paths` suffices); Vite 8 deprecates `__dirname`. Sharpest case:
+two *official* scaffolds collided — the Tailwind/shadcn init replaces `index.css`,
+orphaning the Vite demo's CSS variables, leaving a half-styled page. The fix was deleting
+the demo remnants, not building config to reconcile two scaffolds' outputs.
+
+**35. Eighteen findings, one arbiter: the guard** `[JUDGMENT]` `[WHY]` `[BREAKS]`
+Three blind review layers returned 18 findings; triage split them 7 patch / 3 defer /
+8 reject, every reject naming its rule. The patches were all correctness (a phantom `zod`
+dependency all three layers caught independently; a fresh clone hitting Node's ENOENT
+instead of the promised "Zod names the variable"). The honest one: the *only* nontrivial
+runtime behavior this story ships — env fail-fast — has no automated observer, and even
+1.8's golden-master (valid env only) will never execute it. Not swept: deferred as an
+explicit decision Story 1.8 must make inside the one-test constraint (sub-assertion in
+the single test file, or recorded manual-only). What breaks in production is exactly the
+branch nobody's test runs.
+
+**36. The close-out audit, run as a 2×2** `[PERSONAL]` `[JUDGMENT]`
+Pablo closed the session with four questions: considered-and-should (ACs traced 1:1,
+guard applied at plan AND triage)? considered-and-shouldn't (a product name slipped into
+a patch as `<title>MenuLens</title>` — unratified naming smuggled in a cosmetic fix)?
+not-considered-but-should (the upstream-repo diff habit ran late, at close instead of
+session start; the web production build was never smoke-run)? not-considered-and-rightly
+(no k8s, no queues, no hand-upgrade to TS 7, no machinery for a port conflict that only
+exists on this machine)? The misses were small and named — which is the point of asking.
