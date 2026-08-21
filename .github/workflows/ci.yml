@@ -1,8 +1,8 @@
 # CI — grows with the repo (rationale and cuts: DECISIONS.md D12).
-# Today: secret scan over the full git history, guarding the challenge's
+# secret-scan: gitleaks over the full git history, guarding the challenge's
 # "secrets in repo" auto-reject tripwire (REQUIREMENTS R12 / §7) continuously
 # instead of as a one-shot manual check before submission.
-# When the app scaffold lands: add a `checks` job (typecheck + the single test).
+# checks: workspace typecheck (Story 1.1); the single golden-master test joins in 1.8.
 name: CI
 
 on:
@@ -24,3 +24,16 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITLEAKS_ENABLE_COMMENTS: false # commenting would need PR write; scan verdict is enough
+
+  checks:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
