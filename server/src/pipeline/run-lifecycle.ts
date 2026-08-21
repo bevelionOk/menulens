@@ -1,6 +1,6 @@
 import type { FastifyBaseLogger } from 'fastify';
 import type { RunStatus, Stage, StoredFailureReason } from 'shared';
-import { db } from '../db/client';
+import { db, type Db, type Tx } from '../db/client';
 import { setStage, setTerminal } from '../db/runs-repo';
 
 // The single place a run transition is persisted AND logged (AC7, NFR5). Stories
@@ -15,8 +15,10 @@ export type RunOutcome =
   | { status: Exclude<RunStatus, 'processing' | 'failed'>; failure_reason?: null }
   | { status: 'failed'; failure_reason: StoredFailureReason };
 
-export async function finishRun(log: FastifyBaseLogger, runId: string, outcome: RunOutcome): Promise<void> {
+// `tx` lets the terminal write join the `saving` transaction (1.6): `done` and the dish
+// rows land together or not at all.
+export async function finishRun(log: FastifyBaseLogger, runId: string, outcome: RunOutcome, tx: Db | Tx = db): Promise<void> {
   const failure_reason = outcome.failure_reason ?? null;
-  await setTerminal(db, runId, { status: outcome.status, failure_reason });
+  await setTerminal(tx, runId, { status: outcome.status, failure_reason });
   log.info({ run_id: runId, status: outcome.status, failure_reason }, 'run finished');
 }
