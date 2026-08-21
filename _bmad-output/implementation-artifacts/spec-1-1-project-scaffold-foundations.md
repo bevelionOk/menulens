@@ -57,13 +57,13 @@ context:
 ## Tasks & Acceptance
 
 **Execution:**
-- [ ] `package.json` (root) -- create: `"workspaces": ["server","web","shared"]`, `"engines": {"node": ">=22.13"}`, `private: true`; scripts `dev` (concurrently server+web) and `typecheck` (all workspaces); `concurrently` as root devDependency.
-- [ ] `docker-compose.yml` -- create: single `postgres:16-alpine` service, named volume, port 5432, credentials matching `.env.example`'s `DATABASE_URL`.
-- [ ] `shared/` -- create package (`zod` its only runtime dep), `tsconfig.json`, `shared/src/index.ts` minimal export so typecheck has a compilation unit.
-- [ ] `server/` -- create package: `fastify`, `tsx` (dev), dep on `shared`; `src/env.ts` Zod schema over `process.env`, fail-fast (`DATABASE_URL` url, `OPENAI_API_KEY` non-empty, `PORT` optional default); `src/index.ts` boots Fastify with `logger: true` (native Pino) + `GET /api/health` → `{ status: 'ok' }` (exists to make the proxy verifiable — only route this story); seed dirs `src/core|pipeline|routes|db`, `drizzle/`, `test/` via `.gitkeep`; `typecheck` = `tsc --noEmit`.
-- [ ] `web/` -- official `npm create vite@latest` (react-ts), then official Tailwind install + `shadcn` CLI init, defaults throughout; `vite.config.ts` gets only the `/api` proxy to the server port.
-- [ ] `.env.example` -- extend: `DATABASE_URL` (compose-matching placeholder), `PORT` (commented default), keep `OPENAI_API_KEY`.
-- [ ] `.github/workflows/ci.yml` -- append `checks` job: checkout, setup-node 22, `npm ci`, `npm run typecheck`; update header comment.
+- [x] `package.json` (root) -- create: `"workspaces": ["server","web","shared"]`, `"engines": {"node": ">=22.13"}`, `private: true`; scripts `dev` (concurrently server+web) and `typecheck` (all workspaces); `concurrently` as root devDependency.
+- [x] `docker-compose.yml` -- create: single `postgres:16-alpine` service, named volume, port 5432, credentials matching `.env.example`'s `DATABASE_URL`.
+- [x] `shared/` -- create package (`zod` its only runtime dep), `tsconfig.json`, `shared/src/index.ts` minimal export so typecheck has a compilation unit.
+- [x] `server/` -- create package: `fastify`, `tsx` (dev), dep on `shared`; `src/env.ts` Zod schema over `process.env`, fail-fast (`DATABASE_URL` url, `OPENAI_API_KEY` non-empty, `PORT` optional default); `src/index.ts` boots Fastify with `logger: true` (native Pino) + `GET /api/health` → `{ status: 'ok' }` (exists to make the proxy verifiable — only route this story); seed dirs `src/core|pipeline|routes|db`, `drizzle/`, `test/` via `.gitkeep`; `typecheck` = `tsc --noEmit`.
+- [x] `web/` -- official `npm create vite@latest` (react-ts), then official Tailwind install + `shadcn` CLI init, defaults throughout; `vite.config.ts` gets only the `/api` proxy to the server port.
+- [x] `.env.example` -- extend: `DATABASE_URL` (compose-matching placeholder), `PORT` (commented default), keep `OPENAI_API_KEY`.
+- [x] `.github/workflows/ci.yml` -- append `checks` job: checkout, setup-node 22, `npm ci`, `npm run typecheck`; update header comment.
 
 **Acceptance Criteria:**
 - Given a fresh clone with `.env` copied from `.env.example`, when `docker compose up -d && npm install && npm run dev` run, then Postgres 16 starts, Fastify boots under tsx watch, and the Vite SPA shell loads with `/api` proxied.
