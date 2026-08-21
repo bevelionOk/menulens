@@ -6,8 +6,9 @@ import { MAX_SOURCE_BYTES } from '../limits';
 import { AcquisitionError } from './acquisition-error';
 
 // AD-11 fetcher: one plain GET per hop with Node's built-in `fetch`, manual redirects,
-// every hop re-validated (scheme + resolved host), 15 s per request, 10 MB streamed cap.
-// Residual (documented, accepted): DNS rebinding between `lookup` and fetch's own resolve.
+// every hop re-validated (scheme + userinfo + resolved host), 15 s per request, 10 MB
+// streamed cap. Residual (documented, accepted): DNS rebinding between `lookup` and
+// fetch's own resolve.
 
 const MAX_HOPS = 5;
 const REQUEST_TIMEOUT_MS = 15_000;
@@ -20,6 +21,7 @@ const HEADERS = {
 
 export interface FetchedSource {
   content_type: string; // media type only, lowercased, parameters dropped
+  charset?: string; // the `charset=` parameter, lowercased, when present
   bytes: Buffer;
   final_url: string;
 }
@@ -27,10 +29,13 @@ export interface FetchedSource {
 const refused = (url: URL, details: Record<string, unknown>) =>
   new AcquisitionError('unreachable_url', 'ssrf_refused', { ssrf_refused: true, host: url.hostname, ...details });
 
-// Scheme + host gate, run before every request. IP literals are checked directly; names
-// are resolved with all addresses and refused if any one is in a blocked range.
+// Scheme + userinfo + host gate, run before every request. IP literals are checked
+// directly; names are resolved with all addresses and refused if any one is blocked.
+// Userinfo is refused here too: a redirect `Location` can carry credentials the 1.3
+// route never saw.
 async function assertAllowedTarget(url: URL): Promise<void> {
   if (url.protocol !== 'http:' && url.protocol !== 'https:') throw refused(url, { scheme: url.protocol });
+  if (url.username || url.password) throw refused(url, { userinfo: true });
   const literal = url.hostname.startsWith('[') ? url.hostname.slice(1, -1) : url.hostname;
   if (isIP(literal)) {
     if (isRefusedAddress(literal)) throw refused(url, { address: literal });
@@ -38,7 +43,7 @@ async function assertAllowedTarget(url: URL): Promise<void> {
   }
   let addresses: { address: string }[];
   try {
-    addresses = await lookup(literal, { all: true, verbatim: true });
+    addresses = await lookup(literal, { all: true, order: 'verbatim' });
   } catch (err) {
     throw new AcquisitionError('unreachable_url', 'dns lookup failed', { host: literal, err });
   }
@@ -70,9 +75,24 @@ async function readCapped(response: Response, url: string): Promise<Buffer> {
   return Buffer.concat(chunks);
 }
 
+function parseContentType(header: string | null): { content_type: string; charset?: string } {
+  const [type = '', ...params] = (header ?? '').split(';');
+  const content_type = type.trim().toLowerCase();
+  for (const param of params) {
+    const [key = '', value = ''] = param.split('=');
+    if (key.trim().toLowerCase() === 'charset') {
+      const charset = value.trim().replace(/^"|"$/g, '').toLowerCase();
+      if (charset) return { content_type, charset };
+    }
+  }
+  return { content_type };
+}
+
 export async function fetchSource(url: string, log: FastifyBaseLogger): Promise<FetchedSource> {
   let current = new URL(url);
-  for (let hop = 0; hop <= MAX_HOPS; hop++) {
+  // Hop 0 is the initial request, hops 1..MAX_HOPS are redirects. One exit: a 2xx body;
+  // every other path throws.
+  for (let hop = 0; ; hop++) {
     await assertAllowedTarget(current);
     let response: Response;
     try {
@@ -91,7 +111,7 @@ export async function fetchSource(url: string, log: FastifyBaseLogger): Promise<
       if (!location) {
         throw new AcquisitionError('unreachable_url', 'redirect without location', { final_url: current.href, status: response.status });
       }
-      if (hop === MAX_HOPS) {
+      if (hop >= MAX_HOPS) {
         throw new AcquisitionError('unreachable_url', 'too many redirects', { final_url: current.href, hops: hop });
       }
       let next: URL;
@@ -109,8 +129,10 @@ export async function fetchSource(url: string, log: FastifyBaseLogger): Promise<
       throw new AcquisitionError('unreachable_url', 'non-2xx response', { final_url: current.href, status: response.status });
     }
     const bytes = await readCapped(response, current.href);
-    const content_type = (response.headers.get('content-type') ?? '').split(';')[0]?.trim().toLowerCase() ?? '';
-    return { content_type, bytes, final_url: current.href };
+    // A 0-byte 2xx has nothing to classify (a 0-byte PDF would otherwise persist as `visual`).
+    if (bytes.length === 0) {
+      throw new AcquisitionError('no_usable_text', 'empty body', { final_url: current.href, status: response.status });
+    }
+    return { ...parseContentType(response.headers.get('content-type')), bytes, final_url: current.href };
   }
-  throw new AcquisitionError('unreachable_url', 'too many redirects', { final_url: current.href });
 }

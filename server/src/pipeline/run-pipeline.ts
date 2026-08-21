@@ -23,7 +23,7 @@ export async function runPipeline(log: FastifyBaseLogger, runId: string): Promis
       acquired = await acquireSource(log, run, artifact);
     } catch (err) {
       if (!(err instanceof AcquisitionError)) throw err;
-      log.warn({ run_id: runId, err, ...err.details, failure_reason: err.reason }, 'source acquisition failed');
+      log.warn({ run_id: runId, err, details: err.details, failure_reason: err.reason }, 'source acquisition failed');
       await finishRun(log, runId, { status: 'failed', failure_reason: err.reason });
       return;
     }

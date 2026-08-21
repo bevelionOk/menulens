@@ -20,6 +20,18 @@ export interface AcquiredSource {
 const IMAGE_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp']);
 const HTML_TYPES = new Set(['text/html', 'application/xhtml+xml']);
 
+// Decodes with the response's `charset` (e.g. iso-8859-1 menus); an unknown label makes
+// `TextDecoder` throw a RangeError — fall back to UTF-8 rather than fail the run.
+function decodeBody(bytes: Buffer, charset: string | undefined): string {
+  let decoder: TextDecoder;
+  try {
+    decoder = new TextDecoder(charset ?? 'utf-8', { fatal: false });
+  } catch {
+    decoder = new TextDecoder('utf-8', { fatal: false });
+  }
+  return decoder.decode(bytes);
+}
+
 // Decides by `run.source_type`, then (URL) by the final content type after redirects —
 // never by the URL's extension (AD-6). Stage is `fetching_source` throughout.
 export async function acquireSource(
@@ -41,8 +53,8 @@ export async function acquireSource(
       return { source_class: 'visual', content_type, bytes: fetched.bytes, acquired_text: null };
     }
     let text: string;
-    if (HTML_TYPES.has(content_type)) text = htmlToText(fetched.bytes.toString('utf8'));
-    else if (content_type.startsWith('text/')) text = collapseWhitespace(fetched.bytes.toString('utf8'));
+    if (HTML_TYPES.has(content_type)) text = htmlToText(decodeBody(fetched.bytes, fetched.charset));
+    else if (content_type.startsWith('text/')) text = collapseWhitespace(decodeBody(fetched.bytes, fetched.charset));
     else {
       throw new AcquisitionError('no_usable_text', 'unsupported content type', {
         final_url: fetched.final_url,
