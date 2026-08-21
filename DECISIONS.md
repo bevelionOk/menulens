@@ -384,3 +384,8 @@ when the test lands (1.8). Rejected under the guard, each naming its rule: engin
 exercises the seam for real), `--kill-others-on-fail` (a no-op under tsx watch — the
 suggested fix doesn't do what it promises), compose port parametrization for a
 machine-local conflict, credential-drift machinery.
+**Name ratified post-audit**: the close-out 2×2 flagged `<title>MenuLens</title>` as an
+unratified naming decision smuggled into a review patch. Verified against the challenge
+docs: naming is nowhere a requirement (BRIEF's "name" is a dish field; the task is
+"deliberately unrelated to our actual product"), and the repo was already `menulens`.
+Pablo ratified keeping it (2026-08-21).
