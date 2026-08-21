@@ -24,7 +24,7 @@ export const errorEnvelopeSchema = z.object({
 export type ErrorEnvelope = z.infer<typeof errorEnvelopeSchema>;
 
 // POST /api/runs (JSON variant) — the URL source; uploads travel as multipart `file`.
-export const createRunUrlRequestSchema = z.object({ url: z.string() });
+export const createRunUrlRequestSchema = z.object({ url: z.string().trim().max(2048) });
 export type CreateRunUrlRequest = z.infer<typeof createRunUrlRequestSchema>;
 
 // POST /api/runs — the row exists before processing starts (AD-4).

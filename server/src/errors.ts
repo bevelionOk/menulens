@@ -17,17 +17,22 @@ function envelope(code: ApiErrorCode, message: string): ErrorEnvelope {
   return { error: { code, message } };
 }
 
-export function errorHandler(err: FastifyError | ApiError, request: FastifyRequest, reply: FastifyReply) {
+export function errorHandler(err: unknown, request: FastifyRequest, reply: FastifyReply) {
+  // A thrown non-object (string, undefined) has no `code`/`validation`/`statusCode` to inspect.
+  if (typeof err !== 'object' || err === null) {
+    request.log.error({ err }, 'unhandled non-error throw');
+    return reply.status(500).send(envelope('internal_error', 'Internal error.'));
+  }
   if (err instanceof ApiError) {
     return reply.status(err.status).send(envelope(err.code, err.message));
   }
-  const code = 'code' in err ? err.code : undefined;
+  const fe = err as Partial<FastifyError>;
   // @fastify/multipart `limits.fileSize` exceeded (verified: FST_REQ_FILE_TOO_LARGE, 413).
-  if (code === 'FST_REQ_FILE_TOO_LARGE') {
+  if (fe.code === 'FST_REQ_FILE_TOO_LARGE') {
     return reply.status(413).send(envelope('file_too_large', 'File exceeds the 10 MB cap.'));
   }
   // Fastify schema validation, bad JSON, unsupported/empty body — all "malformed request".
-  if (err.validation || (typeof err.statusCode === 'number' && err.statusCode >= 400 && err.statusCode < 500)) {
+  if (fe.validation || (typeof fe.statusCode === 'number' && fe.statusCode >= 400 && fe.statusCode < 500)) {
     return reply.status(400).send(envelope('invalid_request', 'Malformed request body.'));
   }
   request.log.error({ err }, 'unhandled error');

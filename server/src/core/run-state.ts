@@ -2,7 +2,8 @@ import type { RunDetail, RunState, RunStatus } from 'shared';
 
 // Pure run-state derivation (AD-5, AD-10): `active` / `interrupted` come from
 // `status` + `stage_changed_at` + the staleness threshold — no stored column, no
-// background job. The 409 gate and the read path both call these. Inputs are typed
+// background job. The POST 409 gate calls `isActive` on the newest processing row and the
+// GET path calls `toRunDetail` → `deriveState` — one rule, two callers. Inputs are typed
 // structurally so core never imports `db`.
 
 export interface RunStateInput {

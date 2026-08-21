@@ -1,4 +1,4 @@
-import { and, asc, desc, eq, getTableColumns, gt } from 'drizzle-orm';
+import { and, asc, desc, eq, getTableColumns } from 'drizzle-orm';
 import type { RunStatus, Stage, StoredFailureReason } from 'shared';
 import { db, type Db, type Tx } from './client';
 import { dishes, runs } from './schema';
@@ -18,23 +18,31 @@ export async function createRun(tx: Db | Tx, input: NewRun): Promise<RunRow> {
   return row;
 }
 
-// Seriality gate input (AD-10): a `processing` run whose stage changed after `cutoff`.
-// The caller computes `cutoff = now − RUN_STALE_AFTER_MS`; a stale run never blocks.
-export async function findActiveRun(cutoff: Date): Promise<RunRow | null> {
+// Seriality gate input (AD-10): the newest `processing` run by staleness anchor. No
+// staleness logic here — the route decides with `core/run-state.isActive`, the same
+// pure function the read path uses. If the newest processing run is not active, none is.
+export async function findLatestProcessingRun(): Promise<RunRow | null> {
   const [row] = await db
     .select(getTableColumns(runs))
     .from(runs)
-    .where(and(eq(runs.status, 'processing'), gt(runs.stage_changed_at, cutoff)))
+    .where(eq(runs.status, 'processing'))
+    .orderBy(desc(runs.stage_changed_at))
     .limit(1);
   return row ?? null;
 }
 
 // Stage transition: `stage_changed_at` is the staleness anchor and moves on every write.
+// Guarded on `status = 'processing'`: a late pipeline write never rewrites a terminal run
+// (a stale-but-still-processing run may still finish — that stays allowed).
 export async function setStage(tx: Db | Tx, id: string, stage: Stage): Promise<void> {
-  await tx.update(runs).set({ stage, stage_changed_at: new Date() }).where(eq(runs.id, id));
+  await tx
+    .update(runs)
+    .set({ stage, stage_changed_at: new Date() })
+    .where(and(eq(runs.id, id), eq(runs.status, 'processing')));
 }
 
 // Terminal write: keeps the last `stage` readable; bumps the anchor like any transition.
+// Same `processing` guard: terminal is written once.
 export async function setTerminal(
   tx: Db | Tx,
   id: string,
@@ -43,7 +51,7 @@ export async function setTerminal(
   await tx
     .update(runs)
     .set({ status: outcome.status, failure_reason: outcome.failure_reason, stage_changed_at: new Date() })
-    .where(eq(runs.id, id));
+    .where(and(eq(runs.id, id), eq(runs.status, 'processing')));
 }
 
 // History list (FR29): explicit `runs` columns only, newest first. Never joins
