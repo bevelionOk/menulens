@@ -176,4 +176,47 @@ PRD amended in place (E6 retired, T-rules re-scoped by class) so epics inherit a
 consistent upstream. Spine final: 14 ADs. Next session: `/bmad-create-epics-and-stories`,
 then the sprint-planning gate.
 
-<!-- Session 4 (epics/stories) appends here -->
+## Session 4 — Epics & Stories (2026-08-21)
+
+**25. Story count is partition, not scope** `[JUDGMENT]`
+Pablo's own challenge — "¿13/14 stories no se nos va de scope?" — got the distinction
+that shaped the session: the story count partitions the same 36 ratified FRs; scope never
+moved. The real protection isn't fewer stories, it's the tag-safe rule Pablo set: **no
+story mixes P0 and P1**, so the D8 deadline ladder cuts P1 stories whole (batch/
+reversibility, evidence panel) without touching a line of P0.
+
+**26. History stayed separate on a UX argument, not a technical one** `[WHY]` `[PERSONAL]`
+The merge option (History into Review) was cheaper on paper. Pablo killed it as an
+operator-experience call: History is not a post-processing phase — it's the other view of
+runs in *any* state; mixing unprocessed runs into the review flow confuses the person
+doing the work. Epic boundaries drawn by how Ana lives in the tool, verbatim in the doc.
+
+**27. Failure states are acceptance criteria, not an epic** `[JUDGMENT]`
+The alternative cut — a "failure states epic" — was rejected on principle: an epic that
+ships without its failure states ships *dishonest* (violating the operating principle),
+and a later failure epic re-churns every file. Honest failure is an AC of each pipeline
+story. FG6 lives distributed, and Epic 1 stands alone truthfully.
+
+**28. One elicitation pass, reserved for the complete set** `[JUDGMENT]`
+Party Mode and per-story elicitation declined — upstream was already gate-audited and
+story-level risk is verification-shaped, not vision-shaped. Three methods (Self-
+Consistency, Pre-mortem, Red Team) ran once over the finished set and converged on small
+additive findings: three coverage gaps (FR14/FR21/FR34), and Red Team caught T4
+traceability missing the pinned normalization — the *same bug class* the architecture
+gate caught for T6, now hunted down at story level. Convergence on small findings is what
+a solid set looks like.
+
+**29. The guard question, turned on the reviewer** `[PERSONAL]` `[JUDGMENT]`
+Before approving the elicitation's 8 fixes, Pablo asked: "¿se atiene esto a la mitigación
+de riesgos y requisitos?" — the standing over-engineering guard applied to the review's
+own output. Every fix had to map to an existing requirement line or a logged risk before
+landing; three of the eight actively *ban* machinery (no partial-error mechanism, one
+config threshold, scaffold defaults as-is). Even the safety net gets audited.
+
+**30. The pre-mortem's sharpest find: the test can't be last-and-lost** `[BREAKS]` `[NEXT]`
+Failure path: it's Aug 25, everything works except Story 1.8 — and R8 ("exactly one
+meaningful automated test") is a *hard* submission requirement, not a P1. Story 1.8 is
+now the Epic 1 exit gate, never cuttable under the ladder. Next: the sprint-planning
+gate (readiness verdict + sprint-status file), then build story by story.
+
+<!-- Session 5 (sprint planning / build) appends here -->
