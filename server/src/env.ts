@@ -2,9 +2,9 @@ import { z } from 'zod';
 
 // Fail-fast env validation (spine conventions: env vars only, validated at boot).
 const envSchema = z.object({
-  DATABASE_URL: z.url(),
-  OPENAI_API_KEY: z.string().min(1),
-  PORT: z.coerce.number().int().positive().default(3000),
+  DATABASE_URL: z.url({ protocol: /^postgres(ql)?$/ }),
+  OPENAI_API_KEY: z.string().trim().min(1),
+  PORT: z.coerce.number().int().positive().max(65535).default(3000),
 });
 
 const parsed = envSchema.safeParse(process.env);

@@ -13,6 +13,7 @@ export default defineConfig({
   },
   server: {
     proxy: {
+      // Target must match the server's PORT (default 3000) — Vite never loads ../.env.
       '/api': 'http://localhost:3000',
     },
   },

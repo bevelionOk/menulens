@@ -2,7 +2,7 @@
 title: 'Story 1.1 — Project Scaffold & Foundations'
 type: 'chore'
 created: '2026-08-21'
-status: 'in-progress'
+status: 'in-review'
 review_loop_iteration: 0
 baseline_commit: 'a3f2e35e338fe6a1d1da98680d023fa287519400'
 context:
