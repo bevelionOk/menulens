@@ -4,7 +4,8 @@ import { env } from '../env';
 import * as schema from './schema';
 
 // The one database handle (AD-1): DATABASE_URL comes validated from env.ts.
-export const pool = new Pool({ connectionString: env.DATABASE_URL });
+// `connectionTimeoutMillis`: Postgres down = an error within ~5 s (→ 500), never a hang (AD-14).
+export const pool = new Pool({ connectionString: env.DATABASE_URL, connectionTimeoutMillis: 5000 });
 
 // AD-14 failure containment: an error on an idle client (Postgres restart, network drop)
 // would otherwise be an unhandled EventEmitter error and crash the process. Log only.

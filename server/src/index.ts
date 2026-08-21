@@ -1,10 +1,7 @@
-import fastify from 'fastify';
+import { buildApp } from './app';
 import { env } from './env';
 
-const app = fastify({ logger: true });
-
-// Exists to make the Vite /api proxy verifiable — the only route in Story 1.1.
-app.get('/api/health', async () => ({ status: 'ok' }));
+const app = buildApp();
 
 try {
   await app.listen({ port: env.PORT });
