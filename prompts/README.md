@@ -16,6 +16,7 @@ Prompts are grouped by phase so a reviewer can follow the thought sequence:
 | `05-bmad-sprint-planning/` | BMAD readiness gate + sprint tracking |
 | `06-implementation/` | Dev prompts (backend, frontend, LLM extraction, tests) |
 | `07-review-hardening/` | Code review, edge cases, production-risk analysis |
+| `runtime/` | Versioned runtime prompts the server loads at boot (e.g. `extraction-v1.md`) — not session prompts |
 
 ## File format
 
