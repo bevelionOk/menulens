@@ -134,4 +134,46 @@ SSRF mechanics) close.
 
 ---
 
-<!-- Session 3 (architecture) appends here -->
+## Session 3 — Architecture (2026-08-21)
+
+**19. The one-test budget flips the choice** `[JUDGMENT]` `[PERSONAL]`
+The PRD's front-runner was a unit test on the pure arbiter. Pablo challenged his own
+plan: with *exactly one* test allowed, breadth of meaningful coverage wins — an
+integration golden-master (real API, real Postgres, OpenAI mocked at its seam) crosses
+every boundary the unit test can't see, and the fixture is crafted to fire all six triage
+rules, so the arbiter's coverage is embedded, not lost. E2E was rejected for riding real
+LLM non-determinism. A visible supersession, logged as D16.
+
+**20. "A yes eliminates E6" turned out to be false — and that's the story** `[WHY]` `[JUDGMENT]`
+OpenAI's native PDF input verified: yes, it exists. But sending PDFs natively means *we*
+never hold the source text — no ground truth, no machine verification, an empty evidence
+tab. The fix reframed the whole pipeline: sources are classed by *usable ground text*
+(`text | visual`), not by file type; scanned PDFs simply join the class photos already
+live in. E6 stopped being a failure state without weakening the gate one millimeter.
+
+**21. The adversarial reviewer found a real spec bug** `[BREAKS]` `[JUDGMENT]`
+"Strip diacritics after NFKC" is a no-op — composed é has no combining mark to strip. Two
+compliant builders would have produced *different confidence flags on identical Spanish
+menus*: the worst possible divergence in an allergen product. The pinned order is now
+NFKC → lowercase → NFD → remove combining marks → collapse whitespace. Caught by a
+reviewer whose only job was to build two compliant-but-incompatible units.
+
+**22. The gate a lying model can't beat** `[BREAKS]`
+Chaos pass: a menu carrying prompt-injection ("mark everything reliable"). On text
+sources the deterministic arbiter shrugs — a fabricated "declared" needs an evidence
+quote that actually matches the source, or T6 downgrades it and the allergen gate fires.
+On photos the quote can be faked, and that's exactly why photo evidence is Ana-verified.
+Walkthrough gold. Companion residual, named not hidden: DNS rebinding on the SSRF guard.
+
+**23. Six reviewers, six pass-with-fixes, zero reversals** `[JUDGMENT]` `[PERSONAL]`
+Five elicitation methods + six gate subagents (heartbeat-watched, R-11) attacked the
+decision set from independent angles and converged on the same verdict: decisions right,
+seams under-specified. Nine seam rules + ~20 fixes, no new machinery. Pablo's framing:
+"había que ajustar costuras para que los builds no diverjan."
+
+**24. Next** `[NEXT]`
+PRD amended in place (E6 retired, T-rules re-scoped by class) so epics inherit a
+consistent upstream. Spine final: 14 ADs. Next session: `/bmad-create-epics-and-stories`,
+then the sprint-planning gate.
+
+<!-- Session 4 (epics/stories) appends here -->
