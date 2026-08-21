@@ -1,5 +1,5 @@
 import { and, asc, desc, eq, getTableColumns } from 'drizzle-orm';
-import type { RunStatus, Stage, StoredFailureReason } from 'shared';
+import type { RunStatus, SourceClass, Stage, StoredFailureReason } from 'shared';
 import { db, type Db, type Tx } from './client';
 import { dishes, runs } from './schema';
 
@@ -52,6 +52,19 @@ export async function setTerminal(
     .update(runs)
     .set({ status: outcome.status, failure_reason: outcome.failure_reason, stage_changed_at: new Date() })
     .where(and(eq(runs.id, id), eq(runs.status, 'processing')));
+}
+
+// AD-6 class write (1.4): same `processing` guard; no anchor bump — not a stage transition.
+export async function setSourceClass(tx: Db | Tx, id: string, source_class: SourceClass): Promise<void> {
+  await tx
+    .update(runs)
+    .set({ source_class })
+    .where(and(eq(runs.id, id), eq(runs.status, 'processing')));
+}
+
+export async function getRun(id: string): Promise<RunRow | null> {
+  const [row] = await db.select().from(runs).where(eq(runs.id, id));
+  return row ?? null;
 }
 
 // History list (FR29): explicit `runs` columns only, newest first. Never joins

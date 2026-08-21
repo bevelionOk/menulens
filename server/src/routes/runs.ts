@@ -6,6 +6,7 @@ import { createRun, findLatestProcessingRun, getRunWithDishes, type NewRun } fro
 import { insertArtifact } from '../db/source-artifacts-repo';
 import { env } from '../env';
 import { ApiError } from '../errors';
+import { runPipeline } from '../pipeline/run-pipeline';
 
 // FR1 accept set. `image/heic` is deliberately absent (epic: its presence would stop the
 // OS HEIC→JPEG auto-convert). A `Map` so only these four literal keys match — a plain
@@ -82,6 +83,8 @@ export const runsRoutes: FastifyPluginAsync = async (app) => {
     });
 
     request.log.info({ run_id: created.id }, 'run created');
+    // AD-4: the pipeline starts after the commit and is never awaited by the request.
+    void runPipeline(request.log, created.id);
     return reply.status(201).send({ id: created.id, status: created.status });
   });
 
