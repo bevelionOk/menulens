@@ -1,9 +1,10 @@
 import { readFileSync } from 'node:fs';
 import type { FastifyBaseLogger } from 'fastify';
-import OpenAI, { APIConnectionTimeoutError, APIError } from 'openai';
+import OpenAI, { APIConnectionTimeoutError, APIError, OpenAIError } from 'openai';
 import { zodTextFormat } from 'openai/helpers/zod';
 import type { ResponseInput } from 'openai/resources/responses/responses';
 import { type ModelDishSignal, modelExtractionOutputSchema, type SourceClass } from 'shared';
+import { z } from 'zod';
 import { ExtractionError } from './extraction-error';
 
 // The OpenAI seam (AD-12/AD-13): this is the ONLY file that imports `openai`. Everything
@@ -36,7 +37,9 @@ export type RuntimePrompt = { version: string; text: string };
 // Versioned runtime prompt in `prompts/runtime/<version>.md`, read once at boot.
 export function loadRuntimePrompt(version: string): RuntimePrompt {
   const url = new URL(`../../../prompts/runtime/${version}.md`, import.meta.url);
-  return { version, text: readFileSync(url, 'utf8') };
+  const text = readFileSync(url, 'utf8');
+  if (text.trim().length === 0) throw new Error(`empty runtime prompt ${version}`);
+  return { version, text };
 }
 
 export type ExtractionAdapterOptions = { model: string; timeoutMs: number; prompt: RuntimePrompt };
@@ -48,6 +51,24 @@ export function createOpenAIClient(apiKey: string): OpenAI {
 }
 
 const OUTPUT_FORMAT = zodTextFormat(modelExtractionOutputSchema, 'menu_extraction');
+
+// True only when `parse` threw because of the model's text: the SDK's own non-HTTP errors
+// (length / content-filter stops), malformed JSON, or a schema miss. Anything else is a
+// programming error and must reach the pipeline's outer catch.
+function isInvalidOutputError(err: unknown): boolean {
+  if (err instanceof OpenAIError && !(err instanceof APIError)) return true;
+  if (err instanceof SyntaxError) return true;
+  if (err instanceof z.ZodError) return true;
+  return err instanceof Error && err.name === 'ZodError';
+}
+
+function firstRefusal(output: { type: string; content?: { type: string; refusal?: string }[] }[]): string | null {
+  for (const item of output) {
+    if (item.type !== 'message') continue;
+    for (const c of item.content ?? []) if (c.type === 'refusal') return c.refusal ?? '';
+  }
+  return null;
+}
 
 // Model input by class (AD-6): `text` sends the acquired text, never the file (a text-class
 // PDF included); `visual` sends the stored bytes — vision for images, native `input_file`
@@ -110,14 +131,14 @@ export function createExtractionAdapter(client: OpenAI, opts: ExtractionAdapterO
         // Timeout first: it is itself an APIError subclass.
         if (err instanceof APIConnectionTimeoutError) {
           log.warn({ run_id: runId, attempt, elapsed_ms, timeout_ms: timeoutMs }, 'model call timed out');
-          throw new ExtractionError('model_timeout', `model call exceeded ${timeoutMs} ms`, { attempt, elapsed_ms });
+          throw new ExtractionError('model_timeout', `model call exceeded ${timeoutMs} ms`, { attempt, elapsed_ms }, err);
         }
         if (err instanceof APIError) {
           log.warn({ run_id: runId, attempt, elapsed_ms, status: err.status ?? null, err }, 'model call failed');
-          throw new ExtractionError('model_error', err.message, { attempt, status: err.status ?? null });
+          throw new ExtractionError('model_error', err.message, { attempt, status: err.status ?? null }, err);
         }
-        // Anything else thrown by `parse` is the SDK rejecting the model's text (malformed
-        // JSON, schema miss, length/content-filter stop) — invalid output, retried once.
+        if (!isInvalidOutputError(err)) throw err;
+        // The SDK rejected the model's text — invalid output, retried once.
         response = null;
         log.warn({ run_id: runId, attempt, elapsed_ms, err }, 'model output could not be parsed');
       }
@@ -132,6 +153,7 @@ export function createExtractionAdapter(client: OpenAI, opts: ExtractionAdapterO
           output_tokens: u?.output_tokens ?? 0,
           total_tokens: u?.total_tokens ?? 0,
           prompt_version: prompt.version,
+          elapsed_ms: Date.now() - started,
         };
         usage.input_tokens += line.input_tokens;
         usage.output_tokens += line.output_tokens;
@@ -142,7 +164,14 @@ export function createExtractionAdapter(client: OpenAI, opts: ExtractionAdapterO
         const parsed = modelExtractionOutputSchema.safeParse(response.output_parsed);
         if (parsed.success) return { dishes: parsed.data.dishes, usage, attempts: attempt };
         log.warn(
-          { run_id: runId, attempt, status: response.status, issues: parsed.error.issues.slice(0, 5) },
+          {
+            run_id: runId,
+            attempt,
+            status: response.status,
+            incomplete_reason: response.incomplete_details?.reason ?? null,
+            refusal: firstRefusal(response.output),
+            issues: parsed.error.issues.slice(0, 5),
+          },
           'model output invalid',
         );
       }

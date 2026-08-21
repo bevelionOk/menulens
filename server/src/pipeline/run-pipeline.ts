@@ -4,7 +4,7 @@ import { getRun, setSourceClass } from '../db/runs-repo';
 import { getArtifact, upsertArtifact } from '../db/source-artifacts-repo';
 import { AcquisitionError } from './acquisition-error';
 import { acquireSource } from './acquire-source';
-import type { ExtractFn } from './extraction-adapter';
+import type { ExtractFn, ExtractionResult } from './extraction-adapter';
 import { ExtractionError } from './extraction-error';
 import { finishRun, transitionStage } from './run-lifecycle';
 
@@ -54,7 +54,7 @@ export async function runPipeline(log: FastifyBaseLogger, runId: string, extract
     await transitionStage(log, runId, 'extracting');
     const stored = await getArtifact(runId);
     if (!stored) throw new Error(`runPipeline: run ${runId} has no artifact after acquisition`);
-    let extracted;
+    let extracted: ExtractionResult;
     try {
       extracted = await extract(
         {

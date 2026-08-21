@@ -9,8 +9,9 @@ export class ExtractionError extends Error {
     readonly reason: ExtractionFailureReason,
     message: string,
     readonly details: Record<string, unknown> = {},
+    cause?: unknown,
   ) {
-    super(message);
+    super(message, { cause });
     this.name = 'ExtractionError';
   }
 }

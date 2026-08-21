@@ -12,7 +12,7 @@ const envSchema = z.object({
   // Default 200 is calibration data, not an invariant.
   SOURCE_MIN_TEXT_CHARS: z.coerce.number().int().positive().default(200),
   // D3 model tier for extraction; the id is config, never code.
-  OPENAI_MODEL: z.string().min(1).default('gpt-5.6-luna'),
+  OPENAI_MODEL: z.string().trim().min(1).default('gpt-5.6-luna'),
   // FR6: the pipeline's single technical timeout — one model call. Default 120 s.
   MODEL_TIMEOUT_MS: z.coerce.number().int().positive().default(120000),
 });

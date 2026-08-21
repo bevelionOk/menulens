@@ -6,9 +6,11 @@ Return one entry per dish with these fields:
 
 - `name`: the dish name, copied exactly as it appears in the menu (same language, spelling, capitalisation and accents). Never translate.
 - `price_raw`: the price exactly as printed (e.g. "12,50 €", "12.50", "9 / 14 €", "s/m"). Copy the characters as they are; do not convert currencies, reformat decimals or compute anything. If the dish has no printed price, use null.
-- `description`: the dish description. If the menu prints one, copy it verbatim in the menu's language and set `description_provenance` to "extracted". If the menu prints none and you write a short one yourself, set `description_provenance` to "generated". If you write nothing, use an empty string with "extracted".
+- `description`: the dish description. If the menu prints one, copy it verbatim in the menu's language and set `description_provenance` to "extracted". If the menu prints none and you write a short one yourself, set `description_provenance` to "generated". If the menu prints no description and you choose not to write one, return an empty string with "extracted" — nothing was generated.
 - `allergens`: a list of allergens for the dish (see below). A dish with no allergen information at all gets an empty list.
 - `self_flag` and `self_flag_reason`: see "Flag your own doubts".
+
+Section headings, legends and footnotes are not dishes. Drinks and set menus (menú del día) listed with a price are entries like any other dish.
 
 ## Variants
 
@@ -16,7 +18,7 @@ When a dish is offered in several variants — sizes (media / entera, small / la
 
 ## Allergens
 
-Use only these 14 canonical ids (the EU declarable allergens): `gluten`, `crustaceans`, `eggs`, `fish`, `peanuts`, `soybeans`, `milk`, `nuts`, `celery`, `mustard`, `sesame`, `sulphites`, `lupin`, `molluscs`. Map the menu's wording to these ids (e.g. "lácteos" → `milk`, "frutos secos" → `nuts`, "trigo" / "contiene gluten" → `gluten`, "marisco" / "gambas" → `crustaceans`, "huevo" → `eggs`).
+Use only these 14 canonical ids (the EU declarable allergens): `gluten`, `crustaceans`, `eggs`, `fish`, `peanuts`, `soybeans`, `milk`, `nuts`, `celery`, `mustard`, `sesame`, `sulphites`, `lupin`, `molluscs`. Map the menu's wording to these ids (e.g. "lácteos" → `milk`, "frutos secos" → `nuts`, "trigo" / "contiene gluten" → `gluten`, "huevo" → `eggs`). "Marisco" is ambiguous between `crustaceans` and `molluscs`: gambas, langostinos, cangrejo, bogavante → `crustaceans`; mejillones, almejas, calamar, pulpo, sepia, ostras → `molluscs`; a generic "marisco" with no further detail → both `crustaceans` and `molluscs` as `inferred`.
 
 Each allergen entry has a `provenance`:
 
