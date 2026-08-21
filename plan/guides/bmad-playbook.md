@@ -127,6 +127,14 @@ anything *outside* the ratified FRs ("admin", "settings").
 The gate. It audits whether planning is implementable and emits PASS/CONCERNS/FAIL plus
 the sprint-status file the build loop follows. See §7 for the CONCERNS scenario.
 
+Ratified (2026-08-21, session 5): **PASS**, zero new decisions — traceability verified
+both directions via the FR coverage map, FR30 already closed by D19, and all open items
+are calibration data with owners, not missing decisions.
+`_bmad-output/implementation-artifacts/sprint-status.yaml` generated deterministically:
+3 epics / 13 stories — 16 `backlog` + 3 `optional` retrospectives. Re-run the skill to
+refresh tracking whenever epics change during build; it never downgrades an advanced
+story status.
+
 ## 4. Pablo's do/don't in sessions
 
 **Do**: answer in first person as product owner; give reasons with decisions ("X porque Y");

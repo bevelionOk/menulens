@@ -219,4 +219,22 @@ meaningful automated test") is a *hard* submission requirement, not a P1. Story 
 now the Epic 1 exit gate, never cuttable under the ladder. Next: the sprint-planning
 gate (readiness verdict + sprint-status file), then build story by story.
 
-<!-- Session 5 (sprint planning / build) appends here -->
+**31. The gate that added nothing — and why that's the point** `[JUDGMENT]` `[WHY]`
+The sprint-planning readiness gate ran as a skeptic reading a handoff: could a developer
+build these 13 stories without inventing a single unrecorded decision? Verdict: PASS with
+zero new decisions needed. Traceability held in both directions (FR coverage map forward,
+story citations back), the one historical gap (FR30's priority) had already been caught
+and ratified in D19, and every remaining open item is calibration *data* with a recorded
+owner — a threshold to measure, never a decision to invent. Four gated sessions upstream
+left nothing for the fifth to fix: that silence is the evidence the process worked.
+
+**32. Judgment where it matters, a script where it doesn't** `[JUDGMENT]` `[NEXT]`
+The tracking file wasn't hand-written: a deterministic parser turned epics.md into
+`sprint-status.yaml` (3 epics, 13 stories — 16 backlog + 3 optional retrospectives),
+because parsing headings and merging statuses are mechanical jobs where an LLM only adds
+noise. Judgment stayed where the script can't go: the readiness verdict, and auditing the
+parser's two warnings (both benign — summary headings, not lost stories). Planning phase
+closed; next conversation is `bmad-build` on Story 1.1, and if epics change mid-build,
+the skill re-runs and refreshes tracking without downgrading any story already in flight.
+
+<!-- Session 6 (build) appends here -->
