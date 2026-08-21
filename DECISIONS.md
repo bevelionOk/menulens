@@ -306,3 +306,54 @@ endpoint (single = batch of one, reopen included); T6 match offsets persisted so
 frontend never re-implements matching; acquired text served `text/plain` (stored-XSS).
 New risk logged as R-13 (fresh-major toolchain convergence). Full reports:
 `_bmad-output/planning-artifacts/architecture/architecture-full-stack-challenge-2026-08-21/reviews/`.
+
+## D19 · 2026-08-21 — Epics & stories: 3 value epics, 13 priority-pure stories, tag-safe cut ladder
+
+**Context**: decomposing PRD FR1–FR36 + the 14-AD spine into implementable stories
+(`_bmad-output/planning-artifacts/epics.md`). With both upstream artifacts final and
+gate-audited, the epic-design principle is fewer/larger epics cut only at genuine value
+boundaries — organized by user value, never technical layers.
+**Options considered**: (a) epic per PRD feature group (6 — file churn: FG2/FG3 build one
+pipeline, FG6 lives inside every path); (b) 2 epics merging History into Review; (c) a
+separate failure-states epic; (d) **3 epics mirroring the loop**: Extract & Triage /
+Review & Confirm / History.
+**Decision**: (d). History stays separate on Pablo's UX argument: it is not a
+post-processing phase but *the other view of runs in any state* — mixing unprocessed runs
+into the review flow would confuse the operator (finding/resuming/defending work vs doing
+it). A failure-states epic was rejected on principle: honest failure is an acceptance
+criterion of each pipeline story — an epic that ships without its failure states ships
+dishonest, and a later "failure epic" re-churns the same files. Story compression was
+bounded by one rule (Pablo's): **no story mixes P0 and P1**, so the D8 ladder can cut P1
+stories whole (2.3 batch/reversibility/notice, 2.4 evidence panel) without touching P0;
+the single exception is one tagged `[P1]` AC (FR5 expectation copy) inside Story 1.7.
+Result: 13 stories (E1: 8 · E2: 4 · E3: 1), each sized for one dev-agent session, no
+forward dependencies (a 1.3 run with no pipeline yet ends honestly as `interrupted`).
+**Ladder fix**: FR30 (open a run from History) was absent from the PRD's P0/P1 lists;
+ratified **P0** — FR3's promise ("the run is found in History") is useless if the found
+run can't be opened, and the deep link costs a route, not a feature.
+**Restraint (D11 style)**: Party Mode and per-story elicitation declined — both upstream
+artifacts already carried 8- and 6-reviewer gates, and story-level risk is
+verification-shaped, not vision-shaped. One advanced-elicitation pass over the *complete*
+story set instead; per-story ceremony would burn the 4-day window for marginal return.
+
+## D20 · 2026-08-21 — Story-hardening closures from the epics session
+
+Small decisions closed while writing stories, recorded so none becomes tacit:
+**SSRF failure code**: a runtime SSRF refusal reuses `unreachable_url` with an honest
+message instead of adding an `ssrf_refused` code — AD-14's enum is closed, a new code
+would require a spine amendment, and E2's actionable copy (retry / switch to PDF-photo)
+fits. **Fetcher scope guard** (anti-over-engineering, now an explicit AC in Story 1.4):
+the URL fetch is one plain GET per submitted URL via Node's built-in `fetch` — no
+crawling, no JS rendering/headless browser, no retry loops, no third-party HTTP client;
+a page that yields no text gets the honest E3 answer, never more machinery. **Golden
+per-rule guarantee** (Story 1.8): the golden asserts each fired rule *by id* in
+`confidence_reasons`, so the single test fails naming the rule if any of T1–T6 stops
+firing — the per-rule guarantee is what makes one test carry the arbiter's coverage
+(strengthens D16). **Review contract whole** (Story 2.1): the endpoint implements the
+full AD-9 action enum including `reopen` even though the reopen *UI* is P1 — splitting a
+closed contract across stories fragments it; marginal cost ≈ zero. **UX-3 accessibility**:
+no custom a11y workstream — the stock shadcn/ui (Radix) baseline (keyboard operability,
+ARIA semantics) is the decision; single named desktop operator, not requested by the
+challenge, and a custom a11y epic would violate the over-engineering guard. (Completes
+the session-start UX audit: visual identity = stock shadcn, desktop-first — both already
+decided upstream.)

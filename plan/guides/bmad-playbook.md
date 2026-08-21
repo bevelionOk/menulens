@@ -108,9 +108,19 @@ no PII stored, allergen disclaimer in UI ("AI-extracted — verify before publis
 
 ### 3.4 `/bmad-create-epics-and-stories` (~30 min)
 
-Expect **1 epic, 5–7 stories** matching plan/03's table. Each story: acceptance criteria
-traceable to a PRD requirement. If the agent proposes a second epic ("admin", "settings") —
-cut it, log the cut.
+> **Synced to the ratified outcome (2026-08-21, session 4).** The opening expectation
+> ("1 epic, 5–7 stories") predated the ratified PRD/spine and is superseded — authority:
+> `_bmad-output/planning-artifacts/epics.md` + DECISIONS.md D19/D20.
+
+Ratified: **3 epics mirroring the loop** (Extract & Triage / Review & Confirm / History —
+History separate on a UX argument, never a technical layer), **13 priority-pure stories,
+62 ACs**. The governing rule was tag safety, not count: no story mixes P0 and P1, so the
+D8 ladder cuts P1 stories whole (2.3, 2.4). Failure states are ACs inside pipeline
+stories, not an epic. FR30 ratified P0 (a PRD ladder gap). One advanced-elicitation pass
+over the *complete* set (Self-Consistency + Pre-mortem + Red Team) yielded 8 additive
+fixes — coverage gaps FR14/FR21/FR34 closed, T4 normalization pinned, 1.8 declared Epic 1
+exit gate (R8 is a hard requirement). The "second epic → cut it" instinct stands for
+anything *outside* the ratified FRs ("admin", "settings").
 
 ### 3.5 `/bmad-sprint-planning` (~15–30 min)
 
