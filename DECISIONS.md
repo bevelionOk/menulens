@@ -389,3 +389,55 @@ unratified naming decision smuggled into a review patch. Verified against the ch
 docs: naming is nowhere a requirement (BRIEF's "name" is a dish field; the task is
 "deliberately unrelated to our actual product"), and the repo was already `menulens`.
 Pablo ratified keeping it (2026-08-21).
+
+## D22 · 2026-08-21 — Build session 2 (Story 1.2): contract conventions, the envelope-code gap, review triage
+
+**Context**: second `bmad-build` session (worktree `bmad/build-1-2`, from main `41794ac`).
+The story turns the spine's shapes into code: `shared` as the single contract, the
+Drizzle schema with the challenge's "real migration" (R2), and the repos that embody the
+two read invariants (server-assigned `position`; artifact bytes never in list queries).
+**Conventions closed while writing the contract**:
+- **Keys are snake_case on the wire and in the DB; TS identifiers are camelCase.** Data
+  keys are contract, not identifiers — every AD and AC already spells them that way
+  (`price_raw`, `dish_id`, `confidence_reasons`), so the DB row, the API JSON, and the
+  1.8 golden carry one shape with zero mapping layer. Drizzle's `casing` auto-mapping is
+  banned: a column is spelled once. Timestamps are the one declared boundary: `Date` in
+  rows, ISO-8601 strings once Fastify serializes — the `shared` schema describes the wire.
+- **Model-signal schemas are strict-structured-output compatible** (`.nullable()` never
+  `.optional()`, no defaults, closed enums) so 1.5's `zodTextFormat` consumes them as-is.
+- **Dish-level `unknown` = empty `allergens` array** (FR13/FR21) — no column, no tri-state.
+- **`bytea` via `customType`**: verified against the drizzle-orm 0.45.2 tarball that
+  pg-core ships no native bytea; R-13 practice — check the artifact, not the docs.
+- **Migrations run by an explicit script, never at boot** (`db:migrate`, programmatic
+  migrator, folder resolved from the file so CI's cwd is irrelevant).
+**The envelope-code gap (a real spine seam)**: the conventions table says error-envelope
+codes come from the AD-14 enum, but AD-14 has no code for a 409 (active run, FR35), a
+404, or a malformed review body (2.1). Resolution, checked against the over-engineering
+guard (each code maps to a *required* behavior; three literals, no error taxonomy):
+`apiErrorCodeSchema = pre-run reasons ∪ run_active | not_found | invalid_request`. The
+run's `failure_reason` enum stays closed (AC3). **Course-corrected by the review**: the
+first cut spread the *whole* AD-14 enum into the envelope; a reviewer pointed out that
+stored reasons travel in `runs.failure_reason` via GET and never in an envelope, so the
+wider type claimed codes no endpoint can emit. Narrowed — Pablo's call: "the value is in
+being stricter" — the contract now draws AD-14's two failure channels exactly.
+**Review triage (3 layers, ~47 raw findings → 5 patch / 3 defer / rest reject)**:
+patches were containment- and robustness-shaped — a `pg.Pool` with **no `error`
+listener crashes the process on an idle-client error** (Postgres restart; AD-14 says the
+failure path never throws — "what breaks in production" material), a cwd-relative
+migrations folder, a `returning()` row guard, the serialization-boundary comment, a
+healthcheck made consumable (`up -d --wait`, `start_period`/`retries`). Deferred with
+owners: a schema↔SQL drift guard in CI (decide in 1.8 against R8 — build-time check,
+not a test, but the distinction must be argued), `connectionTimeoutMillis` (DB down =
+hang forever; 1.3), a dummy `OPENAI_API_KEY` for `db:migrate` in CI (1.8). Rejected
+under the guard: check constraints, indexes, cascades, `pgEnum`, reconnect logic,
+UUID validation inside repos (the route's job), `.refine()`s that would break the
+model-signal path (T6 must *accept* a `declared` allergen without a quote in order to
+downgrade it), "no tests" (R8). One correct rejection worth recording: `getRunWithDishes`
+reads run and dishes in two statements — a poll landing mid-`saving` can see
+`processing` with dishes for one tick; the next poll heals it, a transaction would be
+machinery for a flicker.
+**Local-environment note (not a repo change)**: port 5432 was held by another project's
+Postgres on the dev machine; the session ran the challenge DB on 5433 through a compose
+override kept outside the repo. Compose stays on 5432 — an evaluator with a local
+Postgres hits the same clash; recorded as a known limitation for the README, not
+parametrized (D21's rejection stands).

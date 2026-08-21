@@ -273,3 +273,46 @@ not-considered-but-should (the upstream-repo diff habit ran late, at close inste
 session start; the web production build was never smoke-run)? not-considered-and-rightly
 (no k8s, no queues, no hand-upgrade to TS 7, no machinery for a port conflict that only
 exists on this machine)? The misses were small and named — which is the point of asking.
+
+---
+
+## Session 7 — Story 1.2: Shared Contract & Data Layer (2026-08-21)
+
+**37. One base schema per entity — the rule that keeps three consumers honest** `[WHY]` `[JUDGMENT]`
+The contract is six small files where every variant is a `.pick()/.extend()/.omit()` of
+one base: the model-signal shape *is* the dish row minus what the server assigns, plus
+the self-flag — which is why the model can never smuggle a verdict, only signals. The
+AD-14 failure enum is assembled from its three subsets (pre-run / stored / derived)
+instead of re-spelled, so the "never stored" and "derived at read" distinctions exist in
+the type system, not only in prose. Keys are snake_case on the wire and in the DB on
+purpose: the DB row, the JSON, and the golden are one shape, zero mapping code.
+
+**38. The review made the contract stricter — and that was the point** `[JUDGMENT]` `[WHY]`
+The first cut of the error envelope accepted every AD-14 code. A reviewer noticed what
+the design already said: pipeline failures are persisted on the run and read via GET;
+they never travel in an envelope. The wide enum claimed codes no endpoint can emit.
+Narrowed to pre-run + three HTTP codes — Pablo's call was "the value is in being
+stricter": the same principle as the product ("never claim more than provable"),
+applied to a type. Also a visible spine seam closed: the conventions said envelope codes
+come from AD-14, which had no word for a 409/404 — three literals, guard-checked.
+
+**39. What breaks in production: the `error` listener nobody writes** `[BREAKS]`
+A `pg.Pool` without an `'error'` handler is fine for weeks — until Postgres restarts or a
+connection drops while a client sits idle: the EventEmitter throws and the process dies,
+taking every in-flight run with it. AD-14 says the failure path never throws; the review
+caught that the data layer violated it before a single route existed. Same family,
+deferred with an owner: no connection timeout means a dead database produces hanging
+requests, not honest 5xx — decided when 1.3 issues the first query. And the migration
+runner inherits the env fail-fast, so CI will need a dummy API key to migrate — found by
+running it, logged for 1.8.
+
+**40. The 2×2 audit, second run** `[PERSONAL]` `[JUDGMENT]`
+Considered-and-should: every AC verified by me, not only by the implementer (live `\d`,
+idempotent re-migrate, the I/O matrix re-executed, a clean `npm ci` after the worker
+hand-edited the lockfile). Considered-and-shouldn't: a token-count ceremony that asked
+Pablo to pick between a split nobody wanted and the obvious "keep". Missed-and-should:
+the CI dummy-key requirement the worker flagged and I didn't log; the 5432 clash that
+isn't only this machine's; a read-race I rejected without saying why. Not-considered-and-
+rightly: check constraints, indexes, cascades, reconnect logic, `.refine()`s that would
+have broken T6's downgrade path, and "there are no tests" (R8). The misses were small and
+named — asking the four questions is what makes them small.

@@ -5,15 +5,21 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch --env-file-if-exists=../.env src/index.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "tsx --env-file-if-exists=../.env src/db/migrate.ts"
   },
   "dependencies": {
+    "drizzle-orm": "^0.45.2",
     "fastify": "^5.12.1",
+    "pg": "^8.23.0",
     "shared": "*",
     "zod": "^4.4.3"
   },
   "devDependencies": {
     "@types/node": "^22",
+    "@types/pg": "^8.23.1",
+    "drizzle-kit": "^0.31.10",
     "tsx": "^4.23.12",
     "typescript": "~6.0.2"
   }

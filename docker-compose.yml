@@ -11,6 +11,15 @@ services:
       - "127.0.0.1:5432:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
+    # Readiness signal for the first DB consumers (1.2 migrate, 1.8 CI test):
+    # plain `up -d` returns before Postgres accepts connections. Use
+    # `docker compose up -d --wait` — it blocks until this check reports healthy,
+    # which is the safe moment to run `npm run -w server db:migrate`.
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d menu_extraction"]
+      interval: 5s
+      start_period: 10s
+      retries: 10
 
 volumes:
   postgres-data:
