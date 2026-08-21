@@ -82,6 +82,18 @@ no PII stored, allergen disclaimer in UI ("AI-extracted — verify before publis
 
 ### 3.3 `/bmad-architecture` (~45–60 min)
 
+> **Ratified outcome (2026-08-21)** — session done; authority is the spine
+> (`_bmad-output/planning-artifacts/architecture/architecture-full-stack-challenge-2026-08-21/ARCHITECTURE-SPINE.md`)
+> + DECISIONS D16–D18. Deltas vs the opening positions below: **PDF path evolved** —
+> scanned PDFs ARE supported now via source classes `text|visual` (pdfjs text layer when
+> usable; OpenAI native-PDF input otherwise; E6 retired, D17); **schema evolved** —
+> `runs` + `dishes` + `source_artifacts` (persisted bytes/text), `price_raw`/`price_value`
+> split, `source_class`, `description` + `description_provenance` (D14), `position`;
+> **LLM contract** = structured outputs (`zodTextFormat`) as the current JSON mode;
+> **the one test** adopted as written below (D16 — Pablo re-derived the same
+> golden-master position in-session before consulting this table). SSRF guard added
+> (spine AD-11). The table below stays as the historical frame — cite the spine, not it.
+
 **Decisions this session MUST close**:
 
 | Decision | Recommended position to open with |
