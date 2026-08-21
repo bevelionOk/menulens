@@ -25,3 +25,15 @@ Collected by build reviews for later focused attention. Append-only.
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-2-shared-contract-data-layer.md`
   summary: The CI `checks` job (1.8) must export a dummy `OPENAI_API_KEY` for `db:migrate` — the runner imports `env.ts`, whose fail-fast schema requires the key even though migrations never use it.
   evidence: Implementation note — `server/src/db/migrate.ts` imports `./client`, which imports `../env`; without the variable the process exits 1 naming `OPENAI_API_KEY` before any migration runs.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-1-3-persist-first-run-lifecycle-api.md`
+  summary: Story 1.5 must keep the worst-case `extracting` stage (model timeout ~120 s × one retry) below `RUN_STALE_AFTER_MS` (default 180 s) — either cap retry+timeout under the threshold, bump the anchor between attempts, or raise the default with a DECISIONS.md note.
+  evidence: Edge-case review — a live run whose single stage outlasts the staleness threshold reads as `interrupted` and unblocks a second POST while the first still writes; two 120 s attempts already exceed 180 s.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-1-3-persist-first-run-lifecycle-api.md`
+  summary: Story 1.6 should write dishes and the terminal `done`/`empty` status in one transaction — call `setTerminal(tx, …)` inside the `insertDishes` transaction rather than `finishRun` after it (or give `finishRun` an optional `tx`).
+  evidence: Edge-case review — `finishRun` opens its own write; a crash between `insertDishes` and `finishRun` leaves dishes on a run still `processing` (reads `interrupted` with rows), the inverse order leaves a `done` run with zero dishes.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-1-3-persist-first-run-lifecycle-api.md`
+  summary: The 1.8 golden-master should cover the terminal-state read path — a `done` run older than the threshold reads `state: 'done'` (never `interrupted`) and does not 409 the next POST.
+  evidence: Verification-gap review — every run the 1.3 manual verification created stayed `processing`; dropping the `status === 'processing'` guard in `deriveState` or the gate query would pass every curl in the spec's Verification list and only surface once 1.4–1.6 finish runs.
