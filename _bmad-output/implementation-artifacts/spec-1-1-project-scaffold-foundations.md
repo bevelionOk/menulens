@@ -2,7 +2,7 @@
 title: 'Story 1.1 — Project Scaffold & Foundations'
 type: 'chore'
 created: '2026-08-21'
-status: 'in-review'
+status: 'done'
 review_loop_iteration: 0
 baseline_commit: 'a3f2e35e338fe6a1d1da98680d023fa287519400'
 context:
@@ -85,3 +85,51 @@ context:
 
 **Manual checks (if no CLI):**
 - CI: after push, both jobs green in Actions.
+
+## Suggested Review Order
+
+**Boot & fail-fast contract**
+
+- Entry point: importing `env` validates before anything boots; Fastify with native Pino (`logger: true`).
+  [`index.ts:2`](../../server/src/index.ts#L2)
+
+- The whole contract: postgres-scheme URL, trimmed non-empty key, bounded port — exit 1 naming the variable.
+  [`env.ts:4`](../../server/src/env.ts#L4)
+
+- `--env-file-if-exists` keeps a fresh clone's missing `.env` inside the Zod message, not an ENOENT.
+  [`package.json:7`](../../server/package.json#L7)
+
+**Workspace topology & contract seam**
+
+- Plain npm workspaces + Node ≥ 22.13 engine — the ratified monorepo shape, no tooling.
+  [`package.json:7`](../../package.json#L7)
+
+- `shared` exports TS source directly; Zod its only runtime dependency (the contract home for 1.2).
+  [`package.json:6`](../../shared/package.json#L6)
+
+- Server declares every import it makes — `zod` explicit, no phantom hoisting; types match runtime 22.
+  [`package.json:10`](../../server/package.json#L10)
+
+**Dev loop: DB, proxy, env reference**
+
+- Loopback-only bind — matches the local-only operational envelope.
+  [`docker-compose.yml:11`](../../docker-compose.yml#L11)
+
+- `/api` proxy with the PORT-coupling stated where it lives (Vite never loads `../.env`).
+  [`vite.config.ts:16`](../../web/vite.config.ts#L16)
+
+- The complete env reference; `DATABASE_URL` in lockstep with compose credentials.
+  [`.env.example:5`](../../.env.example#L5)
+
+**CI**
+
+- New `checks` job: `npm ci` + workspace typecheck; the golden-master test joins here in 1.8.
+  [`ci.yml:28`](../../.github/workflows/ci.yml#L28)
+
+**Peripherals**
+
+- SPA shell trimmed to a minimal component after the demo's CSS broke against the Tailwind/shadcn init; 1.7 builds here.
+  [`App.tsx:1`](../../web/src/App.tsx#L1)
+
+- Deferred review findings routed to 1.2/1.8 (fail-fast observer, compose healthcheck, test tsconfig include).
+  [`deferred-work.md:5`](deferred-work.md#L5)
