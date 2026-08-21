@@ -2,7 +2,7 @@
 title: 'Story 1.3 — Persist-First Run Lifecycle API'
 type: 'feature'
 created: '2026-08-22'
-status: 'in-progress'
+status: 'done'
 review_loop_iteration: 0
 baseline_commit: '8dbe39233d8ebb5e42a3ce78399ca6e42fd67a43'
 context:
@@ -98,6 +98,8 @@ context:
 
 **HTTP status per code** — 400 `invalid_url`/`invalid_request`, 413 `file_too_large`, 415 `unsupported_file`, 404 `not_found`, 409 `run_active`, 500 `internal_error`.
 
+**Post-review amendments (3 layers, ~55 raw findings → 6 patch / 3 defer / rest rejected):** the 409 gate now reads the newest `processing` row (`findLatestProcessingRun`, superseding the Code Map's `findActiveRun(cutoff)`) and decides with `isActive` — one encoding of the staleness rule, as the frozen intent requires; mimetype lookup via `Map` after normalization (a plain object resolved `constructor`); 0-byte uploads and credential-bearing URLs rejected pre-run; `setStage`/`setTerminal` guarded on `status = 'processing'`; the error handler tolerates non-object throws. Deferred with owners: stage-vs-staleness budget (1.5), atomic `done` + dishes (1.6), terminal-state read in the golden (1.8).
+
 ## Verification
 
 **Commands:**
@@ -109,3 +111,72 @@ context:
 - `docker compose stop` then any request -- expected: 500 `internal_error` within ~5 s; server still up.
 - Scratchpad `tsx` script (never committed — R8) calling `transitionStage`/`finishRun` -- expected: `stage_changed_at` moves; log lines carry `run_id`.
 - `git diff --stat main` -- expected: only files named in Tasks.
+
+## Suggested Review Order
+
+**Persist-first: the run exists before anything happens**
+
+- Entry point — validation order input → 409 → one transaction; no DB touch before the gate.
+  [`runs.ts:34`](../../server/src/routes/runs.ts#L34)
+
+- Run row + uploaded bytes in one transaction — an artifact failure leaves no run (AC3).
+  [`runs.ts:78`](../../server/src/routes/runs.ts#L78)
+
+- `stage: null` at birth — the first real transition belongs to the pipeline (1.4).
+  [`runs.ts:47`](../../server/src/routes/runs.ts#L47)
+
+**Derived state: one pure rule for the gate and the read**
+
+- `isActive` — the only encoding of "processing and not stale"; core imports no IO.
+  [`run-state.ts:15`](../../server/src/core/run-state.ts#L15)
+
+- `interrupted` derived at read, never stored (AD-5).
+  [`run-state.ts:20`](../../server/src/core/run-state.ts#L20)
+
+- The 409 gate asks the newest `processing` row and decides with `isActive` (review patch).
+  [`runs.ts:72`](../../server/src/routes/runs.ts#L72)
+
+- Repo returns data only — no staleness math in SQL.
+  [`runs-repo.ts:24`](../../server/src/db/runs-repo.ts#L24)
+
+- GET detail: uuid guard before Postgres, then `toRunDetail` (counts + state, `dishes: []` mid-run).
+  [`runs.ts:88`](../../server/src/routes/runs.ts#L88)
+
+**Transitions: persisted and logged in one place (AC7)**
+
+- `transitionStage` / `finishRun` — what 1.4–1.6 call; one Pino line per write with `run_id`.
+  [`run-lifecycle.ts:9`](../../server/src/pipeline/run-lifecycle.ts#L9)
+
+- Writes guarded on `status = 'processing'` — a late write never rewrites a terminal run (review patch).
+  [`runs-repo.ts:37`](../../server/src/db/runs-repo.ts#L37)
+
+**Pre-run rejections: 4xx with no row**
+
+- Accept set as a `Map` after mimetype normalization — a plain object resolved `constructor` (review patch).
+  [`runs.ts:13`](../../server/src/routes/runs.ts#L13)
+
+- HEIC by name when mislabeled; renamed-`.jpg` HEIC passes by design — no sniffing.
+  [`runs.ts:21`](../../server/src/routes/runs.ts#L21)
+
+- Credentials in a URL would land in `source_ref` and logs — rejected (review patch).
+  [`runs.ts:63`](../../server/src/routes/runs.ts#L63)
+
+- The envelope: `ApiError` → code; multipart cap → 413 naming 10 MB; unknown → 500 `internal_error`.
+  [`errors.ts:20`](../../server/src/errors.ts#L20)
+
+**Peripherals**
+
+- `buildApp()` — the 1.8 `inject` seam; multipart limit 10 MB, one file.
+  [`app.ts:7`](../../server/src/app.ts#L7)
+
+- Staleness threshold is config, validated at boot; default 3 min.
+  [`env.ts:10`](../../server/src/env.ts#L10)
+
+- Postgres down = honest 500 in ≤5 s, never a hang (closes the 1.2 deferral).
+  [`client.ts:8`](../../server/src/db/client.ts#L8)
+
+- Contract: `internal_error` (the one 5xx an endpoint emits) + the URL request body.
+  [`api.ts:14`](../../shared/src/api.ts#L14)
+
+- Three deferrals with owners (1.5 / 1.6 / 1.8).
+  [`deferred-work.md:29`](deferred-work.md#L29)
