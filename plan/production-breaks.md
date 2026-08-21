@@ -1,0 +1,22 @@
+# What Breaks in Production — running register
+
+Live list of the ways this system fails outside the demo, collected story by story from
+the adversarial reviews and the design notes. Each entry names the trigger, what the user
+sees, why it was accepted (or what the fix would be), and where it is documented. Feeds the
+Epic-1 close ritual (DECISIONS.md), the RISKS register, and the walkthrough video's
+"what breaks in production" segment (`[BREAKS]` highlights). Append-only.
+
+| # | Trigger | What happens | Why accepted / first fix | Where |
+|---|---|---|---|---|
+| B1 | Two `POST /api/runs` within the same few ms (1.3) | Both pass the seriality check — two active runs | Check-then-insert is not atomic; the atomic guard (partial unique index on `processing`) turns a crashed run into a permanent lock (AD-10). Single operator + disabled submit makes it theoretical. Fix: advisory lock per POST. | D23; `spec-1-3` Design Notes |
+| B2 | DNS rebinding on a URL run (1.4) | `dns.lookup` validates a public IP, Node's `fetch` resolves again and gets a private one — the guard is bypassed | AD-11 accepts the residual for a single trusted operator. Fix: pin the validated address with a custom undici dispatcher/`connect`. | AD-11; `spec-1-4` Design Notes |
+| B3 | Menu host sits on CGNAT/NAT64/6to4 ranges (1.4) | `100.64/10`, `64:ff9b::/96`, `2002::/16` are not refused — reachable through the fetcher | Refusal list kept to AC1's enumerated ranges (anti-over-engineering); cloud-internal services on 100.64/10 would be exposed. Fix: one line each in `core/ssrf.ts`. | `spec-1-4` amendments (rejected findings) |
+| B4 | JS-rendered menu page with a rich header/cookie banner (1.4) | Strips to ≥200 chars of nav/legal text → class `text`, model extracts zero or garbage dishes → `empty` or nonsense rows | Threshold is calibration data; `<head>`/nav are counted. Fix: exclude `<head>`/`<nav>`/`<footer>`, raise threshold after measuring dev menus. | `spec-1-4` (rejected findings) |
+| B5 | Run acquired successfully while Postgres drops mid-pipeline (1.4/1.5) | Unexpected throw → `log.error`, run left `processing` → reads `interrupted`; Ana retries | Intended (AD-14): no `internal` failure reason; the staleness net is the catch-all. Cost: retry = new model call. | `spec-1-4` Boundaries |
+| B6 | Transient 429/5xx from OpenAI (1.5) | `failed(model_error)` immediately — no retry (`maxRetries: 0`) | FR6 "one retry, one timeout" is kept literal; a rate-limit burst fails runs Ana must retry by hand. Fix: retry once on 429 with `Retry-After` if ever multi-operator. | `spec-1-5` Design Notes |
+| B7 | Model output truncated at its default output cap on a very long menu (1.5) | `incomplete` (`max_output_tokens`) → invalid output → the one retry re-sends the same input → fails identically → `failed(model_invalid_output)`, double cost | No `max_output_tokens` set (Ask-First param); the retry is deterministic waste on this path. Fix: set a generous cap and skip the retry on `max_output_tokens`. | `spec-1-5` amendments (rejected) |
+| B8 | Attempt 1 throws inside the SDK's `parse` (malformed JSON) (1.5) | Tokens were billed but `usage` is never returned — the run's measured cost under-counts | No hand-parsing allowed (AD-12); only the rare malformed-JSON path loses the number. | `spec-1-5` amendments |
+| B9 | Two slow-but-valid model attempts (1.5) | Stage `extracting` can run up to 2× `MODEL_TIMEOUT_MS`; the anchor re-bump keeps it from reading `interrupted`, but Ana waits up to ~4 min | Accepted: the retry is a real event. Fix: cross-attempt deadline. | `spec-1-5` Boundaries |
+| B10 | Scanned/visual sources (1.5/1.6) | Evidence quotes cannot be machine-verified (no ground text) — a wrong `declared` passes T6 and reaches Ana as "declared" | By design (FR19): Ana verifies visually in the evidence panel. The gate is only as honest as her review on visual runs. | PRD FR19; AD-6 |
+| B11 | Provider API shape drift (1.5) | `responses.parse`/`zodTextFormat`/error classes are verified against `openai@7.5.0` only; a caret upgrade can change `system` vs `developer` role handling or the refusal shape | Majors scaffold-pinned (R-13); the seam isolates the blast radius to one file. | RISKS R-13; `spec-1-5` Code Map |
+| B12 | Seam mocked above the adapter in the single test (1.5/1.8) | Retry/mapping/usage semantics of the real adapter never run in CI | Deferred to 1.8 (stub-client sub-assertion or a DECISIONS record). | `deferred-work.md` |
