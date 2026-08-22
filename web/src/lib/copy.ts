@@ -70,11 +70,13 @@ export const EMPTY_COPY: FailureCopy = {
     'The source was read successfully — it just did not look like a menu to the model. Is it one? Try another page, or upload the menu as a PDF or a photo.',
 }
 
-// E8 — derived from staleness, never stored (AD-5).
+// E8 — derived from staleness, never stored (AD-5). The server does not kill a stale run,
+// so this page must not claim to know how it ended: "nothing was saved" is a guess, and a
+// guess dressed as a fact is the one thing this product refuses to do.
 export const INTERRUPTED_COPY: FailureCopy = {
   title: 'Interrupted — retry available',
   detail:
-    'This run stopped reporting progress and is no longer active. It may have been cut off by a restart. Nothing partial was saved; retry starts a new run.',
+    'This run stopped reporting progress long enough to count as stale, so its outcome is unknown: it may have been cut off, or it may still be working and finish on its own. This page keeps checking. Retry starts a separate new run and leaves this one alone.',
 }
 
 // FR13 — the EU-14, spelled for a human.

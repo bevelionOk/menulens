@@ -57,9 +57,15 @@ export function SubmitPage() {
     queryKey: ['runs'],
     queryFn: listRuns,
     // Same rule as the run page: the server's own state sets the cadence, and a list
-    // with nothing active stops polling itself (AR26).
-    refetchInterval: (query) =>
-      query.state.data?.runs.some((run) => run.state === 'processing') ? 2000 : false,
+    // with nothing live stops polling itself (AR26). `interrupted` counts as live —
+    // it is derived from staleness (AD-5), the server never stopped the run, and a
+    // late finish should land in the list without a reload.
+    refetchInterval: (query) => {
+      const rows = query.state.data?.runs
+      if (!rows) return false
+      if (rows.some((run) => run.state === 'processing')) return 2000
+      return rows.some((run) => run.state === 'interrupted') ? 15000 : false
+    },
   })
 
   const runs = runsQuery.data?.runs ?? []

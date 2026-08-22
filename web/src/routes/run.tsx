@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { ArrowLeft } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'
-import type { RunDetail } from 'shared'
+import type { RunDetail, RunState } from 'shared'
 
 import { Disclaimer } from '@/components/disclaimer'
 import { ReviewTable, type ReviewDecision } from '@/components/review-table'
@@ -23,6 +23,15 @@ import {
   formatTimestamp,
 } from '@/lib/copy'
 
+// How fast each non-terminal state is re-read. `processing` is the live case; a run that
+// has gone stale reads as `interrupted`, but the server left it running and it can still
+// reach `done` — so it is re-checked at a background cadence instead of being abandoned.
+// Every other state is final: no entry, no poll.
+const POLL_MS: Partial<Record<RunState, number>> = {
+  processing: 1000,
+  interrupted: 15000,
+}
+
 export function RunPage() {
   const { id = '' } = useParams()
   const navigate = useNavigate()
@@ -33,7 +42,13 @@ export function RunPage() {
     queryFn: () => getRun(id),
     // AR26 — the poll is a function of the server's own state, so the run stops polling
     // itself the moment it reaches a terminal state. No component has to remember to stop.
-    refetchInterval: (query) => (query.state.data?.state === 'processing' ? 1000 : false),
+    // `interrupted` is not one of those terminal states: it is derived from staleness
+    // (AD-5) and the server never stops a stale run, so it may still finish. Keep looking,
+    // slowly, rather than freezing a guess on screen until someone reloads.
+    refetchInterval: (query) => {
+      const state = query.state.data?.state
+      return state ? (POLL_MS[state] ?? false) : false
+    },
   })
 
   const run = runQuery.data ?? null
