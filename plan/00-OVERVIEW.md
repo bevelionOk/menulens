@@ -1,7 +1,8 @@
 # Master Plan — Overview
 
-> **Status: PROPOSED — under review by Pablo.** Each phase has its own plan file with
-> tasks, owners and exit criteria. Nothing in a phase starts before its plan is approved.
+> **Status: in execution.** Each phase has its own plan file with tasks, owners and exit
+> criteria; nothing in a phase starts before its plan is approved. Phase status below is
+> kept current — a stale plan is worse than no plan.
 
 **Goal**: submit a winning entry to the Vibe-Coder challenge by **2026-08-25**
 (single link + email to gerdrn+hiring@gmail.com).
@@ -11,9 +12,9 @@
 | # | Phase | Plan file | Target date | Status |
 |---|---|---|---|---|
 | 1 | Foundation & infrastructure | [01-foundation.md](01-foundation.md) | Aug 20 | ✅ DONE |
-| 2 | BMAD planning (brief → sprint gate) | [02-bmad-planning.md](02-bmad-planning.md) | Aug 21 | ⬜ proposed |
-| 3 | Implementation (BMAD build loop) | [03-implementation.md](03-implementation.md) | Aug 22–23 | ⬜ proposed |
-| 4 | Hardening & adversarial review | [04-hardening-review.md](04-hardening-review.md) | Aug 23–24 | ⬜ proposed |
+| 2 | BMAD planning (brief → sprint gate) | [02-bmad-planning.md](02-bmad-planning.md) | Aug 21 | ✅ DONE |
+| 3 | Implementation (BMAD build loop) | [03-implementation.md](03-implementation.md) | Aug 22–23 | 🔄 in progress — stories 1.1–1.6 merged, M1 (1.7+2.1+2.2, history folded) in build, 1.8 remaining; scope cut in D24 |
+| 4 | Hardening & adversarial review | [04-hardening-review.md](04-hardening-review.md) | Aug 23–24 | ⬜ next |
 | 5 | Communication: the two videos | [05-communication-videos.md](05-communication-videos.md) | Aug 24 | ⬜ proposed |
 | 6 | Submission | [06-submission.md](06-submission.md) | Aug 25 | ⬜ proposed |
 
