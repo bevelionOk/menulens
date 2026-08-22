@@ -64,7 +64,7 @@ come back `reliable`, four `uncertain` with the rule named under each row.
 
 What to try on the result: confirm a `reliable` row, mark an `uncertain` one as follow-up
 with a note, then go back to `/`. In the recent-runs list, **State** is the extraction
-(`done` = the rows are saved) and **Reviewed** is your progress (`6 of 6 resolved`). The
+(`extracted` = the rows are saved) and **Reviewed** is your progress (`6 of 6 resolved`). The
 extracted columns never change; a review is a verdict, not an edit.
 
 A public URL that also works: `https://vox-restaurant.de/wp-content/uploads/2026/07/Vox-Speisekarte-Englisch-1.pdf`
