@@ -196,6 +196,28 @@ The cost side is settled: under a cent. The value side has one measured fact (ty
 gone) and one unmeasured claim (review is faster than transcription). A price that
 captures a share of a saving nobody has timed is a hypothesis; the paragraph says so.
 
+Volume, for scale only: at 500 menus a month the platform pays €1,000 and the model costs
+about €3.50; at 50 menus, €100 against €0.35.
+
+### 5.1 The assumptions under the price (Assumption Audit, 2026-08-22)
+
+| # | Assumption | Confidence | Impact | If it fails |
+|---|---|---|---|---|
+| A1 | Manual transcription takes 15–30 min per menu | **Low** — the persona's number, no source | **High** — the whole anchor | At 5 min (copy from a PDF text layer) the saving is €2.50 and €2 takes 80% of it |
+| A2 | €30/h loaded operator cost | Medium — Spain ~€20–25, Germany ~€35–45 | Medium | At €20/h the saving is €5–10; €2 is 20–40% of it |
+| A3 | Review is faster than typing | **Low** — unmeasured; 38/38 says the queue is the menu | **High** | Stated in the paragraph |
+| A4 | The platform pays per menu rather than bundling it in onboarding | Medium | Medium | The unit still works as an internal transfer price |
+| A5 | Model pricing stays where it is | High (it falls, not rises) | Low — under 1% of the price | — |
+| A6 | ~34 dishes is a typical menu | Medium | Low — cost is linear; 150 dishes ≈ $0.03 and B7 risk | — |
+| A7 | A 200 k-char cap does not cut real menus | High — Vox is 53 k | Low | — |
+| A8 | The platform values the review record, not only the rows | **Medium — nobody was asked** | **High** — it is "what is sold" | A rows-only buyer makes this a commodity extractor at $0.01; the answer becomes "bundle it" |
+| A9 | Terra does not improve the flag | Medium — n = 1 per menu | Low for the price, medium for D3 | Say n |
+| A10 | Two to three weeks to a paid feature | Medium-low — estimates by inference | Medium | Marked as estimate in §2 |
+| A11 | The three fixes are hours | Medium-high — one rule each; the golden is unaffected (fixture quotes carry markers, text class, no thousands) | Low | — |
+
+The weakest three — A1, A3, A8 — are all on the value side. The paragraph carries them as
+conditions, not as facts.
+
 ## 6. Document contradictions that touch the answer
 
 Found while compiling §3; each is a one-line fix or an amendment note, never an edit of the
@@ -210,3 +232,8 @@ original text.
 5. `plan/guides/manual-test-guide.md` lists as "not yet covered" five scenarios D27's sweep
    ran, and says the next register number is B42. → Updated.
 6. BUSINESS.md "working draft" against the brief's "one paragraph". → Written.
+7. README said the Vox URL returns every row `uncertain`; B45 measured 6 `reliable` on a
+   re-run of the same URL. → README updated; the run payloads are committed next to this
+   file (`measurement-2026-08-22/`).
+8. The brief's "by construction" success criterion against B45. → Dated amendment on the
+   brief, original text intact; D28 §7.

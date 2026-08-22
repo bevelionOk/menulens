@@ -69,7 +69,8 @@ with a note, then go back to `/`. In the recent-runs list, **State** is the extr
 extracted columns never change; a review is a verdict, not an edit.
 
 A public URL that also works: `https://vox-restaurant.de/wp-content/uploads/2026/07/Vox-Speisekarte-Englisch-1.pdf`
-(34 dishes, every row `uncertain` — see B42 under *What breaks in production*).
+(34 dishes; every row `uncertain` on one run, 6 `reliable` on another — B42 and B45 under
+*What breaks in production*).
 
 **Port already in use?** Postgres is the usual clash. Change the host port in
 `docker-compose.yml` and the port in `DATABASE_URL` to match. For the API, set `PORT` in
@@ -99,10 +100,14 @@ shipped, the 11 deleted ones stay in the PRD, marked as cut.
 
 ### Next, in order
 
-1. The review actions cut from story 2.3: batch confirm, reopen, per-row notes.
-2. The evidence panel. Story 1.6 already persists the character offsets of every verified
+1. The three `core/` fixes the business note names as stop-ship for an internal
+   deployment: B45 (a declaration needs a declaration marker), B10 (no `reliable` on visual
+   runs), B14 (refuse a thousands separator). Hours each; not made before submission on
+   purpose (D28).
+2. The review actions cut from story 2.3: batch confirm, reopen, per-row notes.
+3. The evidence panel. Story 1.6 already persists the character offsets of every verified
    quote, so highlighting the source needs no re-matching.
-3. `_bmad-output/implementation-artifacts/deferred-work.md`, in that file's order.
+4. `_bmad-output/implementation-artifacts/deferred-work.md`, in that file's order.
 
 ### Known limitations
 
@@ -111,6 +116,9 @@ shipped, the 11 deleted ones stay in the PRD, marked as cut.
 - **The recent-runs list is unpaginated.** It grows without bound.
 - **Evidence quotes are shown, not highlighted in the source.** The offsets are persisted;
   the panel that would use them is story 2.4.
+- **A `reliable` row can be wrong on a menu that names ingredients but declares no
+  allergens.** Measured: 6 of 34 on the Vox PDF (B45). The flag means no rule fired; one
+  rule is missing.
 - **Image and JS-rendered menus behind a URL come back `empty`.** Upload the menu as a PDF
   or a photo instead.
 

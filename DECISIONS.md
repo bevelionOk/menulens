@@ -824,6 +824,30 @@ missed, split the la-parra fixture into twelve rows and self-flagged all twelve.
    spine stays as written (prompt 38). The manual-test guide's "not yet covered" list and
    next register number were stale → updated. REQUIREMENTS said D1–D26 → D1–D28.
 
+6. **Not fixed before submission, on purpose** (Pablo, prompt 52). The brief's auto-reject
+   is *cannot explain* what breaks; the rubric row scores the framing; the flag's derivation
+   is "your choice" and no row scores its accuracy; D8 ships with documented gaps. Two days
+   out, with one test that does not cover the visual path (D25), the three `core/` fixes —
+   6–8 h with verification runs, register rows and prompts — are the first item under
+   *Next* in the README.
+7. **The brief's "zero tolerance for false-reliables on allergens, by construction" is
+   retracted** to "by rule, given a model that honours its own `declared`/`inferred`
+   labels" — a dated amendment on the brief, original text intact, the PRD's convention.
+   T6 verifies that a quote exists in the source, not that it declares anything. D4's
+   reasoning (deterministic rules over model self-assessment) stands; the rule set was one
+   rule short.
+8. **B45 fix, specified.** `core/arbiter.ts`, T1: a `declared` allergen whose
+   `evidence_quote`, normalized, contains none of `contiene`, `contains`, `enthält` /
+   `enthaelt`, `allergens` / `alérgenos` / `allergene`, nor a legend key (`(A)`, `(G)`, a
+   digit code) is re-labelled `inferred` and T1 fires with `inferred allergens: …`. The
+   golden does not change: both declared quotes in the fixture carry `Contiene` /
+   `Alérgenos declarados`. The marker list is calibration data, like `SOURCE_MIN_TEXT_CHARS`.
+9. **Measurement evidence committed** at
+   `_bmad-output/planning-artifacts/business/measurement-2026-08-22/` — the eight run
+   payloads, the `model usage` lines, the driver and the comparison — so the walkthrough
+   shows B45 from the record instead of attempting a live repeat of a non-deterministic
+   run. Same standard as D26.
+
 **Why**: the brief asks what to charge *and why*; the why is the measured cost, the
 unmeasured value, and a gate with one measured hole. A one-line "yes, ship it" would
 have been contradicted by the repo's own register.

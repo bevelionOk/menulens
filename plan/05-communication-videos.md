@@ -35,6 +35,11 @@ Backbone comes from Phase 4 outputs. Suggested structure (~90 s each):
    false `reliable` rows the measurement found (B45); the three-tier ship-it answer
    (internal after three fixes in hours; paid after two to three weeks and a measured
    review time; unreviewed never). Same numbers as the paragraph — no new ones on camera.
+   Say that the three fixes were not made on purpose (D28 §6) and sit first under *Next*.
+   Show B45 from the committed measurement
+   (`_bmad-output/planning-artifacts/business/measurement-2026-08-22/`), never live — the
+   run is not deterministic. Do not time the Vox URL on camera against the "about 9 to 12
+   seconds" copy: it takes ~25 s (B25); time la-parra, or name B25 when it shows.
 
 | Task | Owner |
 |---|---|

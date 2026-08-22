@@ -1,0 +1,41 @@
+model          menu       status   rows  rel att     in   out     ms    cost$  rules
+gpt-5.6-luna   german     done        5    1   1   1538   599   5735   0.0010  {'T1': 4, 'T2': 1, 'T5': 1}
+gpt-5.6-luna   la-parra   done        6    2   1   1563   879   8737   0.0014  {'T2': 2, 'T5': 1, 'T1': 3, 'T3': 1}
+gpt-5.6-luna   no-prices  done        5    0   1   1516   586   5143   0.0010  {'T1': 5, 'T2': 5, 'T5': 5}
+gpt-5.6-luna   vox        done       34    6   1  14147  3367  25204   0.0069  {'T1': 28, 'T2': 1, 'T5': 1}
+gpt-5.6-terra  german     done        5    2   1   1538   362   3761   0.0074  {'T1': 3, 'T2': 1, 'T5': 1}
+gpt-5.6-terra  la-parra   done       12    0   1   1563  1836  16253   0.0252  {'T5': 12, 'T2': 8, 'T4': 6, 'T1': 6, 'T3': 1}
+gpt-5.6-terra  no-prices  done        5    0   1   1516   272   5145   0.0063  {'T1': 5, 'T2': 5}
+gpt-5.6-terra  vox        done       34    0   1  14147  2727  21630   0.0610  {'T1': 34, 'T5': 4, 'T2': 1}
+
+## german: names only in luna: ['Wiener Schnitzel vom Kalb'] | only in terra: ['Wiener Schnitzel vom Kalb mit Kartoffelsalat']
+  - Apfelstrudel mit Vanillesauce: flag: 'uncertain' -> 'reliable' | allergens: [] -> [('gluten', 'declared'), ('milk', 'declared')]
+
+## la-parra: names only in luna: [] | only in terra: ['Croquetas de jamón ibérico (½ ración)', 'Ensalada de la casa (½ ración)', 'Postre del día (½ ración)', 'Pulpo a la brasa (½ ración)', 'Tabla de quesos artesanos con nueces (½ ración)', 'Tortilla de patatas (½ ración)']
+  - Croquetas de jamón ibérico: flag: 'reliable' -> 'uncertain'
+  - Tortilla de patatas: flag: 'reliable' -> 'uncertain'
+
+## no-prices: names only in luna: [] | only in terra: []
+  - Bacalao al pil pil: price_raw: 'segun mercado' -> None
+  - Callos a la madrilena: price_raw: 'segun mercado' -> None
+  - Cocido madrileno (solo jueves): price_raw: 'segun mercado' -> None
+  - Huevos estrellados con jamon: price_raw: 'segun mercado' -> None
+  - Tarta de queso casera: price_raw: 'segun mercado' -> None
+
+## vox: names only in luna: [] | only in terra: []
+  - Asian cucumber salad: flag: 'reliable' -> 'uncertain' | allergens: [('sesame', 'declared'), ('soybeans', 'declared')] -> [('sesame', 'inferred'), ('soybeans', 'inferred')]
+  - Braised fennel: allergens: [('celery', 'declared'), ('milk', 'inferred'), ('nuts', 'inferred')] -> [('celery', 'inferred')]
+  - Crunchy salad hearts: allergens: [('eggs', 'inferred'), ('fish', 'inferred'), ('milk', 'declared')] -> [('milk', 'inferred')]
+  - Lobster bisque: flag: 'reliable' -> 'uncertain' | allergens: [('crustaceans', 'declared'), ('milk', 'declared')] -> [('crustaceans', 'inferred'), ('milk', 'inferred')]
+  - Mozzarella di Bufala: flag: 'reliable' -> 'uncertain' | allergens: [('milk', 'declared')] -> [('milk', 'inferred')]
+  - Oktopus: flag: 'reliable' -> 'uncertain' | allergens: [('molluscs', 'declared'), ('soybeans', 'declared')] -> [('eggs', 'inferred'), ('molluscs', 'inferred'), ('soybeans', 'inferred')]
+  - Pan-seared label rouge salmon: allergens: [('fish', 'declared'), ('gluten', 'inferred'), ('milk', 'declared')] -> [('fish', 'inferred'), ('gluten', 'inferred'), ('milk', 'inferred')]
+  - Raspberry lemon cream cheese cake: allergens: [('eggs', 'inferred'), ('gluten', 'inferred'), ('milk', 'declared')] -> [('eggs', 'inferred'), ('gluten', 'inferred'), ('milk', 'inferred')]
+  - Romain lettuce: allergens: [('eggs', 'inferred'), ('fish', 'inferred')] -> []
+  - Sautéed chanterelles: flag: 'reliable' -> 'uncertain' | allergens: [('nuts', 'declared')] -> [('nuts', 'inferred')]
+  - Seared corn-fed chicken: allergens: [('gluten', 'inferred'), ('milk', 'inferred')] -> []
+  - Selection of international cheeses: allergens: [('gluten', 'inferred'), ('milk', 'declared')] -> [('gluten', 'inferred'), ('milk', 'inferred')]
+  - Steamed halibut: flag: 'reliable' -> 'uncertain' | allergens: [('fish', 'declared'), ('nuts', 'declared')] -> [('fish', 'inferred'), ('nuts', 'inferred')]
+  - Tagliatelle Ragù: allergens: [('gluten', 'inferred'), ('milk', 'declared')] -> [('eggs', 'inferred'), ('gluten', 'inferred'), ('milk', 'inferred')]
+  - Tatar de Boeuf: allergens: [('gluten', 'inferred'), ('milk', 'declared')] -> [('gluten', 'inferred'), ('milk', 'inferred')]
+  - Truffled Tagliatelle: allergens: [('gluten', 'inferred'), ('milk', 'declared')] -> [('eggs', 'inferred'), ('gluten', 'inferred'), ('milk', 'inferred')]

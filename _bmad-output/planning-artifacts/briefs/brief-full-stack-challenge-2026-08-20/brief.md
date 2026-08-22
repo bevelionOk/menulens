@@ -74,3 +74,15 @@ Every design decision below is this principle projected onto one stage of the lo
 ## Vision
 
 If this were real, the product's value would be Ana's time and her defensibility — a review loop that scales to every menu the platform onboards, where "reviewed by a human with evidence" is the platform's answer to allergen liability. That framing, not the extraction itself, is what a customer would pay for.
+
+## Amendments — business note (2026-08-22, D28)
+
+The text above is the brief as ratified on 2026-08-20 and stays as written. One success
+criterion is narrowed by measurement:
+
+- **"Zero tolerance for false-reliables on allergens, by construction"** → *by rule, given
+  a model that honours its own `declared`/`inferred` labels*. On 2026-08-22 the Vox PDF
+  returned 6 of 34 rows `reliable` on `gpt-5.6-luna`, each a `declared` allergen whose
+  quote is an ingredient word (`Lobster tail`, `hazelnut`); T6 verifies that a quote exists
+  in the source, not that it declares anything. Registered as B45 with its first fix (one
+  rule in T1); not fixed before submission (D28 §6).
