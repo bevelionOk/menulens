@@ -13,8 +13,8 @@
 |---|---|---|---|---|
 | 1 | Foundation & infrastructure | [01-foundation.md](01-foundation.md) | Aug 20 | ✅ DONE |
 | 2 | BMAD planning (brief → sprint gate) | [02-bmad-planning.md](02-bmad-planning.md) | Aug 21 | ✅ DONE |
-| 3 | Implementation (BMAD build loop) | [03-implementation.md](03-implementation.md) | Aug 22–23 | 🔄 in progress — stories 1.1–1.6 merged, M1 (1.7+2.1+2.2, history folded) in build, 1.8 remaining; scope cut in D24 |
-| 4 | Hardening & adversarial review | [04-hardening-review.md](04-hardening-review.md) | Aug 23–24 | ⬜ next |
+| 3 | Implementation (BMAD build loop) | [03-implementation.md](03-implementation.md) | Aug 22–23 | ✅ DONE — 11 stories delivered, 2 cut (D24); the one test green in CI |
+| 4 | Hardening & adversarial review | [04-hardening-review.md](04-hardening-review.md) | Aug 23–24 | 🔄 next up |
 | 5 | Communication: the two videos | [05-communication-videos.md](05-communication-videos.md) | Aug 24 | ⬜ proposed |
 | 6 | Submission | [06-submission.md](06-submission.md) | Aug 25 | ⬜ proposed |
 
