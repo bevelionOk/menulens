@@ -36,7 +36,9 @@ export function parsePrice(priceRaw: string | null): ParsedPrice {
   // Both separators, or the same one twice (`1.250.000`), is ambiguous.
   if (token.replace(/\d/g, '').length > 1) return { value: null, currency };
   const value = Number(token.replace(',', '.'));
-  if (!Number.isFinite(value)) return { value: null, currency };
-  // `dishes.price_value` is numeric(10,2).
+  // `dishes.price_value` is numeric(10,2): a value out of that range would abort the whole
+  // `saving` transaction and discard every dish in the run, so an implausible number
+  // refuses like any other ambiguity (T2) instead.
+  if (!Number.isFinite(value) || value >= 100_000_000) return { value: null, currency };
   return { value: Math.round(value * 100) / 100, currency };
 }

@@ -1,5 +1,5 @@
 import type { AllergenEntry, ConfidenceReason, DescriptionProvenance, Flag, ModelDishSignal, SourceClass } from 'shared';
-import { findNormalized } from './normalize';
+import { findNormalized, type Normalized } from './normalize';
 import { parsePrice } from './price';
 import { verifyEvidence } from './t6-verify';
 
@@ -10,7 +10,9 @@ import { verifyEvidence } from './t6-verify';
 
 export interface TriageContext {
   source_class: SourceClass;
-  acquired_text: string | null;
+  // The stored ground text, normalized once per run (AD-7): `null` on `visual` runs and
+  // whenever no text was acquired.
+  ground: Normalized | null;
 }
 
 export interface TriagedDish {
@@ -28,7 +30,7 @@ export function triageDish(signal: ModelDishSignal, ctx: TriageContext): Triaged
   const reasons: ConfidenceReason[] = [];
 
   // T6 first: unproven `declared` becomes `inferred` before the gate looks.
-  const evidence = verifyEvidence(signal.allergens, ctx.source_class, ctx.acquired_text);
+  const evidence = verifyEvidence(signal.allergens, ctx.source_class, ctx.ground);
   reasons.push(...evidence.reasons);
 
   // T1 — the allergen gate (FR21): any inferred, or no allergen information at all.
@@ -48,12 +50,13 @@ export function triageDish(signal: ModelDishSignal, ctx: TriageContext): Triaged
   // T4 — name blank, or (text class) not traceable in the source text.
   if (signal.name.trim() === '') {
     reasons.push({ rule: 'T4', detail: 'name is blank' });
-  } else if (ctx.source_class === 'text' && (ctx.acquired_text === null || findNormalized(ctx.acquired_text, signal.name) === null)) {
+  } else if (ctx.source_class === 'text' && (ctx.ground === null || findNormalized(ctx.ground, signal.name) === null)) {
     reasons.push({ rule: 'T4', detail: 'name not found in the source text' });
   }
 
   // T5 — the model's criteria-anchored self-flag.
-  if (signal.self_flag) reasons.push({ rule: 'T5', detail: signal.self_flag_reason ?? 'model self-flag' });
+  // A blank reason is no reason: the reviewer always reads why a rule fired.
+  if (signal.self_flag) reasons.push({ rule: 'T5', detail: signal.self_flag_reason?.trim() || 'model self-flag' });
 
   return {
     name: signal.name,

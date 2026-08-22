@@ -49,3 +49,31 @@ Collected by build reviews for later focused attention. Append-only.
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-5-extraction-adapter-the-openai-seam.md`
   summary: Story 1.8 must decide how the adapter's own contract — exactly one retry on invalid output, `onRetry` awaited only before attempt 2, usage summed across attempts, `APIConnectionTimeoutError` mapped before `APIError` (it is a subclass), text-class never sends the file — gets pinned: the golden-master mocks `extract` *above* the adapter, so none of this runs in CI; either a stub-client sub-assertion inside the single test file or an explicit DECISIONS.md record that the adapter stays verified by the logged real runs only.
   evidence: Verification-gap review — reordering the `instanceof` checks, changing the loop bound to 3 attempts, or sending a text-class PDF as `input_file` all compile and pass every CI gate; `createExtractionAdapter` is referenced only from `index.ts`.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-1-6-triage-core-the-deterministic-arbiter.md`
+  summary: Story 1.8 must assert the evidence offsets themselves — `acquired_text.slice(match.start, match.end)` equals the quoted substring — with at least one accented (NFD) row and one row whose text carries an emoji before the match.
+  evidence: Verification-gap review — replacing the offset mapping with normalized indices changes no flag, reason, status or row count; every acceptance criterion in the story still passes while the 2.4 highlight silently points at the wrong span. The review found the mapping was in fact already broken for astral characters (it threw `RangeError` and killed the run); nothing in the repo would have observed it.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-1-6-triage-core-the-deterministic-arbiter.md`
+  summary: Story 1.8 must assert `parsePrice`'s returned `{ value, currency }` over the matrix inputs, not only which T-rules fired.
+  evidence: Verification-gap review — changing the rounding to `Math.round(value)` turns `"12,50 €"` into `13` with `flag: reliable`, no rule fired and every stage/status observable unchanged; the whole `eur` vs `none` distinction is likewise unobservable from the arbiter's outputs.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-1-6-triage-core-the-deterministic-arbiter.md`
+  summary: Story 1.8 must pin the `saving` atomicity — force the dish insert to fail and assert zero `dishes` rows and `runs.status = 'processing'`.
+  evidence: Verification-gap review — dropping the fourth argument at `run-pipeline.ts` (`finishRun(log, runId, { status: 'done' })`) typechecks, the happy path is identical, and the transaction guarantee this story exists to add is silently gone.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-1-6-triage-core-the-deterministic-arbiter.md`
+  summary: Decide (Ask-First) how an ambiguous decimal/thousands separator is treated — `"1.250 €"` currently parses to `1.25` and `"12,345 €"` to `12.35`, both able to reach Ana as `reliable`.
+  evidence: Verified in the scratchpad matrix. The spec's Ask-First list names "thousands-separator heuristics", so the arbiter cannot widen the rule on its own; the honest fix is to refuse (T2) when the single separator is followed by exactly three digits or more than two decimals, which is a refusal rather than a guess.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-1-6-triage-core-the-deterministic-arbiter.md`
+  summary: Decide (Ask-First) whether the pinned normalization chain should drop default-ignorable characters (soft hyphen U+00AD, ZWSP U+200B, BOM U+FEFF) before matching.
+  evidence: Edge-case review, reproduced: `findNormalized('con­tiene gluten', 'contiene gluten')` returns `null`, and `html-to-text.ts` itself decodes `&shy;` into the ground text — so the pipeline manufactures false T6 downgrades and false T4s on rows that are correct. Widening the chain is frozen by D20/AD-7.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-1-6-triage-core-the-deterministic-arbiter.md`
+  summary: `finishRun` emits `run finished` inside the `saving` transaction, before the commit — a rolled-back transaction still leaves a log line claiming `status: done`.
+  evidence: Blind and verification-gap reviews — NFR5 makes the Pino stream the operational record; the story's own manual atomicity check would show a success line for a run that stayed `processing`. Fix: emit the terminal line after the transaction returns, or hand `finishRun` the commit boundary.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-1-6-triage-core-the-deterministic-arbiter.md`
+  summary: `setTerminal`/`setStage` do not report how many rows their guarded UPDATE matched, so a `saving` transaction could commit dish rows onto a run that is no longer `processing`.
+  evidence: Edge-case review — the guard `and(eq(runs.id, id), eq(runs.status, 'processing'))` silently no-ops; only a second writer can trigger it and none exists today (the staleness net derives `interrupted`, never writes), which is why this is deferred rather than patched. Fix: return the rowcount and throw inside the transaction.

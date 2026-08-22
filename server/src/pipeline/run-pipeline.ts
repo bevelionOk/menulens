@@ -3,6 +3,7 @@ import { db } from '../db/client';
 import { getRun, insertDishes, type NewDish, setSourceClass } from '../db/runs-repo';
 import { getArtifact, upsertArtifact } from '../db/source-artifacts-repo';
 import { triageDish } from '../core/arbiter';
+import { normalizeForMatch } from '../core/normalize';
 import { AcquisitionError } from './acquisition-error';
 import { acquireSource } from './acquire-source';
 import type { ExtractFn, ExtractionResult } from './extraction-adapter';
@@ -92,7 +93,10 @@ export async function runPipeline(log: FastifyBaseLogger, runId: string, extract
     // 1.6: the arbiter. Pure triage over the model's signals against the stored ground
     // text; one log line per dish with the fired rule ids (never names or quotes).
     await transitionStage(log, runId, 'validating');
-    const ctx = { source_class: acquired.source_class, acquired_text: stored.acquired_text };
+    // The pinned chain runs once over the ground text, not once per name and quote: it is
+    // linear in a source that may be megabytes, and this loop is the whole process.
+    const ground = stored.acquired_text === null ? null : normalizeForMatch(stored.acquired_text);
+    const ctx = { source_class: acquired.source_class, ground };
     // `TriagedDish` must be insertable as-is — a type-level check, no runtime mapping.
     const rows: NewDish[] = extracted.dishes.map((signal) => triageDish(signal, ctx));
     rows.forEach((row, position) => {

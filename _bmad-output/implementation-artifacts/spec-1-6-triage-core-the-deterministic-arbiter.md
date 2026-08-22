@@ -2,7 +2,7 @@
 title: 'Story 1.6 — Triage Core: the Deterministic Arbiter'
 type: 'feature'
 created: '2026-08-22'
-status: 'in-review'
+status: 'done'
 review_loop_iteration: 0
 baseline_commit: 'a4694091182b1ad19a3b7717d35638f05b0281d6'
 context:
@@ -96,6 +96,49 @@ context:
 **Punctuation is not normalized** — the pinned chain is the invariant (D20); adding punctuation stripping would be a second chain. A name with parenthesised variant text that the source prints differently fires T4 honestly — Ana sees "name not traceable" and the row goes to review. Calibrate from real menus later; never widen the chain silently.
 
 **`done` + dishes atomically** — `finishRun` accepts the transaction; a crash between rows and status can no longer leave dishes on a `processing` run or a `done` run with zero rows (closes 1.3's deferral).
+
+**Post-review amendments (3 layers, ~34 raw findings → 23 unique: 6 patched / 7 deferred / 10 rejected):** the offset map now carries one entry per **UTF-16 code unit**, not per code point — `indexOf` counts units, so a single emoji before a match desynchronized the map and either shifted the highlight or threw `RangeError` and killed the whole run (reproduced: `findNormalized('🌶 Picante — contiene lácteos', 'contiene lacteos')`); `findNormalized` now refuses instead of emitting a half-computed offset, and extends `end` over trailing combining marks so a decomposed (NFD) source highlights `café`, not `cafe`. `parsePrice` refuses values ≥ 10^8: `numeric(10,2)` would have raised inside the `saving` transaction and discarded every dish in the run over one junk price. The pinned chain now runs **once per run** over the ground text (a `Normalized` travels in the triage context) — it is linear in a source that may be 10 MB, and at a measured ~112 ms/MB the per-quote version blocked the single-process event loop for tens of seconds while the UI polled. NUL is dropped exactly as `collapseWhitespace` drops it, so the trailing call stays the no-op the offsets depend on; a blank `self_flag_reason` no longer produces a T5 with an empty detail. Deferred (7): three 1.8 assertions the golden-master needs — the evidence offsets themselves, `parsePrice`'s returned value, and the forced-rollback atomicity, each demonstrably invisible to every acceptance criterion this story states — plus two Ask-First calls (thousands separator `"1.250 €"` → `1.25`; default-ignorable characters like the `&shy;` this pipeline decodes itself) and two lifecycle items (`finishRun` logs `run finished` inside the transaction; `setTerminal` never reports its guarded rowcount). Rejected under the guard: allergen dedupe, length caps, NUL sanitizing of model text, insert chunking, an aggregate triage log line, a re-run idempotency guard, per-char vs whole-string folding semantics — the production-relevant ones are rows B13–B18 in `plan/production-breaks.md`.
+
+**Measured (gpt-5.6-luna, live fixture run):** 11 dishes, `done`/`saving`, 9.4 s in `extracting`, 2 ms in `validating`; 4 rows `reliable`, 7 `uncertain` (T1 on every row without a verifiable declaration, T4 on the four variant rows, T2+T5 on `"según mercado"` and `"4 – 6 €"`); every persisted `match` slices back to the exact accented quote.
+
+## Suggested Review Order
+
+**The pinned chain — one function, and the offsets the web will highlight**
+
+- The chain itself (NFKC → lower → NFD → strip marks → collapse), one offset entry per UTF-16 code unit.
+  [`normalize.ts:24`](../../server/src/core/normalize.ts#L24)
+
+- Normalized-vs-normalized `indexOf`, mapped back to the ORIGINAL text; refuses rather than guessing.
+  [`normalize.ts:61`](../../server/src/core/normalize.ts#L61)
+
+**T6 before the gate (AC4/AC6)**
+
+- No quote ⇒ `inferred` on every class; quote not found on a `text` run ⇒ `inferred`; `visual` passes through.
+  [`t6-verify.ts:16`](../../server/src/core/t6-verify.ts#L16)
+
+**The arbiter (AC3/AC7)**
+
+- T6 → T1 → T2 → T3 → T4 → T5, each fired rule appending `{ rule, detail }`; `reliable` = no reason.
+  [`arbiter.ts:29`](../../server/src/core/arbiter.ts#L29)
+
+- Price: one numeric token, one separator, no range/"from", no non-EUR marker — and a magnitude the column accepts.
+  [`price.ts:29`](../../server/src/core/price.ts#L29)
+  [`price.ts:42`](../../server/src/core/price.ts#L42)
+
+**The pipeline closes the loop (AC8)**
+
+- `validating`: ground text normalized once, triage in extraction order, one log line per dish (ids, never names).
+  [`run-pipeline.ts:95`](../../server/src/pipeline/run-pipeline.ts#L95)
+
+- `saving`: all dishes + `done` in ONE transaction — `finishRun` joins it through its new `tx`.
+  [`run-pipeline.ts:109`](../../server/src/pipeline/run-pipeline.ts#L109)
+  [`run-lifecycle.ts:20`](../../server/src/pipeline/run-lifecycle.ts#L20)
+
+**Peripherals**
+
+- Seven deferrals (three of them the 1.8 golden-master's assertions) and production rows B13–B18.
+  [`deferred-work.md`](deferred-work.md)
+  [`production-breaks.md`](../../plan/production-breaks.md)
 
 ## Verification
 
