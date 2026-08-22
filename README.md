@@ -41,7 +41,18 @@ npm run dev
 ```
 
 The API listens on **http://localhost:3000** and the UI on **http://localhost:5173** (Vite
-proxies `/api` to the server). Open the UI and paste a menu URL.
+proxies `/api` to the server).
+
+To try it without hunting for a menu, generate the sample one and upload it in the UI:
+
+```bash
+npx tsx server/scripts/sample-menu.ts
+```
+
+It writes `la-parra.pdf`: six dishes, two of which come back `reliable` and four
+`uncertain` with the rule named under each row. It is the same PDF the test uploads. A
+public URL that also works: `https://vox-restaurant.de/wp-content/uploads/2026/07/Vox-Speisekarte-Englisch-1.pdf`
+(34 dishes, every row `uncertain` — see B42 under *What breaks in production*).
 
 **Port already in use?** Postgres is the usual clash. Change the host port in
 `docker-compose.yml` and the port in `DATABASE_URL` to match. For the API, set `PORT` in
