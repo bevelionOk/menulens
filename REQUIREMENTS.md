@@ -56,7 +56,7 @@ The brief: *"Effort is your call. We want to see judgment, not hours."* We will 
 - Custom design system — stock shadcn/ui components
 - Speculative features (menu editing, i18n, exports, …) unless the PRD justifies them
 
-**Guard question before every execution:** *does this map to a line in §1–§2 or a rubric row in §6? If not — cut it and log the cut in DECISIONS.md (cuts earn Critical-Thinking points).*
+**Guard question before every execution:** *does this map to a line in §1–§2 or a rubric row in §6? If not — cut it and log the cut in DECISIONS.md.*
 
 ## 5. Alignment signals (not required, but scored or cheap wins — from JOB.md)
 

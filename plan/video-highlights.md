@@ -18,7 +18,7 @@ next. Personal video: `[PERSONAL]` who I am / how I work, shown not claimed.
 Best on-camera moment of the session: "My own playbook promised rows in under a minute.
 During the brief session I pressure-tested it: extraction alone can take 30–90 seconds, and
 the real bottleneck is where Ana's attention goes, not clock speed. I retracted it on the
-record — D10." Shows course-correction under evidence, exactly what the rubric prices.
+record — D10." Shows course-correction under evidence.
 
 **2. The reframe that organized the whole product** `[WHY]`
 The confidence flag is not a statistic — it is an **attention router**. The product is not

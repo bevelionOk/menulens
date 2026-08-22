@@ -95,6 +95,15 @@ capped at exactly one test.
    verified quote, so highlighting the source needs no re-matching.
 3. The items in `_bmad-output/implementation-artifacts/deferred-work.md`, in that file's order.
 
+### Known limitations
+
+- **A confirmed row cannot be reopened from the UI.** The review endpoint accepts `reopen` —
+  the action enum is whole on the server — but the affordance belonged to story 2.3, which is
+  cut. Undoing a verdict currently means a request, not a click.
+- **The recent-runs list is unpaginated.** Fine for one operator; it grows without bound.
+- **Evidence quotes are shown, not highlighted in the source.** The offsets are persisted and
+  correct; the panel that would use them is story 2.4, cut.
+
 ## What breaks in production
 
 The full register is [`plan/production-breaks.md`](plan/production-breaks.md) — 18 named
