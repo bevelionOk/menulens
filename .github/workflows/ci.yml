@@ -2,7 +2,8 @@
 # secret-scan: gitleaks over the full git history, guarding the challenge's
 # "secrets in repo" auto-reject tripwire (REQUIREMENTS R12 / §7) continuously
 # instead of as a one-shot manual check before submission.
-# checks: workspace typecheck (Story 1.1); the single golden-master test joins in 1.8.
+# checks: workspace typecheck (Story 1.1), the schema/migration drift guard and
+# the single golden-master test against a Postgres service container (Story 1.8).
 name: CI
 
 on:
@@ -29,6 +30,30 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    services:
+      # Mirrors docker-compose.yml, healthcheck included: the job's steps only start
+      # once Postgres accepts connections, the same contract `up -d --wait` gives locally.
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: menu_extraction
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d menu_extraction"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+          --health-start-period 10s
+    env:
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/menu_extraction
+      # `db:migrate` and the test both import env.ts, whose fail-fast schema requires the
+      # key. Nothing in CI calls OpenAI — the golden-master mocks the seam (AD-12) — so a
+      # placeholder is the honest value. Deliberately not `sk-`-shaped: a plausible-looking
+      # key in a workflow file is noise for the secret scan and for whoever reads it next.
+      OPENAI_API_KEY: not-a-real-key-ci-mocks-the-model-seam
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -37,3 +62,12 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run typecheck
+      # A check, not a test (DECISIONS.md D26): it runs no application code and asserts
+      # only that two committed artifacts agree. Its own step, so a failure reads as
+      # "you changed schema.ts without generating a migration", never as a failing test.
+      - name: schema/migration drift guard
+        run: |
+          npm run -w server db:generate
+          git diff --exit-code server/drizzle
+      - run: npm run -w server db:migrate
+      - run: npm test
