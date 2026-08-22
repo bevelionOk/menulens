@@ -112,7 +112,11 @@ function reviewWrite(action: ReviewAction, note: string | null, now: Date): Revi
   // `reopen` is the inverse of a verdict: back to pending, and the note and timestamp that
   // recorded the verdict go with it (AD-9 keeps the action in the enum; D24 cut its button).
   if (action === 'reopen') return { review_status: 'pending', followup_note: null, reviewed_at: null };
-  return { review_status: action === 'confirm' ? 'confirmed' : 'followup', followup_note: note, reviewed_at: now };
+  // The note belongs to a `followup` and only to a `followup` (2.1 AC3). A note sent with a
+  // `confirm` is dropped, not stored: a confirmed row that carries follow-up text would read
+  // as two verdicts at once, and clearing it also wipes the note a prior `followup` left.
+  if (action === 'confirm') return { review_status: 'confirmed', followup_note: null, reviewed_at: now };
+  return { review_status: 'followup', followup_note: note, reviewed_at: now };
 }
 
 // Batch review write (AD-9). Every UPDATE is scoped by `run_id`, so a dish id belonging to
