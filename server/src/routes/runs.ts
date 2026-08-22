@@ -1,8 +1,16 @@
 import type { FastifyPluginAsync } from 'fastify';
-import { createRunUrlRequestSchema, type SourceType } from 'shared';
-import { isActive, toRunDetail } from '../core/run-state';
+import { createRunUrlRequestSchema, reviewRequestSchema, type SourceType } from 'shared';
+import { type DishRowLike, isActive, toRunDetail } from '../core/run-state';
 import { db } from '../db/client';
-import { createRun, findLatestProcessingRun, getRunWithDishes, type NewRun } from '../db/runs-repo';
+import {
+  applyReviews,
+  createRun,
+  findLatestProcessingRun,
+  getRun,
+  getRunWithDishes,
+  listRunsWithCounts,
+  type NewRun,
+} from '../db/runs-repo';
 import { insertArtifact } from '../db/source-artifacts-repo';
 import { env } from '../env';
 import { ApiError } from '../errors';
@@ -22,6 +30,14 @@ const ACCEPTED_TYPES = new Map<string, SourceType>([
 // and sent as `image/jpeg` passes by design: no magic-byte sniffing (spec Ask-First).
 const HEIC_NAME = /\.(heic|heif)$/i;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+// `toRunDetail` counts `dish_count` and `review_progress` off a dish array; the list has
+// the two numbers, not the rows. Feeding it an array of that shape keeps the list and the
+// detail on one derivation instead of two that can drift (AD-5, 2.1 AC4).
+const countShaped = (total: number, resolved: number): DishRowLike[] =>
+  Array.from({ length: total }, (_, i) => ({
+    review_status: i < resolved ? ('confirmed' as const) : ('pending' as const),
+  }));
 
 const unsupportedFile = (message?: string) =>
   new ApiError(
@@ -91,10 +107,64 @@ export const runsRoutes: FastifyPluginAsync<RunsRoutesOptions> = async (app, { e
     return reply.status(201).send({ id: created.id, status: created.status });
   });
 
+  // FR29 history, newest first. One `now` for the whole page so two rows never disagree
+  // about staleness, and no dish rows — only the counts the derivation needs.
+  app.get('/api/runs', async () => {
+    const now = new Date();
+    const rows = await listRunsWithCounts();
+    return {
+      runs: rows.map(({ dish_count, resolved_count, ...run }) => {
+        const { dishes: _dishes, ...summary } = toRunDetail(
+          run,
+          countShaped(dish_count, resolved_count),
+          now,
+          env.RUN_STALE_AFTER_MS,
+        );
+        return summary;
+      }),
+    };
+  });
+
   app.get<{ Params: { id: string } }>('/api/runs/:id', async (request) => {
     const { id } = request.params;
     // A non-uuid never reaches Postgres (it would raise 22P02 there).
     if (!UUID.test(id)) throw new ApiError(404, 'not_found', 'Run not found.');
+    const run = await getRunWithDishes(id);
+    if (!run) throw new ApiError(404, 'not_found', 'Run not found.');
+    const { dishes, ...row } = run;
+    return toRunDetail(row, dishes, new Date(), env.RUN_STALE_AFTER_MS);
+  });
+
+  // The one mutation route besides POST /api/runs (2.1 AC5 — no DELETE, nothing else).
+  // Order: shape → run exists → one transaction that is all-or-nothing.
+  app.post<{ Params: { id: string } }>('/api/runs/:id/reviews', async (request) => {
+    const { id } = request.params;
+    if (!UUID.test(id)) throw new ApiError(404, 'not_found', 'Run not found.');
+    const parsed = reviewRequestSchema.safeParse(request.body);
+    if (!parsed.success) {
+      throw new ApiError(
+        400,
+        'invalid_request',
+        'Body must be JSON `{ "decisions": [{ "dish_id": "<uuid>", "action": "confirm|followup|reopen", "note": null }] }`.',
+      );
+    }
+    const { decisions } = parsed.data;
+    if (!(await getRun(id))) throw new ApiError(404, 'not_found', 'Run not found.');
+
+    // AC6: one unknown `dish_id` applies nothing. The count comes back from the repo and
+    // the throw is inside the transaction, so the rollback covers the decisions that did match.
+    await db.transaction(async (tx) => {
+      const matched = await applyReviews(tx, id, decisions);
+      if (matched !== decisions.length) {
+        throw new ApiError(
+          400,
+          'invalid_request',
+          'A dish id in this batch does not belong to this run; nothing was applied.',
+        );
+      }
+    });
+
+    request.log.info({ run_id: id, decisions: decisions.length }, 'reviews applied');
     const run = await getRunWithDishes(id);
     if (!run) throw new ApiError(404, 'not_found', 'Run not found.');
     const { dishes, ...row } = run;
