@@ -2,9 +2,9 @@
 title: 'M1 — Submit, Watch, Review (stories 1.7 + 2.1 + 2.2, history folded)'
 type: 'feature'
 created: '2026-08-22'
-status: 'draft'
+status: 'in-progress'
 review_loop_iteration: 0
-baseline_commit: 'b6c9a82'
+baseline_commit: '0a94f317d4b961fa507997dfe5e4a87947683e07'
 context:
   - '{project-root}/_bmad-output/implementation-artifacts/epic-1-context.md'
   - '{project-root}/DECISIONS.md (D24 — the scope cut this story implements)'
@@ -37,6 +37,7 @@ context:
 
 **Never:**
 - Editing extracted values; a DELETE route; storing derived state; the evidence panel with source highlighting (story 2.4, cut — D24); batch selection or the menu-level honesty notice (story 2.3, cut — D24); tests (R8 — story 1.8 owns the one test).
+- **A reopen affordance in the UI.** The endpoint accepts `reopen` because 2.1 AC1's contract note keeps the action enum whole ("the endpoint implements the full AD-9 action enum — `reopen` included"), and that same note assigns the *UI affordance* to story 2.3 as P1 — which D24 cut. Server yes, button no; the README records it as a known limitation.
 
 ## I/O & Edge-Case Matrix
 
@@ -109,7 +110,9 @@ context:
 
 **Polling belongs to the server's state, not a timer.** `refetchInterval` is a function of the query's own data: a poll interval while `state === 'processing'`, `false` otherwise. The run stops polling itself; no component needs to remember to stop.
 
-**Two lanes.** The server routes and the web app touch disjoint files and share only `shared/src/api.ts`, which is already written. They can be implemented in parallel.
+**Two lanes, disjoint files, parallel.** They share only `shared/src/api.ts`, which is already written and needs no change.
+- **Server lane** — the first two tasks: `server/src/db/runs-repo.ts` and `server/src/routes/runs.ts`. Touches nothing under `web/`.
+- **Web lane** — every remaining task: `web/package.json`, `web/src/**`. Touches nothing under `server/` or `shared/`. It codes against the contract in `shared/src/api.ts` and `shared/src/run.ts`, which already describe both new endpoints exactly, so it never waits for the server lane.
 
 ## Verification
 
