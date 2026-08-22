@@ -153,9 +153,7 @@ test('golden master: one menu upload, through the real API and Postgres, with on
     expect(seen[0]?.acquired_text).toBe(acquiredText);
     expect(seen[0]?.bytes?.equals(pdf)).toBe(true);
 
-    // --- the golden ------------------------------------------------------------------
     const golden = normalizeDetail(detail, acquiredText);
-    expect(golden).toEqual(GOLDEN.detail);
 
     // --- every rule, by id -----------------------------------------------------------
     const fired = new Set(detail.dishes.flatMap((dish) => dish.confidence_reasons.map((reason) => reason.rule)));
@@ -217,6 +215,11 @@ test('golden master: one menu upload, through the real API and Postgres, with on
       { price_raw: '14,00 €', price_value: 14, currency: 'eur or unmarked' },
       { price_raw: '5,00 €', price_value: 5, currency: 'eur or unmarked' },
     ]);
+
+    // --- the golden ------------------------------------------------------------------
+    // Last, on purpose: the accusing assertions above run first, so a rule that stopped
+    // firing reports itself by id instead of arriving as a diff the reader has to decode.
+    expect(golden).toEqual(GOLDEN.detail);
 
     // --- the list's own derivation ------------------------------------------------------
     const list = (await app.inject({ method: 'GET', url: '/api/runs' })).json() as RunListResponse;

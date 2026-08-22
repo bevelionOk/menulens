@@ -6,7 +6,12 @@
 // The lines the extracted text layer yields, in order. Over `SOURCE_MIN_TEXT_CHARS`
 // (default 200) collapsed characters, so the class decision is `text`.
 export const MENU_LINES = [
-  'Restaurante La Parra - Carta de temporada',
+  // The `½` is load-bearing, not decoration: NFKC expands it to three characters, so from
+  // here on the normalized string and the original text no longer share indices. Without
+  // it every evidence offset would be correct by accident and swapping the origin-offset
+  // map for plain normalized indices would pass unnoticed — the exact regression the
+  // story-1.6 review found nothing in the repo could see.
+  'Restaurante La Parra - Carta de temporada (½ ración disponible)',
   'Tortilla de patatas 8,50 € Contiene huevo y leche.',
   'Croquetas de jamón ibérico 9,75 € Alérgenos declarados: leche y gluten.',
   'Ensalada de la casa desde 6 € Aliño con mostaza y semillas de sésamo.',
