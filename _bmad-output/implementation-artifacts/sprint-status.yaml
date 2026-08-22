@@ -42,17 +42,17 @@ development_status:
   1-4-source-acquisition-class-decision: review
   1-5-extraction-adapter-the-openai-seam: review
   1-6-triage-core-the-deterministic-arbiter: review
-  1-7-submit-watch-an-honest-waiting-ui: backlog
+  1-7-submit-watch-an-honest-waiting-ui: in-progress # M1 = 1.7 + 2.1 + 2.2, AC8 cut (D24)
   1-8-the-one-test-golden-master-ci-complete: backlog
   epic-1-retrospective: optional
 
   epic-2: backlog
-  2-1-the-review-endpoint-one-path-for-every-verdict-p0: backlog
-  2-2-the-review-screen-flags-reasons-and-verdicts-in-one-place-p0: backlog
-  2-3-review-depth-batch-reversibility-note-and-the-honesty-notice: backlog
-  2-4-the-evidence-panel-original-first-p1: backlog
+  2-1-the-review-endpoint-one-path-for-every-verdict-p0: backlog # merged into 1-7 as M1 (D24)
+  2-2-the-review-screen-flags-reasons-and-verdicts-in-one-place-p0: backlog # merged into 1-7 as M1 (D24)
+  2-3-review-depth-batch-reversibility-note-and-the-honesty-notice: backlog # CUT 2026-08-22 (D24)
+  2-4-the-evidence-panel-original-first-p1: backlog # CUT 2026-08-22 (D24)
   epic-2-retrospective: optional
 
   epic-3: backlog
-  3-1-history-the-living-audit-record-p0: backlog
+  3-1-history-the-living-audit-record-p0: backlog # folded into M1's submit page (D24)
   epic-3-retrospective: optional

@@ -488,3 +488,53 @@ schemas, magic-byte sniffing, `statement_timeout` (FR6: one timeout), a stage he
 precedent (1.2 was the same size and the single-goal test holds). The implementer was
 re-engaged with context intact for the patch round — cheaper and more coherent than a
 fresh dispatch.
+
+## D24 · 2026-08-22 — Scope re-evaluation: the cut ladder is finally exercised
+
+**Trigger.** With Epic 1 six stories deep, Pablo asked the question D19 deferred: is the
+story count itself over-engineering? Three parallel investigations answered it — challenge
+scope vs plan, measured per-story cost, and the minimum submittable path.
+
+**What the evidence said.**
+- The brief asks for five fields per dish, persisted, "shown in a clean UI", and ends
+  "That's it." Of the **40 acceptance criteria still unbuilt, 4 are mandated by an explicit
+  brief line** (story 1.8, the one test); roughly 8–10 more serve "shown in a clean UI";
+  the remaining ~26 answer requirements this team wrote for itself on day one. Epic 2 in
+  particular traces to our own product brief ("Extract → Triage → Review → Confirm"), not
+  to the challenge.
+- **No rubric row scores feature count.** Stack competence (15%) scores *idiom*, not
+  volume; Critical thinking (15%) and Independent judgment (5%) reward a defended cut.
+- `review-overengineering.md` called this HIGH severity on 2026-08-21 and D19 answered it
+  with priority labels rather than deletions. The ladder was built and never used.
+- Cost is not the process, it is the granularity: per-story wall clock fell from 1 h 26 m
+  (1.1) to ~26 min (1.5) with the same ceremony, but stories 1.3 and 1.6 produced **more
+  lines of specification than of code** (0.81:1 and 0.94:1) because a spec costs the same
+  whether the story is 260 or 760 lines. Small stories, not heavy process.
+
+**Ratified (Pablo, 2026-08-22).**
+1. **Stories 1.7, 2.1 and 2.2 merge into one deliverable, "M1 — Submit, Watch, Review".**
+   Nothing is lost: 2.2's AC3 already says its action "posts through Story 2.1's endpoint"
+   (one wire described twice), 2.1's AC4 (done-ness and "N of M resolved" derived at read
+   time) **is already implemented** in `core/run-state.ts`, and 2.1's AC5 is an absence.
+2. **Story 1.7's AC8 is cut permanently** — the minimal read-only table the epics file
+   itself describes as replaced by the Epic 2 screen. Building it to delete it a day later
+   is a luxury of a longer schedule; M1 builds the real table once.
+3. **Stories 2.3 (review depth) and 2.4 (evidence panel) are cut whole**, today, in
+   writing — exercising D19's tag-safe ladder rather than deferring the call to the night
+   of the 24th. Both are P1 and neither touches a P0 line. The T6 match offsets 1.6 already
+   persists mean the evidence panel stays cheap to add later; that is the honest thing to
+   say in the walkthrough, not a claim that it was never wanted.
+4. **Story 3.1 folds into M1's submit page** as a recent-runs list — no `/history` route,
+   no nav chrome. `listRuns()` and `runListResponseSchema` already exist unused; the only
+   new work is one grouped count query.
+5. **Story 1.8 stays exactly one test.** The eight "story 1.8 must also assert…" entries in
+   `deferred-work.md` are a test suite in disguise and would violate R8 as directly as
+   writing none. They close with a DECISIONS paragraph stating that the repo is capped at
+   one test and those rules stay verified by the logged manual runs.
+6. **The README moves early**, not last: the brief's deliverable is a repo a reviewer
+   installs and runs in under five minutes, and it is the first artifact they open.
+
+**Result: seven remaining stories become four deliverables** — M1 (submit + watch + review
++ recent runs), 1.8 (the one test + CI, a disjoint file set that runs as a parallel lane),
+and the README/decisions pass. What we lose is written down here, on purpose: it is the
+answer to "what did you cut and why", which is a scored question.
