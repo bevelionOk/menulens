@@ -1,7 +1,9 @@
 import type { FastifyBaseLogger } from 'fastify';
 import { db } from '../db/client';
-import { getRun, setSourceClass } from '../db/runs-repo';
+import { getRun, insertDishes, type NewDish, setSourceClass } from '../db/runs-repo';
 import { getArtifact, upsertArtifact } from '../db/source-artifacts-repo';
+import { triageDish } from '../core/arbiter';
+import { normalizeForMatch } from '../core/normalize';
 import { AcquisitionError } from './acquisition-error';
 import { acquireSource } from './acquire-source';
 import type { ExtractFn, ExtractionResult } from './extraction-adapter';
@@ -10,7 +12,7 @@ import { finishRun, transitionStage } from './run-lifecycle';
 
 // The in-process pipeline (AD-4): fire-and-forget from POST /api/runs, never awaited by
 // the request. Story 1.4 owns `fetching_source`; 1.5 owns `extracting` through the
-// injected `extract` seam; 1.6 appends `validating`/`saving`. Every stage/status write
+// injected `extract` seam; 1.6 owns `validating`/`saving`. Every stage/status write
 // goes through the 1.3 primitives. An unexpected throw is logged and leaves the run
 // `processing` — the staleness net reads it `interrupted` (AD-14); no `internal` reason.
 export async function runPipeline(log: FastifyBaseLogger, runId: string, extract: ExtractFn): Promise<void> {
@@ -84,9 +86,30 @@ export async function runPipeline(log: FastifyBaseLogger, runId: string, extract
       return;
     }
     log.info(
-      { run_id: runId, dish_count: extracted.dishes.length, attempts: extracted.attempts, usage: extracted.usage, dishes: extracted.dishes },
-      'extraction complete; triage not wired (1.6)',
+      { run_id: runId, dish_count: extracted.dishes.length, attempts: extracted.attempts, usage: extracted.usage },
+      'extraction complete',
     );
+
+    // 1.6: the arbiter. Pure triage over the model's signals against the stored ground
+    // text; one log line per dish with the fired rule ids (never names or quotes).
+    await transitionStage(log, runId, 'validating');
+    // The pinned chain runs once over the ground text, not once per name and quote: it is
+    // linear in a source that may be megabytes, and this loop is the whole process.
+    const ground = stored.acquired_text === null ? null : normalizeForMatch(stored.acquired_text);
+    const ctx = { source_class: acquired.source_class, ground };
+    // `TriagedDish` must be insertable as-is — a type-level check, no runtime mapping.
+    const rows: NewDish[] = extracted.dishes.map((signal) => triageDish(signal, ctx));
+    rows.forEach((row, position) => {
+      log.info({ run_id: runId, position, flag: row.flag, rules: row.confidence_reasons.map((r) => r.rule) }, 'dish triaged');
+    });
+
+    // AD-5: all dishes + `done` in one transaction — never dishes on a `processing` run,
+    // never a `done` run with zero rows.
+    await transitionStage(log, runId, 'saving');
+    await db.transaction(async (tx) => {
+      await insertDishes(tx, runId, rows);
+      await finishRun(log, runId, { status: 'done' }, tx);
+    });
   } catch (err) {
     log.error({ run_id: runId, err }, 'pipeline crashed; run left processing');
   }
