@@ -63,6 +63,7 @@ beat 4 cut, "taught me" and "That is why" replaced by the two facts, "get review
 reconciled with "I am the only human", the pull-request count marked for a recount; three
 PRESERVE rows ("when the models could", the 405 incident, the beat-3 reason). Three open
 items: the one-clause fix for the 405 incident; whether Bevelion has a TypeScript front
-end; and the prompts used with the agent that drafted the text (prompt 57), owed to
-`prompts/` under R11 as entry 60. Opinion given in chat. Next prompt 60; next register row
+end; and — on the earlier session's reading of prompt 57 ("con mi agente") — whether LLM
+prompts exist that R11 would require in `prompts/`; Pablo disputes that reading in
+prompt 60. Opinion given in chat. Next prompt 60; next register row
 B47.

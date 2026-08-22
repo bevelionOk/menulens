@@ -6,10 +6,10 @@ have financial consequences; production features shipped with BMAD, not tutorial
 writing, trade-offs; no daily standups, no detailed tickets, no pairing to decide; one
 weekly sync, otherwise autonomous; 20–40 h/week, remote, English.
 
-Text by Pablo, 2026-08-22 (prompt 58). Spoken text 595 words ≈ 4:05 at 150 wpm, ≈ 4:35 at
-130 wpm; the brief's cap is 5:00. The review's rows (after the script) are proposed, not
-applied — Pablo decides. Frame: webcam only, eye level; a card with the beat names and the
-numbers of beat 2 in hand; two takes at most. Recording setup: [README.md](README.md).
+Text by Pablo, 2026-08-22 (prompts 58 and 60). Spoken text 605 words ≈ 4:02 at 150 wpm,
+≈ 4:39 at 130 wpm; the brief's cap is 5:00. Two review rows (beats 3 and 4) still wait for
+Pablo. Frame: webcam only, eye level; a card with the beat names and the numbers of beat 2
+in hand; two takes at most. Recording setup: [README.md](README.md).
 
 | # | Beat | Starts | Length |
 |---|---|---|---|
@@ -32,19 +32,22 @@ numbers of beat 2 in hand; two takes at most. Recording setup: [README.md](READM
 
 ## 1 · Background — 0:15
 
-> Before software, project management: Decentralise e.V. in Liechtenstein, a blockchain
-> education association, 2023 to 2025 — three hundred members, the Cryptobus and its
-> podcasts, the CryptoVille festival. I started writing software in January 2025, when
-> the models could. Bevelion began as an idea for freelancers drafted with Gemini and
-> Grok; from September 2025 it was built with Roo Code and a local Qwen — those rules
-> are still in the repository; Claude Code since July 2026; parallel agents since August
-> 13th. Today: 30 Rust crates, 71 migrations on Postgres, 203 merged pull requests, 57
-> of them in August. A mistake there costs money. On August 12th I found every video
-> generation was being queued, paid for and thrown away — the provider returned 405
-> after charging, and "completed" meant finished, not succeeded. Bevelion also taught me
-> that timeouts are treacherous: a ten-minute test timeout fired on every cold compile
-> and read as failing tests. That is why this app has one timeout and derives everything
-> else at read time.
+> Before software, project management at Decentralise e.V. in Liechtenstein, a blockchain
+> education association, 2023 to 2025: three hundred members, the Cryptobus and its
+> podcasts, the CryptoVille festival. I started writing software in January 2025, when the
+> models could. Bevelion began as an idea for freelancers; built with Roo Code and a local
+> Qwen from September 2025, Claude Code from July 2026, parallel agents since August 13th.
+> Today: 30 Rust crates, a TypeScript front end in Svelte 5, 71 migrations, 203 merged
+> pull requests, 57 in August. A mistake there costs money. On August 12th I found every
+> video generation was being queued, paid for and thrown away — the provider answered 405
+> after charging. I fixed it the same day: one queue client instead of six copies, the
+> provider's own tracking URLs, and "completed" counts only when the fetched result
+> carries the file. Bevelion also taught me that timeouts are treacherous: a ten-minute
+> test timeout fired on every cold compile and read as failing tests — so this app has one
+> timeout and derives everything else at read time.
+
+Text by Pablo (prompt 60); the clause *a TypeScript front end in Svelte 5* inserted on his
+answer to open item 2 — reword freely.
 
 ---
 
@@ -97,36 +100,34 @@ numbers of beat 2 in hand; two takes at most. Recording setup: [README.md](READM
 
 ---
 
-## Review 2026-08-22 — `bmad-review` structure + prose, proposed, not applied
+## Review 2026-08-22 — `bmad-review` structure + prose; state after Pablo's beat 1 (prompt 60)
 
-Style guide: REQUIREMENTS §4. Reader: the evaluator, listening once. Pace on camera in a
-second language: plan for 130 wpm, not 150.
+Style guide: REQUIREMENTS §4. Pace on camera in a second language: plan for 130 wpm.
 
-| Pass | Original | Revised | Words |
-|---|---|---|---|
-| structure | Beat 1: "Bevelion began as an idea for freelancers drafted with Gemini and Grok; from September 2025 it was built with Roo Code and a local Qwen — those rules are still in the repository; Claude Code since July 2026; parallel agents since August 13th." | CONDENSE: "Bevelion began in January 2025 as an idea for freelancers; code since September 2025, with Claude Code since July 2026." The private repository cannot be opened by the viewer; the agent dates put the method at two weeks old, and the artifacts score fluency, not tenure. | −22 |
-| structure | Beat 1: "the Cryptobus and its podcasts, the CryptoVille festival" | CONDENSE: "a festival, a podcast" — the names carry nothing outside Liechtenstein. | −6 |
-| structure | Beat 0 "Since January 2025 I have been building Bevelion" vs beat 1 "from September 2025 it was built" | MERGE the dates: beat 0 "Since 2025 I have been building Bevelion…"; beat 1 carries January (the idea) and September (the code). | 0 |
-| structure | Beat 4: "Central European Time, Barcelona and Dresden: full overlap with a reviewer in Europe." | CONDENSE (beat 0 already places you): "Full overlap with a reviewer in Europe." | −6 |
-| structure | Beat 2: "since August 9th" | CUT the date; say the scope exactly as it is true — before every action, every commit, or every PR. | −3 |
-| structure | Beat 2, if a take runs long | The D26 sentence is the one to drop (−27). PRESERVE the four questions: the only process claim that also exists in Bevelion. | — |
-| structure | PRESERVE | "I started writing software in January 2025, when the models could." — the fact the evaluator will find anyway; said first, it is the stronger position. The 405 incident. "agents review agents, and I sign the decisions." "What that repository cannot give me is a reviewer…" | — |
-| prose | Beat 1: "Bevelion also taught me that timeouts are treacherous: … That is why this app has one timeout and derives everything else at read time." | "In Bevelion a ten-minute test timeout fired on every cold compile and read as failing tests. This app has one timeout and derives everything else at read time." ("taught me" is a lesson, "That is why" a coda — §4.) | −8 |
-| prose | Beat 1: "when the models could" | Consider: "when the models could write it"? The antecedent is two sentences back. | +2 |
-| prose | Beat 3: "build, explain in writing, get reviewed, ship" — two sentences after "I am the only human" | "build, explain in writing, ship — reviewed by agents, so far." | +3 |
-| prose | Beat 3: "23 pull requests" | Recount at recording (23 merged, #24 open on 2026-08-22). | 0 |
-| prose | Beat 1: the 405 incident | Consider adding the fix in one clause (≤ 10 words): ownership of the fix, not only of the finding. **Open item 1.** | +10 |
-| prose | Beat 1: "30 Rust crates" | The listing's stack is TypeScript. If Bevelion has a TypeScript or React front end, name it in four words; if not, leave it — this repository is the TypeScript evidence. **Open item 2.** | +4 |
-
-Net if all rows are accepted: ≈ −26 words (≈ 570, 4:23 at 130 wpm). The remaining pace
-lever is the D26 sentence.
+| Beat | Row | State |
+|---|---|---|
+| 1 | Tool chronology condensed; "those rules are still in the repository" unverifiable | **Applied by Pablo, his wording** — Gemini/Grok and the repository line gone; Roo Code, Qwen, Claude Code and the August 13th date kept |
+| 1 | Event names (Cryptobus, CryptoVille) → "a festival, a podcast" | **Declined** — kept as written |
+| 1 | "taught me… That is why" → two facts | **Pablo's middle path** — "That is why" → "— so"; "taught me" kept |
+| 1 | The 405 fix in one clause (open item 1) | **Applied** — three facts: one queue client, the provider's tracking URLs, "completed" needs the file |
+| 1 | TypeScript front end (open item 2) | **Applied** — Svelte 5 |
+| 0/1 | January vs September 2025 | **Closed** — beat 1 no longer dates the idea; beat 0's January is the idea, beat 1's September the code |
+| 2 | "since August 9th" | **Withdrawn** — Pablo keeps dates (beat 1 keeps August 13th) |
+| 3 | "build, explain in writing, get reviewed, ship" two sentences after "I am the only human" → "build, explain in writing, ship — reviewed by agents, so far." | **Open** |
+| 4 | "Central European Time, Barcelona and Dresden: full overlap…" → "Full overlap with a reviewer in Europe." (beat 0 already places you) | **Open** |
+| 3 | "23 pull requests" | Recount at recording |
+| 2 | If a take runs long: the D26 sentence (−27 words) | Pace lever |
 
 ## Open items
 
-1. The one-clause fix for the 405 incident — what "completed" requires now.
-2. Does Bevelion have a TypeScript front end? The stack in four words, or nothing.
-3. The prompts used with the agent that drafted this text (prompt 57) go in `prompts/` —
-   R11, "every prompt you fed to any LLM". Entry 60, verbatim, with the tool named.
+1. ~~The one-clause fix for the 405 incident.~~ Closed (prompt 60).
+2. ~~Does Bevelion have a TypeScript front end?~~ Closed: TypeScript, Svelte 5 (prompt 60).
+3. Prompt 57 reads *"voy a armar con mi agente el cuestionario"* (transcript 2026-08-22
+   17:32Z, verbatim). The earlier session read "mi agente" as an LLM that drafted the text
+   and asked for those prompts under R11; Pablo says the entry is not accurate. Pending his
+   word on what "mi agente" was: if no LLM prompts exist beyond this log, nothing is owed
+   and entry 57's title and intent get corrected; if they exist, they go in as the next
+   entry, verbatim, tool named.
 
 ## Evidence map — claims the listing asks for, and where the proof is
 
