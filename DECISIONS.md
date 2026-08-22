@@ -595,11 +595,38 @@ in its header for that last one: NFKC expands it to three characters, so the nor
 and original index spaces stop agreeing — without it the offsets would be right by
 accident and the mutation would pass.
 
-**Known gap, stated rather than hidden**: the astral-character case (an emoji before a
-match, which the 1.6 review found had thrown a `RangeError`) is not in the fixture. A
-WinAnsi text layer cannot carry one, and reaching it would mean a `ToUnicode` CMap built
-solely to serve the test. The `½` covers the same mapping invariant — normalized indices
-must not be reused as original offsets — which is the property the offsets depend on.
+**Known gaps, stated rather than hidden.** One test drives one path, and the honest
+accounting of what that leaves out is part of the answer R8 asks for. Three adversarial
+reviewers over this diff named these, and each is a direction in which the gate can only
+fail one way:
+
+- **The astral-character case** (an emoji before a match — the `RangeError` the 1.6 review
+  found) is not in the fixture. A WinAnsi text layer cannot carry one, and reaching it
+  would mean a `ToUnicode` CMap built solely to serve the test. The `½` covers the adjacent
+  invariant — normalized indices must not be reused as original offsets.
+- **The decomposed-source branch.** `findNormalized` extends a match end over combining
+  marks left in the *original* text. The fixture's `é` arrives precomposed from WinAnsi, so
+  that branch never executes: deleting it passes. It matters for HTML sources, which is the
+  same reason the next gap matters.
+- **`source_class: 'visual'` is never produced.** The fixture PDF is far above the text
+  threshold, so `hasUsableText` is true on every path the test drives. Making
+  `decideSourceClass` return `'text'` unconditionally passes — and a scanned menu would
+  then be sent as text with an empty ground text, downgrading every allergen and tripping
+  T4 on every name.
+- **The URL branch is unreachable from the test.** The fixture is an upload, so the JSON
+  route arm, the content-type dispatch, charset decoding and `html-to-text` are all
+  outside the gate. Removing `text/html` from the accepted set fails every URL menu with a
+  green build.
+- **`empty` and `failed` are unobserved.** The mocked seam always returns six dishes and
+  never throws, so the zero-dish E9 branch and both failure paths never run. Deleting the
+  zero-dish guard yields a `done` run with no rows — the exact state AD-5 forbids — and the
+  golden, which has six dishes, notices nothing.
+
+The 409 seriality gate was in this list until the review; it moved into the test, because a
+second POST during the live run is an assertion about *this* run's own behaviour and
+therefore inside the line D25 draws. The rest stay out: each needs its own fixture, its own
+entry point, or an injected failure. Naming them is the point — a gate whose blind spots
+are written down is worth more than one whose owner believes it covers everything.
 
 ## D26 · 2026-08-22 — A check is not a test: the schema/migration drift guard in CI
 
@@ -621,7 +648,7 @@ migration", never as a failing test.
 about its behaviour — it needs a fixture, an entry point, and a claim that can be right or
 wrong about a running program. The drift guard runs no application code and has no fixture.
 It regenerates a migration from `schema.ts` and asserts that two **committed artifacts agree
-with each other**. It can fail for exactly one reason. That is the same category as
+with each other**. That is the same category as
 `tsc --noEmit`, which has sat in `checks` since story 1.1 and which nobody would count as a
 test. R8 caps automated *tests* because a candidate who writes forty of them is answering a
 different question than the one asked; it does not forbid the build from checking its own
@@ -629,3 +656,18 @@ consistency. The risk is concrete rather than theoretical: a schema edit without
 leaves a fresh clone booting against a database that does not match the code — and a timed
 fresh-clone run by the reviewer is exactly how this repo gets evaluated. If the distinction
 ever stops being defensible, the honest move is to delete the guard, not to redefine "test".
+
+**Correction (same day, from the story-1.8 review): what this guard does not catch.** The
+first version of this entry claimed the step "can fail for exactly one reason". That
+overstates it, and the overstatement is worth more as a correction than as a quiet edit.
+`drizzle-kit generate` diffs `schema.ts` against `drizzle/meta/*_snapshot.json` and appends
+a new migration; it never re-reads or re-derives the committed `.sql`. So the guard catches
+the case it was built for — a schema edited without generating — but a hand-edited
+`0000_*.sql` that drops a constraint while the snapshot stays untouched passes it cleanly,
+`db:migrate` applies the weakened DDL, and the fresh clone boots against a database that
+does not match the code. That is precisely the failure this entry says the guard prevents,
+and it survives. Two things followed: the check now uses `git status --porcelain` so newly
+*generated* files cannot slip past as untracked, and this residual is stated rather than
+implied. Closing it properly means applying the committed SQL to an empty database and
+comparing the result to the schema — a real verification, correctly outside a CI step that
+claims to be cheap.
