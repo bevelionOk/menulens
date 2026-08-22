@@ -1,6 +1,6 @@
 # Phase 5 — Communication: The Two Videos (Aug 24)
 
-**Goal**: both required videos recorded, uploaded, and linked. The personal video is an
+**Goal**: both required videos recorded, uploaded, and linked. Scripts and recording setup: [videos/](videos/) (personal, walkthrough, recording). The personal video is an
 **auto-reject if missing** — this phase cannot slip past Aug 24.
 
 ## Setup (once, ~15 min)
