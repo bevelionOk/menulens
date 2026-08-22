@@ -116,23 +116,21 @@ see". No adjective about oneself; a fact with a date instead.
 
 ## Questionnaire — what the script needs from Pablo
 
-Answers in Spanish are fine; the script is English.
-
-1. **Nombre y lugar.** Cómo querés aparecer (nombre completo), ciudad/país, zona horaria
-   (para decir el overlap con un reviewer en Europa).
-2. **Hoy.** Qué es Bevelion en una frase; tu rol ahí y desde cuándo; tamaño del equipo. ¿Se
-   puede nombrar en cámara, o lo describo sin nombre?
-3. **Trayectoria.** Años totales. Dos sistemas en producción que hayas tenido a cargo:
-   qué hacían, para quién, escala (usuarios, transacciones, dinero), stack, y qué costaba
-   un error ahí. Si la frase "los timeouts son traicioneros" (prompt 2026-08-21-03) viene
-   de un caso concreto, cuál.
-4. **BMAD / agentes.** Desde cuándo usás Claude Code y BMAD; qué es tu orquestación
-   multiagente (qué hace, desde cuándo, en qué la usás). ¿Hay algo en producción hecho con
-   BMAD antes de este challenge? Si no, lo digo así: este repo es la primera.
-5. **Por qué este rol, en tus palabras.** Tres líneas sin pulir. Qué línea del JOB.md te
-   hizo aplicar. Qué NO buscás (si querés que se diga).
-6. **Disponibilidad.** Horas por semana, fecha de inicio posible, freelance o remote.com.
-   Mi recomendación: no mencionar cifras de dinero.
-7. **Inglés y cámara.** Cómo te sentís hablando inglés en cámara (R-09). ¿Querés una frase
-   que lo nombre, o nada? ¿Preferís leer beats de una tarjeta o memorizar?
-8. **Límites.** Empleadores, clientes o números que no querés decir.
+1. **Name and place.** The name as it should appear, city and country, time zone (to state
+   the overlap with a reviewer in Europe).
+2. **Today.** Bevelion in one sentence; the role there and since when; team size. Can it be
+   named on camera, or should it be described without the name?
+3. **Track record.** Total years. Two production systems you were responsible for: what
+   they did, for whom, scale (users, transactions, money), stack, and what a mistake cost
+   there. If "timeouts are treacherous" (prompt 2026-08-21-03) comes from one concrete
+   case, which one.
+4. **BMAD and agents.** Since when with Claude Code and BMAD; what the multi-agent
+   orchestration is (what it does, since when, what it is used for). Anything in production
+   built with BMAD before this challenge? If not, the script says so: this repo is the first.
+5. **Why this role, in your own words.** Three unpolished lines. Which line of JOB.md made
+   you apply. What you are not looking for, if it should be said.
+6. **Availability.** Hours per week, earliest start date, freelance or remote.com.
+   Recommendation: no money figures on camera.
+7. **English and camera.** How speaking English on camera feels (R-09). One sentence that
+   names it, or nothing? Beats on a card, or from memory?
+8. **Limits.** Employers, clients or numbers that must not be said.
