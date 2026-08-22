@@ -538,3 +538,94 @@ scope vs plan, measured per-story cost, and the minimum submittable path.
 + recent runs), 1.8 (the one test + CI, a disjoint file set that runs as a parallel lane),
 and the README/decisions pass. What we lose is written down here, on purpose: it is the
 answer to "what did you cut and why", which is a scored question.
+
+## D25 · 2026-08-22 — Story 1.8: what the one test asserts, and what stays manual on purpose
+
+**Context**: R8 asks for "exactly one meaningful automated test, and justify the choice".
+D16 chose the shape (an integration golden-master); D24 §5 closed the eight
+"story 1.8 must also assert…" entries in `deferred-work.md` by capping the repo at one
+test. Building it forced the line to be drawn precisely: R8 bounds the *number of tests*,
+not the number of things one test may observe about the run it drives.
+
+**The rule applied.** An assertion belongs in the one test when it is a claim about **that
+run's own observable payload**. It does not when it would need a different fixture, a
+different entry point, or a failure injection — that is a second test wearing the first
+one's filename.
+
+**Decision — what is in** (`server/test/golden-master.test.ts`, one `test()`, no
+`describe`/`it`/`test.each`): one real PDF upload through `app.inject()`, real acquisition
+(pdfjs over real bytes), the real arbiter, a real Drizzle transaction into a real Postgres,
+the real read path — with `extract` as the only mock (AD-12: no network, no OpenAI, no
+cost). Over that single run: the normalized payload against one committed golden; each of
+T1–T6 asserted **by rule id** before the golden comparison, so a rule that stops firing
+reports itself by name instead of arriving as a diff; the T6 downgrade; the one row that
+stays `reliable`; the evidence offsets slicing back to their quotes (`acquired_text.slice`)
+including an accented row; `price_value` and the currency verdict per row; the
+`GET /api/runs` list row as a second, SQL-side derivation of `state`/`dish_count`/
+`review_progress`; a `confirm` + `followup` round-trip proving no extracted value moved;
+and a forged batch whose 400 must leave **both** decisions unapplied.
+
+**Decision — what stays verified by the logged manual runs**, because each needs its own
+fixture or its own injected failure:
+- **The SSRF refusal table** (`core/ssrf.ts`) — a rule about addresses, not about a run.
+  Its own table-driven check is a second test by any honest reading.
+- **The extraction adapter's contract** — one retry on invalid output, `onRetry` awaited
+  only before attempt 2, usage summed across attempts, `APIConnectionTimeoutError` matched
+  before its `APIError` superclass, text-class never sending the file. The golden mocks
+  `extract` *above* the adapter by design, so pinning this needs a stub OpenAI client:
+  a different seam, a different entry point.
+- **The env fail-fast branch** (`env.ts`) — only observable by spawning a process with a
+  stripped environment and reading its exit code.
+- **The `saving` transaction's atomicity** — only observable by forcing the dish insert to
+  fail, which is a failure injection into production code.
+
+**Why**: the riskiest thing in this repo is not any single function — it is the seam-to-seam
+path (a contract shared by three workspaces, a fire-and-forget pipeline, a deterministic
+arbiter, a transaction that must land dishes and the terminal status together). A unit test
+on `parsePrice` proves the least interesting part. The four exclusions above are named here
+rather than quietly dropped, because "we tested one thing and know exactly what we did not"
+is the answer R8 is asking for; "we wrote forty tests" answers a different question.
+
+**Evidence the test accuses rather than merely differs** (each mutation reverted after):
+deleting T4 from `arbiter.ts` fails with `arbiter rule T4 fired on no row`; changing
+`Math.round(value * 100) / 100` to `Math.round(value)` fails naming `price_value` 8.5 → 9;
+returning normalized indices from `findNormalized` instead of the origin-offset map fails
+naming the dish and the quote that no longer slices back. The fixture menu carries a `½`
+in its header for that last one: NFKC expands it to three characters, so the normalized
+and original index spaces stop agreeing — without it the offsets would be right by
+accident and the mutation would pass.
+
+**Known gap, stated rather than hidden**: the astral-character case (an emoji before a
+match, which the 1.6 review found had thrown a `RangeError`) is not in the fixture. A
+WinAnsi text layer cannot carry one, and reaching it would mean a `ToUnicode` CMap built
+solely to serve the test. The `½` covers the same mapping invariant — normalized indices
+must not be reused as original offsets — which is the property the offsets depend on.
+
+## D26 · 2026-08-22 — A check is not a test: the schema/migration drift guard in CI
+
+**Context**: `server/drizzle/*.sql` is generated from `server/src/db/schema.ts` by hand.
+Nothing in CI executed either, so an edit to `schema.ts` without regenerating shipped with
+a green build and failed at the first runtime query. The obvious guard —
+`npm run -w server db:generate` then `git diff --exit-code server/drizzle` — collided with
+R8's "exactly one automated test". Pablo ratified it at the story-1.8 checkpoint on the
+condition that the distinction be argued, not assumed.
+
+**Options**: (a) leave the gap and rely on discipline; (b) add the guard and call the repo's
+test count two; (c) add the guard as a **check**, distinct in kind from a test, and defend
+the distinction in writing.
+**Decision**: (c) — one CI step of its own, named "schema/migration drift guard", placed
+before the test step so its failure reads as "you changed the schema without generating a
+migration", never as a failing test.
+
+**Why the distinction is not semantics**: a test executes the system and asserts something
+about its behaviour — it needs a fixture, an entry point, and a claim that can be right or
+wrong about a running program. The drift guard runs no application code and has no fixture.
+It regenerates a migration from `schema.ts` and asserts that two **committed artifacts agree
+with each other**. It can fail for exactly one reason. That is the same category as
+`tsc --noEmit`, which has sat in `checks` since story 1.1 and which nobody would count as a
+test. R8 caps automated *tests* because a candidate who writes forty of them is answering a
+different question than the one asked; it does not forbid the build from checking its own
+consistency. The risk is concrete rather than theoretical: a schema edit without a migration
+leaves a fresh clone booting against a database that does not match the code — and a timed
+fresh-clone run by the reviewer is exactly how this repo gets evaluated. If the distinction
+ever stops being defensible, the honest move is to delete the guard, not to redefine "test".
