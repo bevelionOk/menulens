@@ -1,0 +1,412 @@
+{
+  "detail": {
+    "run": {
+      "source_type": "pdf",
+      "source_ref": "carta-la-parra.pdf",
+      "source_class": "text",
+      "status": "done",
+      "stage": "saving",
+      "failure_reason": null,
+      "state": "done",
+      "dish_count": 6,
+      "review_progress": {
+        "resolved": 0,
+        "total": 6
+      }
+    },
+    "dishes": [
+      {
+        "position": 0,
+        "name": "Tortilla de patatas",
+        "price_raw": "8,50 €",
+        "price_value": 8.5,
+        "allergens": [
+          {
+            "id": "eggs",
+            "provenance": "declared",
+            "evidence_quote": "Contiene huevo y leche",
+            "match_text": "Contiene huevo y leche"
+          },
+          {
+            "id": "milk",
+            "provenance": "declared",
+            "evidence_quote": "Contiene huevo y leche",
+            "match_text": "Contiene huevo y leche"
+          }
+        ],
+        "description": "Contiene huevo y leche.",
+        "description_provenance": "extracted",
+        "confidence_reasons": [],
+        "flag": "reliable",
+        "review_status": "pending",
+        "followup_note": null,
+        "reviewed_at": null
+      },
+      {
+        "position": 1,
+        "name": "Croquetas de jamón ibérico",
+        "price_raw": "9,75 €",
+        "price_value": 9.75,
+        "allergens": [
+          {
+            "id": "milk",
+            "provenance": "declared",
+            "evidence_quote": "Alérgenos declarados: leche y gluten",
+            "match_text": "Alérgenos declarados: leche y gluten"
+          },
+          {
+            "id": "gluten",
+            "provenance": "inferred",
+            "evidence_quote": "Elaboradas con harina de centeno",
+            "match_text": null
+          }
+        ],
+        "description": "Alérgenos declarados: leche y gluten.",
+        "description_provenance": "extracted",
+        "confidence_reasons": [
+          {
+            "rule": "T6",
+            "detail": "gluten: evidence quote not found in the source text"
+          },
+          {
+            "rule": "T1",
+            "detail": "inferred allergens: gluten"
+          }
+        ],
+        "flag": "uncertain",
+        "review_status": "pending",
+        "followup_note": null,
+        "reviewed_at": null
+      },
+      {
+        "position": 2,
+        "name": "Ensalada de la casa",
+        "price_raw": "desde 6 €",
+        "price_value": null,
+        "allergens": [
+          {
+            "id": "mustard",
+            "provenance": "declared",
+            "evidence_quote": "Aliño con mostaza y semillas de sésamo",
+            "match_text": "Aliño con mostaza y semillas de sésamo"
+          },
+          {
+            "id": "sesame",
+            "provenance": "declared",
+            "evidence_quote": "Aliño con mostaza y semillas de sésamo",
+            "match_text": "Aliño con mostaza y semillas de sésamo"
+          }
+        ],
+        "description": "Aliño con mostaza y semillas de sésamo.",
+        "description_provenance": "extracted",
+        "confidence_reasons": [
+          {
+            "rule": "T2",
+            "detail": "no unambiguous price value"
+          }
+        ],
+        "flag": "uncertain",
+        "review_status": "pending",
+        "followup_note": null,
+        "reviewed_at": null
+      },
+      {
+        "position": 3,
+        "name": "Pulpo a la brasa",
+        "price_raw": "18 $",
+        "price_value": null,
+        "allergens": [
+          {
+            "id": "molluscs",
+            "provenance": "declared",
+            "evidence_quote": "Pulpo a la brasa",
+            "match_text": "Pulpo a la brasa"
+          }
+        ],
+        "description": "Servido sobre patata panadera.",
+        "description_provenance": "extracted",
+        "confidence_reasons": [
+          {
+            "rule": "T2",
+            "detail": "no unambiguous price value"
+          },
+          {
+            "rule": "T3",
+            "detail": "non-EUR currency"
+          }
+        ],
+        "flag": "uncertain",
+        "review_status": "pending",
+        "followup_note": null,
+        "reviewed_at": null
+      },
+      {
+        "position": 4,
+        "name": "Secreto ibérico a la parrilla",
+        "price_raw": "14,00 €",
+        "price_value": 14,
+        "allergens": [
+          {
+            "id": "milk",
+            "provenance": "declared",
+            "evidence_quote": "Tabla de quesos artesanos con nueces",
+            "match_text": "Tabla de quesos artesanos con nueces"
+          },
+          {
+            "id": "nuts",
+            "provenance": "declared",
+            "evidence_quote": "Tabla de quesos artesanos con nueces",
+            "match_text": "Tabla de quesos artesanos con nueces"
+          }
+        ],
+        "description": "Tabla de quesos artesanos con nueces",
+        "description_provenance": "extracted",
+        "confidence_reasons": [
+          {
+            "rule": "T4",
+            "detail": "name not found in the source text"
+          }
+        ],
+        "flag": "uncertain",
+        "review_status": "pending",
+        "followup_note": null,
+        "reviewed_at": null
+      },
+      {
+        "position": 5,
+        "name": "Postre del día",
+        "price_raw": "5,00 €",
+        "price_value": 5,
+        "allergens": [],
+        "description": "Selección de postres caseros.",
+        "description_provenance": "generated",
+        "confidence_reasons": [
+          {
+            "rule": "T1",
+            "detail": "no allergen information"
+          },
+          {
+            "rule": "T5",
+            "detail": "El postre cambia a diario y la carta no lista sus ingredientes."
+          }
+        ],
+        "flag": "uncertain",
+        "review_status": "pending",
+        "followup_note": null,
+        "reviewed_at": null
+      }
+    ]
+  },
+  "list_row": {
+    "source_type": "pdf",
+    "source_ref": "carta-la-parra.pdf",
+    "source_class": "text",
+    "status": "done",
+    "stage": "saving",
+    "failure_reason": null,
+    "state": "done",
+    "dish_count": 6,
+    "review_progress": {
+      "resolved": 0,
+      "total": 6
+    }
+  },
+  "after_review": {
+    "run": {
+      "source_type": "pdf",
+      "source_ref": "carta-la-parra.pdf",
+      "source_class": "text",
+      "status": "done",
+      "stage": "saving",
+      "failure_reason": null,
+      "state": "done",
+      "dish_count": 6,
+      "review_progress": {
+        "resolved": 2,
+        "total": 6
+      }
+    },
+    "dishes": [
+      {
+        "position": 0,
+        "name": "Tortilla de patatas",
+        "price_raw": "8,50 €",
+        "price_value": 8.5,
+        "allergens": [
+          {
+            "id": "eggs",
+            "provenance": "declared",
+            "evidence_quote": "Contiene huevo y leche",
+            "match_text": "Contiene huevo y leche"
+          },
+          {
+            "id": "milk",
+            "provenance": "declared",
+            "evidence_quote": "Contiene huevo y leche",
+            "match_text": "Contiene huevo y leche"
+          }
+        ],
+        "description": "Contiene huevo y leche.",
+        "description_provenance": "extracted",
+        "confidence_reasons": [],
+        "flag": "reliable",
+        "review_status": "confirmed",
+        "followup_note": null,
+        "reviewed_at": "<timestamp>"
+      },
+      {
+        "position": 1,
+        "name": "Croquetas de jamón ibérico",
+        "price_raw": "9,75 €",
+        "price_value": 9.75,
+        "allergens": [
+          {
+            "id": "milk",
+            "provenance": "declared",
+            "evidence_quote": "Alérgenos declarados: leche y gluten",
+            "match_text": "Alérgenos declarados: leche y gluten"
+          },
+          {
+            "id": "gluten",
+            "provenance": "inferred",
+            "evidence_quote": "Elaboradas con harina de centeno",
+            "match_text": null
+          }
+        ],
+        "description": "Alérgenos declarados: leche y gluten.",
+        "description_provenance": "extracted",
+        "confidence_reasons": [
+          {
+            "rule": "T6",
+            "detail": "gluten: evidence quote not found in the source text"
+          },
+          {
+            "rule": "T1",
+            "detail": "inferred allergens: gluten"
+          }
+        ],
+        "flag": "uncertain",
+        "review_status": "pending",
+        "followup_note": null,
+        "reviewed_at": null
+      },
+      {
+        "position": 2,
+        "name": "Ensalada de la casa",
+        "price_raw": "desde 6 €",
+        "price_value": null,
+        "allergens": [
+          {
+            "id": "mustard",
+            "provenance": "declared",
+            "evidence_quote": "Aliño con mostaza y semillas de sésamo",
+            "match_text": "Aliño con mostaza y semillas de sésamo"
+          },
+          {
+            "id": "sesame",
+            "provenance": "declared",
+            "evidence_quote": "Aliño con mostaza y semillas de sésamo",
+            "match_text": "Aliño con mostaza y semillas de sésamo"
+          }
+        ],
+        "description": "Aliño con mostaza y semillas de sésamo.",
+        "description_provenance": "extracted",
+        "confidence_reasons": [
+          {
+            "rule": "T2",
+            "detail": "no unambiguous price value"
+          }
+        ],
+        "flag": "uncertain",
+        "review_status": "pending",
+        "followup_note": null,
+        "reviewed_at": null
+      },
+      {
+        "position": 3,
+        "name": "Pulpo a la brasa",
+        "price_raw": "18 $",
+        "price_value": null,
+        "allergens": [
+          {
+            "id": "molluscs",
+            "provenance": "declared",
+            "evidence_quote": "Pulpo a la brasa",
+            "match_text": "Pulpo a la brasa"
+          }
+        ],
+        "description": "Servido sobre patata panadera.",
+        "description_provenance": "extracted",
+        "confidence_reasons": [
+          {
+            "rule": "T2",
+            "detail": "no unambiguous price value"
+          },
+          {
+            "rule": "T3",
+            "detail": "non-EUR currency"
+          }
+        ],
+        "flag": "uncertain",
+        "review_status": "pending",
+        "followup_note": null,
+        "reviewed_at": null
+      },
+      {
+        "position": 4,
+        "name": "Secreto ibérico a la parrilla",
+        "price_raw": "14,00 €",
+        "price_value": 14,
+        "allergens": [
+          {
+            "id": "milk",
+            "provenance": "declared",
+            "evidence_quote": "Tabla de quesos artesanos con nueces",
+            "match_text": "Tabla de quesos artesanos con nueces"
+          },
+          {
+            "id": "nuts",
+            "provenance": "declared",
+            "evidence_quote": "Tabla de quesos artesanos con nueces",
+            "match_text": "Tabla de quesos artesanos con nueces"
+          }
+        ],
+        "description": "Tabla de quesos artesanos con nueces",
+        "description_provenance": "extracted",
+        "confidence_reasons": [
+          {
+            "rule": "T4",
+            "detail": "name not found in the source text"
+          }
+        ],
+        "flag": "uncertain",
+        "review_status": "pending",
+        "followup_note": null,
+        "reviewed_at": null
+      },
+      {
+        "position": 5,
+        "name": "Postre del día",
+        "price_raw": "5,00 €",
+        "price_value": 5,
+        "allergens": [],
+        "description": "Selección de postres caseros.",
+        "description_provenance": "generated",
+        "confidence_reasons": [
+          {
+            "rule": "T1",
+            "detail": "no allergen information"
+          },
+          {
+            "rule": "T5",
+            "detail": "El postre cambia a diario y la carta no lista sus ingredientes."
+          }
+        ],
+        "flag": "uncertain",
+        "review_status": "followup",
+        "followup_note": "Pedir a cocina la ficha del postre del día.",
+        "reviewed_at": "<timestamp>"
+      }
+    ]
+  }
+}
