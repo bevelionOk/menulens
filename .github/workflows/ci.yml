@@ -2,8 +2,13 @@
 # secret-scan: gitleaks over the full git history, guarding the challenge's
 # "secrets in repo" auto-reject tripwire (REQUIREMENTS R12 / §7) continuously
 # instead of as a one-shot manual check before submission.
-# checks: workspace typecheck (Story 1.1), the schema/migration drift guard and
+# checks: workspace typecheck (Story 1.1), the migration/schema drift guard and
 # the single golden-master test against a Postgres service container (Story 1.8).
+# Note: as of 1.8 the typecheck signal is no longer independent of infrastructure —
+# `checks` waits for the Postgres service to report healthy before any step runs, so a
+# service failure costs the fast signal too. That is the price of one job; splitting
+# typecheck into its own job would buy back the speed at the cost of a second lane to
+# read, which D12's "one minimal workflow" says no to until it actually hurts.
 name: CI
 
 on:
@@ -28,6 +33,9 @@ jobs:
 
   checks:
     runs-on: ubuntu-latest
+    # Nothing here should take minutes. A hung step (a CLI that finds no TTY and waits, a
+    # service that never turns healthy) must fail rather than burn the runner's hour.
+    timeout-minutes: 15
     permissions:
       contents: read
     services:
@@ -62,12 +70,31 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run typecheck
-      # A check, not a test (DECISIONS.md D26): it runs no application code and asserts
-      # only that two committed artifacts agree. Its own step, so a failure reads as
-      # "you changed schema.ts without generating a migration", never as a failing test.
-      - name: schema/migration drift guard
-        run: |
-          npm run -w server db:generate
-          git diff --exit-code server/drizzle
       - run: npm run -w server db:migrate
+      # A check, not a test (DECISIONS.md D26): it runs no application code and has no
+      # fixture. It asks one question of the database the committed migrations just built —
+      # does it already match `schema.ts`? — and answers it in its own step, so a failure
+      # reads as "the migrations and the code disagree", never as a failing test.
+      #
+      # `push` is the right instrument and `db:generate` + `git diff` is not: the latter
+      # only proves `schema.ts` agrees with drizzle's own snapshot, so a hand-edited
+      # migration that drops a constraint passes it, gets applied by `db:migrate`, and
+      # produces exactly the fresh-clone mismatch this guard exists to prevent.
+      #
+      # The assertion is the string, not the exit code: `push` exits 0 even when it applies
+      # statements, and requiring the positive "No changes detected" means an unexpected
+      # drizzle-kit output format fails closed instead of passing silently. Applying to the
+      # ephemeral service container is harmless — the verdict is the point, not the write.
+      - name: migration/schema drift guard
+        shell: bash
+        working-directory: server
+        run: |
+          # stdin closed: `push` prompts on an ambiguous rename, and a prompt with no TTY
+          # is a step that hangs until the job timeout.
+          out="$(npx drizzle-kit push --dialect postgresql --schema ./src/db/schema.ts --url "$DATABASE_URL" --verbose < /dev/null 2>&1)" || true
+          echo "$out"
+          if ! grep -qF 'No changes detected' <<<"$out"; then
+            echo "::error::The committed migrations do not produce schema.ts. Regenerate with \`npm run -w server db:generate\` and commit server/drizzle, or fix the migration by hand if it was edited."
+            exit 1
+          fi
       - run: npm test
