@@ -41,14 +41,6 @@ export type StoredFailureReason = z.infer<typeof storedFailureReasonSchema>;
 export const derivedFailureReasonSchema = z.enum(['interrupted']);
 export type DerivedFailureReason = z.infer<typeof derivedFailureReasonSchema>;
 
-// The full AD-14 enum — derived from the three subsets, never re-spelled.
-export const failureReasonSchema = z.enum([
-  ...preRunFailureReasonSchema.options,
-  ...storedFailureReasonSchema.options,
-  ...derivedFailureReasonSchema.options,
-]);
-export type FailureReason = z.infer<typeof failureReasonSchema>;
-
 // AD-4 — persisted terminal truth (`empty` is a status, not a failure: E9).
 export const runStatusSchema = z.enum(['processing', 'done', 'failed', 'empty']);
 export type RunStatus = z.infer<typeof runStatusSchema>;

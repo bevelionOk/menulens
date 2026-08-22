@@ -1,7 +1,8 @@
 # Prompt Log — Vibe-Coder Challenge
 
-Every prompt fed to any LLM during this challenge is recorded here, verbatim, in
-chronological order. This folder is a first-class deliverable per the challenge brief.
+Every prompt I gave the assistant during this challenge is recorded here, verbatim —
+typos, Spanish and all — in chronological order. This folder is a first-class deliverable
+per the challenge brief.
 
 ## Organization
 
@@ -14,8 +15,7 @@ Prompts are grouped by phase so a reviewer can follow the thought sequence:
 | `03-bmad-architecture/` | BMAD architecture spine |
 | `04-bmad-epics-stories/` | BMAD epic & story breakdown |
 | `05-bmad-sprint-planning/` | BMAD readiness gate + sprint tracking |
-| `06-implementation/` | Dev prompts (backend, frontend, LLM extraction, tests) |
-| `07-review-hardening/` | Code review, edge cases, production-risk analysis |
+| `06-implementation/` | Dev prompts (backend, frontend, LLM extraction) — code review and scope decisions are logged here too, in sequence |
 | `runtime/` | Versioned runtime prompts the server loads at boot (e.g. `extraction-v1.md`) — not session prompts |
 
 ## File format

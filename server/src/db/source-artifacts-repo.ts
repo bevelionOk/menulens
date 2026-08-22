@@ -24,7 +24,8 @@ export async function upsertArtifact(
     .onConflictDoUpdate({ target: sourceArtifacts.run_id, set });
 }
 
-// The only reader of `bytes` (AD-8): serves GET /api/runs/:id/artifact and T6's text.
+// The only reader of `bytes` (AD-8): the extraction adapter's vision input, and the
+// ground text T4/T6 verify against.
 export async function getArtifact(runId: string): Promise<ArtifactRow | null> {
   const [row] = await db.select().from(sourceArtifacts).where(eq(sourceArtifacts.run_id, runId));
   return row ?? null;
