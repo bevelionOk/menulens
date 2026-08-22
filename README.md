@@ -50,11 +50,12 @@ read `.env`.
 
 ## Scope
 
-Planned with BMAD: a PRD with 36 requirements and 84 acceptance criteria, then six
-stories. On 22 August I measured what the stories had cost and cut scope
-([`DECISIONS.md`](DECISIONS.md), **D24**): three stories merged into one, two deleted,
-the test surface capped at one test. 73 of the 84 acceptance criteria shipped; the 11
-deleted ones stay in the PRD, marked as cut.
+Planned with BMAD: a PRD with 36 requirements and 84 acceptance criteria, broken into
+three epics and 13 stories (8 + 4 + 1). After the first six stories I measured what each
+had cost and cut scope ([`DECISIONS.md`](DECISIONS.md), **D24**): 1.7, 2.1 and 2.2 merged
+into one deliverable, 2.3 and 2.4 deleted, 3.1 folded into the submit page, the test
+surface capped at one test. 11 stories delivered, 2 cut; 73 of the 84 acceptance criteria
+shipped, the 11 deleted ones stay in the PRD, marked as cut.
 
 | Area | Status |
 |---|---|
@@ -89,7 +90,19 @@ deleted ones stay in the PRD, marked as cut.
 
 The register is [`plan/production-breaks.md`](plan/production-breaks.md): 41 failure modes,
 each with why it was accepted or what the first fix would be. The summary, and the
-hostile-input sweep that checked it, is **D27**. The ones I would fix first:
+hostile-input sweep that checked it, is **D27**. By kind:
+
+| Category | Entries | What fails |
+|---|---|---|
+| Reaching the menu — URL fetch, SSRF, JS/image sites | 6 | JS or image menus come back `empty`; residual SSRF ranges; redirect stalls |
+| The model call — availability, cost, drift | 9 | A 429 fails the run; no char cap on billed text; no PDF page/time budget; SDK pinned to one version |
+| What the arbiter cannot see | 7 | Visual sources pass unverified; hidden HTML text verifies; separators and punctuation mis-flag |
+| Lifecycle and clocks | 8 | Non-atomic seriality gate; two timeouts that can disagree; DB and Node clocks on one anchor |
+| One process, no bounds | 2 | Unpaginated list; unbounded strings |
+| Copy and contract drift | 7 | The screen says something other than what the server did |
+| Trust boundary | 2 | No auth on any route; CI actions pinned by tag |
+
+The ones I would fix first:
 
 - **DNS rebinding (B2).** The SSRF guard validates the resolved address, then Node's `fetch`
   resolves again; a hostile host can answer with a private IP on the second lookup. Fix: a
