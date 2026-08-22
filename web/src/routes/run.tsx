@@ -94,7 +94,7 @@ export function RunPage() {
   return (
     <div className="grid gap-6">
       <div className="grid gap-2">
-        <Button size="sm" variant="ghost" className="justify-self-start" render={<Link to="/" />}>
+        <Button size="sm" variant="ghost" className="justify-self-start" nativeButton={false} render={<Link to="/" />}>
           <ArrowLeft aria-hidden="true" />
           All extractions
         </Button>
@@ -237,7 +237,7 @@ function RetryControl({
           {busy ? 'Starting…' : 'Retry — start a new run'}
         </Button>
       ) : (
-        <Button size="sm" variant="outline" render={<Link to="/" />}>
+        <Button size="sm" variant="outline" nativeButton={false} render={<Link to="/" />}>
           Re-upload the file to retry
         </Button>
       )}

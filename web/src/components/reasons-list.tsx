@@ -34,8 +34,8 @@ export function ReasonsList({ dish }: { dish: Dish }) {
                 <q className="italic">{allergen.evidence_quote}</q>{' '}
                 <span className="text-xs">
                   {allergen.match
-                    ? '(found in the source text)'
-                    : '(not found in the source text)'}
+                    ? '(verified in the source text)'
+                    : '(not verified — the quote did not match, or the source was an image with no text to match against)'}
                 </span>
               </li>
             ))}

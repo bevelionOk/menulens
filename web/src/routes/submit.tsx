@@ -257,7 +257,7 @@ function RecentRuns({
                   ) : (
                     <span className="text-xs text-muted-foreground">re-upload to retry</span>
                   ))}
-                <Button size="sm" variant="ghost" render={<Link to={`/runs/${run.id}`} />}>
+                <Button size="sm" variant="ghost" nativeButton={false} render={<Link to={`/runs/${run.id}`} />}>
                   Open
                 </Button>
               </div>
