@@ -17,10 +17,9 @@ import {
   EXPECTATION_COPY,
   FAILURE_COPY,
   INTERRUPTED_COPY,
-  STAGE_COPY,
-  STAGE_PENDING_COPY,
   formatElapsed,
   formatTimestamp,
+  stageCopy,
 } from '@/lib/copy'
 
 // How fast each non-terminal state is re-read. `processing` is the live case; a run that
@@ -199,7 +198,7 @@ function Waiting({ run }: { run: RunDetail }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{run.stage ? STAGE_COPY[run.stage] : STAGE_PENDING_COPY}</CardTitle>
+        <CardTitle>{stageCopy(run.stage)}</CardTitle>
         <CardDescription>{EXPECTATION_COPY}</CardDescription>
       </CardHeader>
       <CardContent className="grid gap-1">

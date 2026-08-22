@@ -15,7 +15,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Textarea } from '@/components/ui/textarea'
-import { formatTimestamp } from '@/lib/copy'
+import { REVIEW_STATUS_LABEL, formatTimestamp } from '@/lib/copy'
 
 export type ReviewDecision = { dish_id: string; action: ReviewAction; note: string | null }
 
@@ -65,6 +65,7 @@ type ReviewRowProps = {
 function ReviewRow({ dish, onDecide, pending, busy }: ReviewRowProps) {
   const [noteOpen, setNoteOpen] = useState(false)
   const [note, setNote] = useState('')
+  const priceRaw = dish.price_raw?.trim() ?? ''
 
   const submitFollowup = () => {
     onDecide({ dish_id: dish.id, action: 'followup', note: note.trim() || null })
@@ -92,9 +93,11 @@ function ReviewRow({ dish, onDecide, pending, busy }: ReviewRowProps) {
         </TableCell>
 
         <TableCell className="align-top whitespace-normal">
-          <div>{dish.price_raw ?? '—'}</div>
+          {/* A menu with no price can reach us as null or as an empty string; both are
+              "no price", and only the trimmed test catches the second. */}
+          <div>{priceRaw || '—'}</div>
           <div className="text-xs text-muted-foreground">
-            {dish.price_raw === null
+            {priceRaw === ''
               ? 'no price on the menu'
               : dish.price_value !== null
                 ? `€${dish.price_value.toFixed(2)}`
@@ -156,7 +159,7 @@ function ReviewRow({ dish, onDecide, pending, busy }: ReviewRowProps) {
           ) : (
             <div className="grid gap-1">
               <Badge variant={dish.review_status === 'confirmed' ? 'outline' : 'secondary'}>
-                {dish.review_status === 'confirmed' ? 'confirmed' : 'marked for follow-up'}
+                {REVIEW_STATUS_LABEL[dish.review_status] ?? dish.review_status}
               </Badge>
               {dish.followup_note && <p className="text-xs">{dish.followup_note}</p>}
               {dish.reviewed_at && (

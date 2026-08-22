@@ -1,4 +1,4 @@
-import type { AllergenId, RunState, Stage, StoredFailureReason } from 'shared'
+import type { AllergenId, ReviewStatus, RunState, Stage, StoredFailureReason } from 'shared'
 
 // All user-facing wording lives here so the honesty rules are auditable in one file:
 // no percentage, no ETA, no "safe"/"verified", and every failure says what to do next.
@@ -15,6 +15,13 @@ export const STAGE_COPY: Record<Stage, string> = {
 // The run row exists before the pipeline sets its first stage (persist-first, AD-4).
 export const STAGE_PENDING_COPY = 'Starting'
 
+// A stage this bundle has never heard of must not render as a blank heading; saying
+// "still working" is true of every stage there could ever be.
+export function stageCopy(stage: Stage | null): string {
+  if (stage === null) return STAGE_PENDING_COPY
+  return STAGE_COPY[stage] ?? 'Still working'
+}
+
 // FR5 — a measurement, not a guess. Six real runs on the configured model took ~9–12 s
 // end to end. Stating a bigger, safer-sounding range would be the exact dishonesty this
 // product argues against. No countdown is derived from it.
@@ -27,6 +34,13 @@ export const STATE_LABEL: Record<RunState, string> = {
   failed: 'failed',
   empty: 'no dishes found',
   interrupted: 'interrupted',
+}
+
+// FR22 — the verdict as the review column spells it.
+export const REVIEW_STATUS_LABEL: Record<ReviewStatus, string> = {
+  pending: 'not reviewed',
+  confirmed: 'confirmed',
+  followup: 'marked for follow-up',
 }
 
 export type FailureCopy = { title: string; detail: string }

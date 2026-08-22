@@ -14,14 +14,22 @@ export function ReasonsList({ dish }: { dish: Dish }) {
     <div className="grid gap-3 border-l-2 border-border py-1 pl-3 text-sm">
       <div>
         <p className="font-medium">Why this row needs review</p>
-        <ul className="mt-1 grid gap-1 text-muted-foreground">
-          {dish.confidence_reasons.map((reason, index) => (
-            <li key={`${reason.rule}-${index}`}>
-              <span className="font-mono text-xs text-foreground">{reason.rule}</span>{' '}
-              {reason.detail}
-            </li>
-          ))}
-        </ul>
+        {dish.confidence_reasons.length === 0 ? (
+          // A flagged row with no recorded reason should say so. A heading over an empty
+          // list reads as a rendering bug and tells the reviewer nothing.
+          <p className="mt-1 text-muted-foreground">
+            This row is flagged, but no rule recorded a reason — check it by hand.
+          </p>
+        ) : (
+          <ul className="mt-1 grid gap-1 text-muted-foreground">
+            {dish.confidence_reasons.map((reason, index) => (
+              <li key={`${reason.rule}-${index}`}>
+                <span className="font-mono text-xs text-foreground">{reason.rule}</span>{' '}
+                {reason.detail}
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
       {quotes.length > 0 && (
@@ -30,7 +38,7 @@ export function ReasonsList({ dish }: { dish: Dish }) {
           <ul className="mt-1 grid gap-1 text-muted-foreground">
             {quotes.map((allergen, index) => (
               <li key={`${allergen.id}-${index}`}>
-                <span className="text-foreground">{ALLERGEN_LABEL[allergen.id]}</span>:{' '}
+                <span className="text-foreground">{ALLERGEN_LABEL[allergen.id] ?? allergen.id}</span>:{' '}
                 <q className="italic">{allergen.evidence_quote}</q>{' '}
                 <span className="text-xs">
                   {allergen.match

@@ -14,5 +14,7 @@ const VARIANT: Record<RunState, 'default' | 'secondary' | 'destructive' | 'outli
 }
 
 export function RunStateBadge({ state }: { state: RunState }) {
-  return <Badge variant={VARIANT[state]}>{STATE_LABEL[state]}</Badge>
+  // A server that learns a new state before this bundle does must still render
+  // something readable rather than an empty badge.
+  return <Badge variant={VARIANT[state] ?? 'secondary'}>{STATE_LABEL[state] ?? state}</Badge>
 }

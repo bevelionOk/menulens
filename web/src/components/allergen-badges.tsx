@@ -20,9 +20,11 @@ export function AllergenBadges({ allergens }: { allergens: AllergenEntry[] }) {
 
   return (
     <div className="flex flex-wrap gap-1">
-      {allergens.map((allergen) => (
+      {/* The same allergen can legitimately appear twice on one dish with different
+          evidence quotes, so id+provenance is not a unique key — the index is. */}
+      {allergens.map((allergen, index) => (
         <Badge
-          key={`${allergen.id}-${allergen.provenance}`}
+          key={`${allergen.id}-${index}`}
           variant={allergen.provenance === 'declared' ? 'outline' : 'secondary'}
           title={
             allergen.provenance === 'declared'
@@ -30,7 +32,7 @@ export function AllergenBadges({ allergens }: { allergens: AllergenEntry[] }) {
               : 'Not stated on the menu — inferred by the model from the dish.'
           }
         >
-          {ALLERGEN_LABEL[allergen.id]}
+          {ALLERGEN_LABEL[allergen.id] ?? allergen.id}
           <span className="text-muted-foreground">· {allergen.provenance}</span>
         </Badge>
       ))}
