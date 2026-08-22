@@ -38,10 +38,68 @@ const NAMED_ENTITIES: Record<string, string> = {
 };
 
 // Invisible containers: their whole content goes, not just the tags.
-const DROP_ELEMENTS = /<(script|style|noscript|template)\b[^>]*>[\s\S]*?<\/\1\s*>/gi;
-const COMMENTS = /<!--[\s\S]*?-->/g;
-// Block-level closes/breaks become whitespace so adjacent words never fuse.
-const TAGS = /<\/?[a-zA-Z!?][^>]*>/g;
+const DROP_ELEMENT = /^(script|style|noscript|template)(?=[\s/>])/i;
+// A tag opener is `<` followed by a letter, `/`, `!` or `?` — a bare `<` in text stays.
+const TAG_START = /^<\/?[a-zA-Z!?]/;
+
+// Single-pass tag stripper. The regex version (`<[^>]*>` and a lazy `[\s\S]*?` for the
+// dropped elements) rescanned to EOF for every unclosed `<` or `<script>`, which is
+// quadratic: 640 KB of `<a<a<a…` took 3.8 s of event loop (Phase-4 review, measured).
+// This walk is linear: every search for a closer starts where the last one stopped, and
+// a closer that is not found is never searched for again (`missing`).
+function stripTags(html: string): string {
+  let out = '';
+  let i = 0;
+  const missing = new Set<string>();
+  const findFrom = (key: string, re: RegExp, from: number): number => {
+    if (missing.has(key)) return -1;
+    re.lastIndex = from;
+    const m = re.exec(html);
+    if (!m) {
+      missing.add(key);
+      return -1;
+    }
+    return m.index + m[0].length;
+  };
+  const gt = />/g;
+  const commentEnd = /-->/g;
+  while (i < html.length) {
+    const lt = html.indexOf('<', i);
+    if (lt === -1) {
+      out += html.slice(i);
+      break;
+    }
+    out += html.slice(i, lt);
+    if (html.startsWith('<!--', lt)) {
+      const end = findFrom('-->', commentEnd, lt + 4);
+      i = end === -1 ? html.length : end;
+      continue;
+    }
+    if (!TAG_START.test(html.slice(lt, lt + 3))) {
+      out += '<';
+      i = lt + 1;
+      continue;
+    }
+    const tagEnd = findFrom('>', gt, lt + 1);
+    if (tagEnd === -1) {
+      // Unclosed tag: the old regex left the tail untouched as text; keep that behaviour.
+      out += html.slice(lt);
+      break;
+    }
+    const name = DROP_ELEMENT.exec(html.slice(lt + 1, lt + 10))?.[1]?.toLowerCase();
+    if (name && html[lt + 1] !== '/') {
+      const close = findFrom(`</${name}>`, new RegExp(`</${name}\\s*>`, 'gi'), tagEnd);
+      if (close !== -1) {
+        i = close;
+        continue;
+      }
+      // No closer: the old regex did not drop the element either — it became a plain tag.
+    }
+    out += ' ';
+    i = tagEnd;
+  }
+  return out;
+}
 
 export function decodeEntities(text: string): string {
   return text.replace(/&(#x[0-9a-fA-F]+|#[0-9]+|[a-zA-Z]+);/g, (match, body: string) => {
@@ -63,6 +121,5 @@ export function collapseWhitespace(text: string): string {
 }
 
 export function htmlToText(html: string): string {
-  const stripped = html.replace(COMMENTS, '').replace(DROP_ELEMENTS, '').replace(TAGS, ' ');
-  return collapseWhitespace(decodeEntities(stripped));
+  return collapseWhitespace(decodeEntities(stripTags(html)));
 }

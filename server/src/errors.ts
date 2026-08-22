@@ -31,7 +31,16 @@ export function errorHandler(err: unknown, request: FastifyRequest, reply: Fasti
   if (fe.code === 'FST_REQ_FILE_TOO_LARGE') {
     return reply.status(413).send(envelope('file_too_large', 'File exceeds the 10 MB cap.'));
   }
-  // Fastify schema validation, bad JSON, unsupported/empty body — all "malformed request".
+  // Fastify's own 413 (JSON over `bodyLimit`) and 415 (content type it cannot parse) keep
+  // their status and say what happened — collapsing them into "malformed" sent the user to
+  // fix a body that was well-formed (Phase-4 review).
+  if (fe.statusCode === 413) {
+    return reply.status(413).send(envelope('invalid_request', 'Request body exceeds the 1 MB JSON limit.'));
+  }
+  if (fe.statusCode === 415) {
+    return reply.status(415).send(envelope('invalid_request', 'Unsupported content type: send JSON or a multipart file.'));
+  }
+  // Fastify schema validation, bad JSON, empty body — all "malformed request".
   if (fe.validation || (typeof fe.statusCode === 'number' && fe.statusCode >= 400 && fe.statusCode < 500)) {
     return reply.status(400).send(envelope('invalid_request', 'Malformed request body.'));
   }
