@@ -2,7 +2,7 @@
 title: 'Story 1.8 — The One Test: Golden-Master + CI Complete'
 type: 'feature'
 created: '2026-08-22'
-status: 'ready-for-dev'
+status: 'done'
 review_loop_iteration: 0
 baseline_commit: '3ea07f4'
 context:
@@ -75,13 +75,13 @@ context:
 ## Tasks & Acceptance
 
 **Execution:**
-- [ ] `server/package.json` -- add `vitest` (dev) and a `test` script; root `package.json` gets a `test` script delegating to the workspace.
-- [ ] `server/tsconfig.json` -- widen `include` to cover `test`.
-- [ ] `server/test/fixtures/` -- the source text the run acquires and the mocked `ExtractionResult` whose signals fire T1–T6 with one clean row.
-- [ ] `server/test/golden-master.test.ts` -- one `test()`: build, POST, poll, assert the normalized payload against the golden, assert each of T1–T6 by id, assert the offsets slice back, assert prices, assert the list row, run the review round-trip and the forged batch.
-- [ ] `server/test/golden-master.json` -- the committed golden.
-- [ ] `.github/workflows/ci.yml` -- Postgres service container, dummy `OPENAI_API_KEY`, `db:migrate`, `npm test`, and the schema-drift guard (`db:generate` then `git diff --exit-code server/drizzle`) as a step distinct from the test step, so a failure reads as "you changed the schema without a migration", never as a failing test.
-- [ ] `DECISIONS.md` -- the R8 argument and the explicit manual-only list (SSRF table, adapter semantics, env fail-fast, forced-rollback atomicity).
+- [x] `server/package.json` -- add `vitest` (dev) and a `test` script; root `package.json` gets a `test` script delegating to the workspace.
+- [x] `server/tsconfig.json` -- widen `include` to cover `test`.
+- [x] `server/test/fixtures/` -- the source text the run acquires and the mocked `ExtractionResult` whose signals fire T1–T6 with one clean row.
+- [x] `server/test/golden-master.test.ts` -- one `test()`: build, POST, poll, assert the normalized payload against the golden, assert each of T1–T6 by id, assert the offsets slice back, assert prices, assert the list row, run the review round-trip and the forged batch.
+- [x] `server/test/golden-master.json` -- the committed golden.
+- [x] `.github/workflows/ci.yml` -- Postgres service container, dummy `OPENAI_API_KEY`, `db:migrate`, `npm test`, and the schema-drift guard (`db:generate` then `git diff --exit-code server/drizzle`) as a step distinct from the test step, so a failure reads as "you changed the schema without a migration", never as a failing test.
+- [x] `DECISIONS.md` -- the R8 argument and the explicit manual-only list (SSRF table, adapter semantics, env fail-fast, forced-rollback atomicity).
 
 **Acceptance Criteria:**
 - Given `npm test` against a fresh migrated database, then Vitest's own summary reads **`1 passed (1)`** for tests — the runner's count, not a file count, is the evidence — and the repo-wide grep for `describe(`, `it(`, `test.each` and `test.for` returns nothing (AC1, AC3).
@@ -103,6 +103,45 @@ context:
 **A check is not a test, and the difference is not semantics.** A test executes the system and asserts something about its behaviour: it needs a fixture, an entry point, and a claim that can be right or wrong about a running program. The drift guard runs no application code and has no fixture. It regenerates a migration from `schema.ts` and asserts that two **committed artifacts agree with each other** — nothing more. It can fail for exactly one reason: someone edited the schema without generating the migration. That is the same category as `tsc --noEmit`, which nobody would call a test and which has sat in `checks` since story 1.1 without anyone claiming the repo has two tests. R8 caps the number of automated tests because a candidate who writes forty of them is answering a different question than the one asked; it does not forbid the build from checking its own consistency. The risk is concrete rather than theoretical: a schema edit without a migration leaves a fresh clone booting against a database that does not match the code — and a timed fresh-clone run by the reviewer is exactly how this repo gets evaluated. The guard is one step and it names its own failure. If the distinction ever stops being defensible, the honest move is to delete the guard, not to redefine "test".
 
 **The golden must accuse, not just differ.** A blob diff tells you something changed. Asserting each fired rule by id means a regression says *which* rule stopped firing — the property story 1.6's review showed to be load-bearing, since flags, counts and status stay identical while the evidence offsets silently rot.
+
+**Post-review amendments (3 layers, ~55 raw findings → 28 unique: 17 patched / 4 deferred / 7 rejected).** The gate the reviewers attacked was the gate itself, which is the right target: a vacuous test is worse than none. The patches that mattered: **`npm test` truncated whatever `DATABASE_URL` pointed at** — locally a developer's real history — now refused unless the database is named `*_test` or `CI` is set; **the golden silently depended on the developer's `.env`** (`SOURCE_MIN_TEXT_CHARS` decides the `source_class: 'text'` the whole fixture rests on, `RUN_STALE_AFTER_MS` decides the derived state), both now pinned before `env.ts` loads; **every payload was cast, never parsed** — now `createRunResponseSchema` / `runDetailSchema` / `runListResponseSchema` / `errorEnvelopeSchema`, which closes the wire contract the normalizer deliberately drops; **the newest-first assertion was vacuous** (one row in a truncated table — reversing the order passed), now a seeded older run and a full id-order assertion; **the 409 seriality gate was unreachable**, now asserted deterministically by blocking the mocked seam so the run is provably `processing` for a second POST; **`reopen` — the only review branch that removes data — was never exercised**; and `reviewed_at` was normalized without ever checking its value. The `½` in the fixture header is now guarded mechanically: if it leaves, the normalized and original index spaces coincide and the offset assertions quietly become identity checks, so the test says so by name.
+
+**The CI guard was replaced, not hardened.** `db:generate` + `git diff` compares `schema.ts` to drizzle's snapshot and never re-reads the committed SQL — a hand-edited migration that drops a constraint passes it, gets applied, and produces exactly the fresh-clone mismatch it exists to prevent. It now runs `drizzle-kit push` against the just-migrated service container and fails unless the output reads `No changes detected`, asserting the positive string rather than an exit code that is 0 either way. Verified against a real database in both directions before shipping. D26 was rewritten to describe what shipped; the correction paragraph it briefly carried is gone, because the residual it described is gone.
+
+**And the guard that was right cost the reviewer their first command.** The truncation refusal broke `npm test` on a fresh clone — a wall with good instructions is still a wall, on the path a reviewer walks first. Closed without weakening it: `docker compose up -d --wait` now creates the disposable database (an initdb *directory*, not a single-file bind mount — that fails outright on some Docker setups, which we hit), and the test applies the committed migrations to its own database, so the run is driven against a schema built the way a fresh clone builds one. Verified from an empty volume: up, install, migrate, `npm test` → `Tests 1 passed (1)`.
+
+**Deferred (4):** the pdfjs-version brittleness of the ground-text assertion; asserting the fixture's inert `usage`/`attempts`; trimming the unused WinAnsi mappings; restructuring the golden to drop its redundant `list_row`/`after_review` sections. **Rejected under the guard:** making the rule set tolerant of a future T7 — a new rule *should* force a fixture update, that is the mechanism working.
+
+**Six mutations, each reverted, each accusing by name:** drop T4 → *"arbiter rule T4 fired on no row"*; `Math.round(value)` → the price table diff; normalized indices as offsets → *"the persisted offsets for 'Tortilla de patatas' do not slice back"*; disable the 409 gate → *"answered 201: expected 201 to be 409"*; `reopen` keeping the note → *"reopen left the verdict, the note or the timestamp behind"*; `desc` → `asc` → *"GET /api/runs is not newest-first"*.
+
+## Suggested Review Order
+
+**Read the gate before the code it guards**
+
+- One `test()`, no `describe`, no `it` — and the refusal that protects a developer's database.
+  [`golden-master.test.ts`](../../server/test/golden-master.test.ts)
+
+- The inputs the golden is a function of, pinned rather than inherited from a `.env`.
+  [`setup-env.ts`](../../server/test/setup-env.ts)
+
+**What it actually pins**
+
+- Every rule asserted by id *before* the golden comparison, so a regression names itself.
+- The offsets slicing back to their quotes — and the `½` that keeps that assertion honest.
+  [`menu-pdf.ts`](../../server/test/fixtures/menu-pdf.ts)
+
+- Six crafted rows: every rule fires, one row stays clean.
+  [`extraction.ts`](../../server/test/fixtures/extraction.ts)
+
+**CI**
+
+- The migration guard: the migrated database, not drizzle's snapshot.
+  [`ci.yml`](../../.github/workflows/ci.yml)
+
+**The arguments**
+
+- Why a golden-master, what folded in, and the four blind spots it cannot see (D25); why a check is not a test, and what the first version of that argument got wrong (D26).
+  [`DECISIONS.md`](../../DECISIONS.md)
 
 ## Verification
 
