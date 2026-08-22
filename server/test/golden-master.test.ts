@@ -1,5 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { migrate } from 'drizzle-orm/node-postgres/migrator';
 import type { FastifyInstance } from 'fastify';
 import {
   createRunResponseSchema,
@@ -69,16 +71,22 @@ function assertDatabaseIsDisposable(url: string): string {
   if (name.endsWith('_test')) return name;
   throw new Error(
     `Refusing to run: this test truncates every row in "${name}", and that database is not marked disposable.\n` +
-      'Point DATABASE_URL at a database whose name ends in `_test`:\n' +
+      'Set TEST_DATABASE_URL to a database whose name ends in `_test` — `.env.example` already\n' +
+      'carries the right value, and docker-compose.yml creates that database on first start:\n' +
+      '  TEST_DATABASE_URL=postgres://postgres:postgres@localhost:5432/menu_extraction_test\n' +
+      'If the Postgres volume predates that, create it once:\n' +
       '  docker compose exec postgres psql -U postgres -c "CREATE DATABASE menu_extraction_test"\n' +
-      '  DATABASE_URL=postgres://postgres:postgres@localhost:5432/menu_extraction_test npm run -w server db:migrate\n' +
-      '  DATABASE_URL=postgres://postgres:postgres@localhost:5432/menu_extraction_test npm test\n' +
       '(CI sets CI=true and gets a fresh service container, so it needs no suffix.)',
   );
 }
 
 beforeAll(async () => {
   assertDatabaseIsDisposable(process.env.DATABASE_URL!);
+  // The test owns its database, so it applies the committed migrations itself rather than
+  // asking the reader to run `db:migrate` twice with two different URLs. Idempotent (the
+  // drizzle journal records what ran), and it means the run below is driven against a
+  // schema built the same way a fresh clone builds one.
+  await migrate(db, { migrationsFolder: fileURLToPath(new URL('../drizzle', import.meta.url)) });
   await db.delete(dishes);
   await db.delete(sourceArtifacts);
   await db.delete(runs);

@@ -13,6 +13,16 @@ try {
   if ((err as NodeJS.ErrnoException).code !== 'ENOENT') throw err;
 }
 
+// The test gets its own database when one is offered. `TEST_DATABASE_URL` is substituted
+// into `DATABASE_URL` here — before `env.ts` and `db/client.ts` are imported — so there is
+// exactly one connection string in the process and nothing downstream needs to know that a
+// test is running. This is a convenience, never a way around the refusal: the disposability
+// guard reads the *result*, so a `TEST_DATABASE_URL` aimed at the dev database is refused
+// exactly as loudly as a `DATABASE_URL` aimed at it.
+if (process.env.TEST_DATABASE_URL?.trim()) {
+  process.env.DATABASE_URL = process.env.TEST_DATABASE_URL.trim();
+}
+
 // Two thresholds the golden depends on, pinned here rather than inherited. Both are
 // calibration knobs a developer may legitimately change in their own `.env`, and both
 // silently rewrite the golden if they do: `SOURCE_MIN_TEXT_CHARS` decides the
@@ -26,12 +36,15 @@ process.env.RUN_STALE_AFTER_MS = '180000';
 // `env.ts` answers a bad environment with `process.exit(1)`, which inside a Vitest worker
 // reads as a crash with no test report and no reason. Fail here instead, with the remedy.
 const REMEDY =
-  'Set it in the repo-root .env (cp .env.example .env), then:\n' +
+  'Set it in the repo-root .env — `cp .env.example .env` carries working defaults — then:\n' +
   '  docker compose up -d --wait && npm run -w server db:migrate';
 
 const databaseUrl = process.env.DATABASE_URL;
 if (!databaseUrl || !(databaseUrl.startsWith('postgres://') || databaseUrl.startsWith('postgresql://'))) {
-  throw new Error(`DATABASE_URL is missing or is not a postgres URL (got: ${databaseUrl ?? 'unset'}).\n${REMEDY}`);
+  throw new Error(
+    'No postgres URL to test against: TEST_DATABASE_URL is unset and DATABASE_URL is missing or is not a ' +
+      `postgres URL (got: ${databaseUrl ?? 'unset'}).\n${REMEDY}`,
+  );
 }
 if (!process.env.OPENAI_API_KEY?.trim()) {
   // Nothing in this test calls OpenAI — the seam is mocked — but `env.ts` requires the
