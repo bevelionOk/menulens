@@ -354,3 +354,83 @@ one crash. Missed-and-should: the spec told the implementer to write the gate in
 the worker's. Not-considered-and-rightly: response schemas, sniffing, statement
 timeouts, a stage heartbeat, a second test. The drift is the lesson: the Code Map is
 the implementer's map, and it has to agree with the intent above it.
+
+---
+
+## Session 7 · 2026-08-22 — Story 1.6 review, the scope audit (D24), and M1
+
+**45. The bug that only an emoji could find** `[BREAKS]` `[JUDGMENT]`
+The evidence offsets — the thing that lets the UI point at the exact words the model
+quoted — were indexed by code point while `indexOf` counts UTF-16 code units. One emoji
+anywhere before a matched quote and the highlight slides, or the lookup runs off the end
+and throws: uncaught, the whole run dies and reads `interrupted`. Menus are full of 🌱 and
+🌶. Reproduced on camera in one line: `findNormalized('🌶 Picante — contiene lácteos',
+'contiene lacteos')` → `RangeError`. Nothing in the acceptance criteria would ever have
+caught it; the flags, the reasons, the counts and the status are all identical whether the
+offsets are right or wrong. Three parallel reviewers over a 300-line diff found it.
+
+**46. Refusing is a feature: the price that would have deleted a run** `[BREAKS]`
+`price_value` is `numeric(10,2)`. A model that reads a phone number as a price produces a
+value the column cannot hold — and the insert happens inside the transaction that writes
+all the dishes plus `done`, so one junk string discards eleven correctly triaged rows and
+leaves the run `processing`. The fix is not a bigger column: an implausible number now
+refuses like any other ambiguity and fires T2. The same instinct, one story later:
+`"1.250 €"` parses as `1.25` and can still be marked auto-checked — that one is NOT fixed,
+because widening the rule is Ask-First; it is written down as B14 instead of guessed at.
+
+**47. 112 milliseconds per megabyte, once per quote** `[BREAKS]` `[NEXT]`
+The pinned normalization chain ran once per dish name and once per allergen quote against
+a source that can be 10 MB. Measured: ~112 ms per megabyte, ~120 passes per run, on the
+single process that also answers the polling UI. The page would have frozen for tens of
+seconds while claiming to be honest about progress. Now the chain runs once per run. A
+performance bug that was really an honesty bug.
+
+**48. The audit I asked for against my own plan** `[JUDGMENT]` `[PERSONAL]`
+The camera line of the whole project: "At every planning session I asked whether this was
+over-engineering, and I was told the stories didn't count. Six stories in, I stopped and
+put three agents on it — one against the brief, one measuring what each story actually
+cost, one designing the smallest submittable path." The verdict: of the 40 unbuilt
+acceptance criteria, **four** were required by an explicit line of the brief; roughly
+twenty-six answered requirements we had written for ourselves. And the evidence was
+already in the repo — our own over-engineering review had flagged it HIGH the day before,
+and the answer had been priority labels instead of deletions.
+
+**49. The cut, in writing, before the deadline forced it** `[JUDGMENT]`
+D24: stories 1.7, 2.1 and 2.2 merged into one deliverable; 1.7's throwaway table cut;
+stories 2.3 and 2.4 deleted whole; 3.1 folded into the submit page; story 1.8 capped at
+exactly one test. **Seven stories became four deliverables, eleven acceptance criteria
+deleted.** The number that made the case: stories 1.3 and 1.6 produced more lines of
+specification than of code (0.81:1 and 0.94:1), because a spec costs the same whether the
+story is 260 lines or 760. The problem was never the process — it was that the stories had
+been cut too small for it. Show the diff of the decision, not a slide about agility.
+
+**50. What we cut is in the PRD, annotated, not deleted** `[JUDGMENT]` `[PERSONAL]`
+FR20, FR23, FR26 and FR27's reopen affordance will not exist in this submission, and they
+are still in the PRD marked as cut. "I would rather show you a requirement I chose not to
+build than pretend I never wanted it." Same logic one level down: the review endpoint
+accepts `reopen` because the contract is whole, but the button is gone with story 2.3 —
+server yes, UI no, recorded as a known limitation instead of quietly half-built.
+
+**51. Two lanes, one screen** `[WHY]` `[NEXT]`
+M1 is the product finally visible: paste a URL or upload a photo, watch honest stages with
+a measured timer — no percentage bar, no invented ETA, no lone spinner — and land on a
+table that says "auto-checked" or "needs review" per row, with the fired rules spelled out
+underneath ("T2 no unambiguous price value · T5 the price is listed as *según mercado* and
+is not fixed"). Server and UI were built as two parallel lanes against a contract that was
+already written, because the schemas had been in `shared` since story 1.2 and had been
+sitting there unused, waiting.
+
+**52. The demo of the invariant, not of the feature** `[WHY]` `[BREAKS]`
+Best 30 seconds of the walkthrough: confirm a row in the UI, then show the md5 of every
+extracted column — byte-identical before and after. Then post a batch containing one
+forged dish id and show the 400, and that the *valid* decision in the same batch was not
+applied either. The review is a verdict about the data; it can never become an edit of it.
+
+**53. The 2×2 audit, fourth run** `[PERSONAL]` `[JUDGMENT]`
+Missed-and-should, all mine: `git add -A` with two agents writing in the same worktree
+swept one lane's local config into an unrelated commit; I broke an acceptance criterion of
+my own spec (three dependency entries where it says two) and recorded it as an amendment
+rather than let it slide; and the anti-progress-bar grep I wrote as a verification command
+now returns twenty false positives, so it no longer distinguishes a violation from noise.
+Not-considered-and-rightly: deleting the evidence offsets, the seriality gate and the
+review columns — surgery on untested code two days out, explained in writing instead.
