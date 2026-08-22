@@ -30,7 +30,7 @@ export const EXPECTATION_COPY =
 
 export const STATE_LABEL: Record<RunState, string> = {
   processing: 'processing',
-  done: 'done',
+  done: 'extracted', // B44: `done` read as "reviewed" next to the Reviewed column
   failed: 'failed',
   empty: 'no dishes found',
   interrupted: 'interrupted',
