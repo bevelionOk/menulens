@@ -62,14 +62,14 @@ lines of specification than of code. On 22 August I stopped and cut.
 | Source acquisition — URL fetch with an SSRF guard, PDF text layer, `text`/`visual` class decision | **Shipped** |
 | Extraction — one model call behind a seam, one retry, one timeout | **Shipped** |
 | The triage arbiter — six rules, evidence verification, persisted match offsets | **Shipped** |
-| Submit, watch, review — the UI and the review endpoint | **In flight (M1)** |
-| Recent runs on the submit page | **In flight (M1)** |
-| The one automated test + CI | **In flight** |
+| Submit, watch, review — the UI and the review endpoint | **Shipped** |
+| Recent runs on the submit page | **Shipped** |
+| The one automated test + CI | **Shipped** |
 | Batch review, reopen, per-row notes (story 2.3) | **Cut — D24** |
 | The evidence panel with source-vs-extraction highlighting (story 2.4) | **Cut — D24** |
 
-Of the 84 acceptance criteria: **44 shipped, 11 deleted in writing on 22 August, the rest is
-M1 and the one test.** The decision lives in [`DECISIONS.md`](DECISIONS.md) as **D24**.
+Of the 84 acceptance criteria: **73 shipped, 11 deleted in writing on 22 August.** The
+decision lives in [`DECISIONS.md`](DECISIONS.md) as **D24**.
 
 ### Why there are more requirements than features
 
@@ -134,6 +134,23 @@ If you have ten minutes: [`DECISIONS.md`](DECISIONS.md) (D4, D19, D24),
 | `prompts/` | Every prompt I wrote, verbatim, in order — plus the runtime extraction prompt. |
 | `plan/` | How I ran the five days. Working notes, not a deliverable. |
 | `.claude/skills/` | Vendored BMAD v6.11.0, so the toolchain is reproducible. Not my code. |
+
+## The one test
+
+The brief asks for exactly one meaningful automated test, and for the choice to be argued.
+It is a golden-master over the whole path:
+
+```bash
+npm test
+```
+
+It builds the app with the model seam as its only mock, POSTs a fixture through the real
+HTTP surface, polls the run to completion against real Postgres, and compares the payload to
+one committed golden. The fixture is crafted so **every triage rule T1–T6 fires at least
+once and one row stays fully `reliable`** — and each rule is asserted by its id, so a
+regression fails saying *which* rule stopped firing rather than diffing a blob. The
+reasoning, and the list of behaviours that stay verified by hand instead, are in
+[`DECISIONS.md`](DECISIONS.md) as **D25**.
 
 ## Configuration
 

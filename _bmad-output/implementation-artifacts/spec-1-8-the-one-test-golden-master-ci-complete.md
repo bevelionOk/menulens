@@ -108,7 +108,7 @@ context:
 
 **Commands:**
 - `npm test` -- expected: one test, green, against the local Postgres on 5433.
-- `npx vitest run --reporter=verbose` -- expected: the summary line reads `Tests  1 passed (1)`. **This is the AC3 evidence**: Vitest counts what actually ran, so a suite hidden behind `describe`, `test.each` or a second file cannot pass it.
+- `npm test` (or `npm test -w server -- --reporter=verbose`) -- expected: the summary line reads `Tests  1 passed (1)`. Run it through the workspace script: a bare `npx vitest run` from the repo root skips `server/vitest.config.ts` and the env setup, and fails in `db/client.ts` before any test loads. **This is the AC3 evidence**: Vitest counts what actually ran, so a suite hidden behind `describe`, `test.each` or a second file cannot pass it.
 - `find . -name "*.test.ts" -o -name "*.spec.ts" | grep -v node_modules | wc -l` -- expected: `1`.
 - `grep -rnE "\b(describe|it|test\.each|test\.for)\s*\(" server/test` -- expected: no matches.
 - `grep -rcE "\btest\s*\(" server/test/golden-master.test.ts` -- expected: `1`.

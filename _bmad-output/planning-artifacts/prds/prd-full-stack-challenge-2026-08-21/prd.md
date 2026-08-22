@@ -375,6 +375,36 @@ ground text, not file type); **FR1 HEIC verified** (accept-list mechanism). The
 single-test front-runner evolved to an integration golden-master (DECISIONS.md D16,
 spine AD-13).
 
+## Amendments — scope re-evaluation (2026-08-22, D24)
+
+This PRD is left as it was written. Nothing below is deleted: a requirement we chose not to
+build is more informative than a requirement quietly removed, and the choice is the part
+worth reading. What follows records which requirements will **not** exist in the submission
+and why, so no one has to reconcile the two by hand.
+
+Six stories in, the plan was audited against the challenge brief rather than against itself.
+Of the 40 acceptance criteria still unbuilt at that point, four were required by an explicit
+line of the brief; roughly twenty-six answered requirements this PRD had written for itself.
+Our own over-engineering review had flagged the requirement mass as HIGH severity on
+2026-08-21, and D19 answered it with a priority ladder — a plan to decide rather than a
+decision. D24 exercised that ladder: three stories merged into one deliverable, two stories
+cut whole, eleven acceptance criteria deleted in writing, before the deadline forced it.
+
+**Cut — will not exist in this submission:**
+
+| Requirement | What it asked for | Where it died |
+|---|---|---|
+| **FR20** | The menu-level honesty notice | Story 2.3, cut whole |
+| **FR23** | The evidence panel showing the original source beside what the system read | Story 2.4, cut whole |
+| **FR26** | Batch review mechanics (multi-select and confirm-all) | Story 2.3, cut whole |
+| **FR27** (reopen affordance only) | The UI control that reverses a verdict | Story 2.3, cut whole. The *data* half of FR27 stands: the review endpoint implements the full action enum including `reopen`, because splitting a closed contract across stories fragments it. Server yes, button no — recorded in the README as a known limitation. |
+
+**Delivered by a different shape than this PRD assumed:** FR29–FR32 (history) exist as a
+recent-runs section of the submit page rather than a `/history` route — same behaviour, no
+extra route, no nav chrome. The evidence offsets FR23 would have consumed are computed and
+persisted today (story 1.6), so the panel remains a UI-only change if it is ever built:
+that is why the offsets were kept rather than deleted along with the story.
+
 ## Open items
 
 | Item | Owner / where it closes |
