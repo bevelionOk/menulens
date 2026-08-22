@@ -42,6 +42,15 @@ npm install
 npm run -w server db:migrate
 ```
 
+Before starting the servers, generate the sample menu you will upload first — `npm run dev`
+keeps the terminal busy:
+
+```bash
+npx tsx server/scripts/sample-menu.ts
+```
+
+It writes `la-parra.pdf` into the folder you ran it from — the repo root.
+
 ```bash
 npm run dev
 ```
@@ -49,20 +58,14 @@ npm run dev
 The API listens on **http://localhost:3000** and the UI on **http://localhost:5173** (Vite
 proxies `/api` to the server).
 
-To try it without hunting for a menu, generate the sample one and upload it in the UI:
-
-```bash
-npx tsx server/scripts/sample-menu.ts
-```
-
-It writes `la-parra.pdf` into the folder you ran it from — the repo root. In the UI,
-choose *upload* and pick it from there (`open -R la-parra.pdf` reveals it in Finder). It is
-the same PDF the test uploads: six dishes, two come back `reliable`, four `uncertain` with
-the rule named under each row.
+Open the UI, choose *upload* and pick `la-parra.pdf` from the repo root (`open -R
+la-parra.pdf` reveals it in Finder). It is the same PDF the test uploads: six dishes, two
+come back `reliable`, four `uncertain` with the rule named under each row.
 
 What to try on the result: confirm a `reliable` row, mark an `uncertain` one as follow-up
-with a note, then go back to `/` — the run in the recent list shows how many rows are
-resolved. The extracted columns never change; a review is a verdict, not an edit.
+with a note, then go back to `/`. In the recent-runs list, **State** is the extraction
+(`done` = the rows are saved) and **Reviewed** is your progress (`6 of 6 resolved`). The
+extracted columns never change; a review is a verdict, not an edit.
 
 A public URL that also works: `https://vox-restaurant.de/wp-content/uploads/2026/07/Vox-Speisekarte-Englisch-1.pdf`
 (34 dishes, every row `uncertain` — see B42 under *What breaks in production*).
@@ -112,7 +115,7 @@ shipped, the 11 deleted ones stay in the PRD, marked as cut.
 
 ## What breaks in production
 
-The register is [`plan/production-breaks.md`](plan/production-breaks.md): 43 failure modes,
+The register is [`plan/production-breaks.md`](plan/production-breaks.md): 44 failure modes,
 each with why it was accepted or what the first fix would be. The summary, and the
 hostile-input sweep that checked it, is **D27**. By kind:
 
@@ -123,7 +126,7 @@ hostile-input sweep that checked it, is **D27**. By kind:
 | What the arbiter cannot see | 9 | Every row is `uncertain` on a menu that declares no allergens in prose; visual sources pass unverified; hidden HTML text verifies |
 | Lifecycle and clocks | 8 | Non-atomic seriality gate; two timeouts that can disagree; DB and Node clocks on one anchor |
 | One process, no bounds | 2 | Unpaginated list; unbounded strings |
-| Copy and contract drift | 7 | The screen says something other than what the server did |
+| Copy and contract drift | 8 | The screen says something other than what the server did |
 | Trust boundary | 2 | No auth on any route; CI actions pinned by tag |
 
 The ones I would fix first:
