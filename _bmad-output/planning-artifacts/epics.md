@@ -256,7 +256,13 @@ the single P1 item is one tagged AC in Story 1.7. Sequencing note: no story depe
 future one — a run created in 1.3 before the pipeline exists ends honestly as
 `interrupted`; stories 1.4–1.6 then make each stage real.
 
-### Story 1.1: Project Scaffold & Foundations
+
+> **Status tags added 2026-08-22.** The story text below is unchanged — this file records
+> what was planned. The tag on each heading records what happened to it, including the two
+> stories cut whole and the three merged into one deliverable by D24. A cut story is left
+> readable on purpose: what a team decided not to build is part of the record.
+
+### Story 1.1: Project Scaffold & Foundations — SHIPPED
 
 As the developer,
 I want a runnable monorepo skeleton on the pinned stack,
@@ -272,7 +278,7 @@ So that every later story lands on the ratified structure instead of inventing i
 6. **Given** the repo layout, **Then** it matches the spine's structural seed (`server/src/core|pipeline|routes|db`, `server/drizzle`, `server/test`, `web/src`, `shared/src`) and the naming conventions (AR24).
 7. **Scope guard (anti-over-engineering; R-13 mitigation):** **Given** the scaffold, **Then** official-scaffold defaults are accepted as-is — no config polishing, no toolchain tuning beyond what an AC explicitly requires; friction with the fresh majors resolves toward the default, never toward custom configuration.
 
-### Story 1.2: Shared Contract & Data Layer
+### Story 1.2: Shared Contract & Data Layer — SHIPPED
 
 As the developer,
 I want the Zod contract and the database schema with a real committed migration,
@@ -286,7 +292,7 @@ So that front, back, and pipeline share one source of truth for every shape.
 4. **Given** a fresh database, **When** the committed Drizzle migration in `server/drizzle/` is applied, **Then** tables `runs`, `dishes`, `source_artifacts` exist per the spine ER — uuid ids via `gen_random_uuid()`, `timestamptz` UTC, `dishes.position` integer, `allergens`/`confidence_reasons` as jsonb, `source_artifacts` 1:1 with runs holding `bytes`, `acquired_text`, `content_type`; **And** no PII columns exist anywhere in the schema (NFR4) (AR6; the challenge's "real migration", R2).
 5. **Given** the repos in `server/src/db`, **Then** dish reads order by server-assigned `position` **And** no list query ever selects artifact `bytes` (AR6, AR9).
 
-### Story 1.3: Persist-First Run Lifecycle API
+### Story 1.3: Persist-First Run Lifecycle API — SHIPPED
 
 As Ana,
 I want submitting a menu to create a persistent, observable run immediately,
@@ -303,7 +309,7 @@ So that closing the tab never loses anything and the state is always honest.
 7. **Given** any stage transition, **Then** it is persisted and logged with `run_id` (FR4, AR23).
 8. **Given** a mid-run `GET /api/runs/:id`, **Then** the run returns with `dishes: []` — dishes appear only after the single `saving` transaction (AR8).
 
-### Story 1.4: Source Acquisition & Class Decision
+### Story 1.4: Source Acquisition & Class Decision — SHIPPED
 
 As Ana,
 I want the system to fetch my URL or read my file safely and decide honestly what kind of source it has,
@@ -320,7 +326,7 @@ So that extraction takes the right path and failures tell the truth.
 7. **Given** acquisition succeeds, **Then** the acquired/extracted source text persists to `source_artifacts.acquired_text`, the class is recorded on the run, and transitions are logged (AR6, FR4).
 8. **Scope guard (anti-over-engineering, ratified this session):** **Given** the fetcher, **Then** it is one plain GET per URL (following redirects) using Node's built-in `fetch` — no crawling beyond the submitted URL, no JS rendering or headless browser, no retry loops, no third-party HTTP client. A page that won't yield text gets the honest E3 answer, never more machinery (REQUIREMENTS §4).
 
-### Story 1.5: Extraction Adapter — the OpenAI Seam
+### Story 1.5: Extraction Adapter — the OpenAI Seam — SHIPPED
 
 As Ana,
 I want the model to read the menu and return structured dish signals through one honest boundary,
@@ -337,7 +343,7 @@ So that extraction is reliable, bounded, and auditable.
 7. **Given** a model result with zero dishes, **Then** the run completes as `status=empty` (E9) — a distinct honest terminal state, not a failure (FR33).
 8. **Given** a model result with at least one dish, **Then** the run completes `done` with what was extracted — missed content is Ana's catch against the Original tab, and no partial-error mechanism exists (FR34).
 
-### Story 1.6: Triage Core — the Deterministic Arbiter
+### Story 1.6: Triage Core — the Deterministic Arbiter — SHIPPED
 
 As Ana,
 I want every row flagged by deterministic rules with recorded reasons,
@@ -354,7 +360,7 @@ So that "auto-checked" means exactly "no rule fired" and I can always see why th
 7. **Given** a row where no rule fires, **Then** `flag=reliable`; **And** every fired rule is logged with `run_id` (FR15, NFR5).
 8. **Given** extraction + triage complete, **Then** all dishes are written in one transaction at the `saving` stage and the run ends `done` (AR8).
 
-### Story 1.7: Submit & Watch — an Honest Waiting UI
+### Story 1.7: Submit & Watch — an Honest Waiting UI — SHIPPED as M1, AC8 CUT (D24)
 
 As Ana,
 I want to submit a menu and watch its real progress with honest failure states,
@@ -371,7 +377,7 @@ So that I always know what is happening and what to do next.
 7. **Given** a failed or interrupted run, **When** Ana clicks retry, **Then** a new run is created and she navigates to it; the old run is untouched (FR8).
 8. **Given** a run completes `done`, **Then** a minimal read-only table shows the extracted rows (name, price, flag) — the Epic 2 review screen replaces this view (walking-skeleton evolution).
 
-### Story 1.8: The One Test — Golden-Master + CI Complete
+### Story 1.8: The One Test — Golden-Master + CI Complete — SHIPPED
 
 As the developer,
 I want the single integration golden-master running in CI,
@@ -394,7 +400,7 @@ follow-up — individually or in batch, reversibly, through one review endpoint.
 is the deliverable. Stories are priority-pure: 2.1–2.2 are P0, 2.3–2.4 are P1 — if time
 runs short, 2.3/2.4 fall whole without touching a line of P0 (D8 cut ladder).
 
-### Story 2.1: The Review Endpoint — One Path for Every Verdict (P0)
+### Story 2.1: The Review Endpoint — One Path for Every Verdict (P0) — SHIPPED inside M1 (D24)
 
 As Ana,
 I want my decisions persisted through one honest path,
@@ -411,7 +417,7 @@ So that my review is the deliverable and the audit record never lies.
 
 *Contract note (ratified this session): the endpoint implements the full AD-9 action enum — `reopen` included — because splitting a closed contract across stories fragments it; what is P1 is the reopen UI affordance (Story 2.3). Marginal cost ≈ zero, contract whole from day one.*
 
-### Story 2.2: The Review Screen — Flags, Reasons, and Verdicts in One Place (P0)
+### Story 2.2: The Review Screen — Flags, Reasons, and Verdicts in One Place (P0) — SHIPPED inside M1 (D24)
 
 As Ana,
 I want the dish table to show what the system claims and why it doubts,
@@ -427,7 +433,7 @@ So that I can resolve each row with the evidence of my own judgment.
 6. **Given** a wrong extracted value, **Then** no inline-editing affordance exists anywhere (FR28).
 7. **Given** an `empty` run (E9), **Then** the review screen renders the honest empty state — never a mute zero-row table (FR33, FG6).
 
-### Story 2.3: Review Depth — Batch, Reversibility, Note, and the Honesty Notice (P1)
+### Story 2.3: Review Depth — Batch, Reversibility, Note, and the Honesty Notice (P1) — CUT 2026-08-22 (D24)
 
 As Ana,
 I want batch mechanics, reversibility, and menu-level honesty,
@@ -441,7 +447,7 @@ So that triage pays off and no decision is a trap.
 4. **Given** a follow-up, **Then** the optional one-line note can be entered and shows with the row (FR25).
 5. **Given** a menu with zero `declared` allergens, **Then** the FR20 notice renders above the table; the same pattern names a non-EUR currency when T3 fired menu-wide (FR20).
 
-### Story 2.4: The Evidence Panel — Original First (P1)
+### Story 2.4: The Evidence Panel — Original First (P1) — CUT 2026-08-22 (D24)
 
 As Ana,
 I want the original source beside what the system read,
@@ -465,7 +471,7 @@ gap. Ratified **P0** here: without opening a run from History, FR3's promise ("t
 finishes and is found in History") breaks — finding without opening is useless, and the
 deep link costs a route, not a feature.
 
-### Story 3.1: History — the Living Audit Record (P0)
+### Story 3.1: History — the Living Audit Record (P0) — SHIPPED inside M1, folded into `/` (D24)
 
 As Ana,
 I want every run findable, openable, and retryable from one list,

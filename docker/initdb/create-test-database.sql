@@ -1,0 +1,11 @@
+-- The golden-master (Story 1.8) truncates every row in the database it runs against, so it
+-- refuses to run unless that database is named `*_test`. Creating it here means the
+-- documented setup — `docker compose up -d --wait` — leaves both databases ready and
+-- `npm test` needs no extra flags or manual psql.
+--
+-- The official postgres image executes everything in /docker-entrypoint-initdb.d ONLY on
+-- first initialisation, i.e. when the data directory is empty. On a volume that already
+-- exists this file is never read; create the database by hand instead:
+--   docker compose exec postgres psql -U postgres -c 'CREATE DATABASE menu_extraction_test'
+-- or start over with `docker compose down -v && docker compose up -d --wait`.
+CREATE DATABASE menu_extraction_test;

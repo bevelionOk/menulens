@@ -11,6 +11,10 @@ services:
       - "127.0.0.1:5432:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
+      # Creates `menu_extraction_test` next to the dev database, so `up -d --wait` leaves
+      # both ready and `npm test` runs with no extra flags. The image runs this ONLY on a
+      # fresh volume — see the file itself for what to do on an existing one.
+      - ./docker/initdb:/docker-entrypoint-initdb.d:ro
     # Readiness signal for the first DB consumers (1.2 migrate, 1.8 CI test):
     # plain `up -d` returns before Postgres accepts connections. Use
     # `docker compose up -d --wait` — it blocks until this check reports healthy,

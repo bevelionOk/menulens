@@ -10,28 +10,28 @@ Re-read before every phase; every task must map to a line here or it gets cut.
 
 | # | Requirement | Status |
 |---|---|---|
-| R1 | Backend: Node.js + Fastify + TypeScript | ☐ |
-| R2 | PostgreSQL + Drizzle, with a **real migration file** | ☐ |
-| R3 | Frontend: React + Vite + TypeScript + Tailwind + shadcn/ui | ☐ |
-| R4 | LLM: OpenAI SDK, JSON mode; **vision** when input is an image | ☐ |
-| R5 | Input paths: public menu **URL** + uploaded **PDF/image** | ☐ |
-| R6 | Extracted per dish: name, price, allergens (list), one-line description, **confidence flag** (derivation is our documented choice) | ☐ |
-| R7 | Results persisted to Postgres and shown in a clean UI | ☐ |
-| R8 | **Exactly one** meaningful automated test — type chosen and justified in DECISIONS.md | ☐ |
-| R9 | Structured Pino logs on the backend | ☐ |
-| R10 | BMAD drives planning **and** implementation; artifacts checked into the repo | ☐ |
-| R11 | Every prompt to any LLM captured in `prompts/` (first-class deliverable) | ☐ |
-| R12 | `.env.example` only — no real keys ever committed (history included) | ☐ |
+| R1 | Backend: Node.js + Fastify + TypeScript | ☑ |
+| R2 | PostgreSQL + Drizzle, with a **real migration file** | ☑ |
+| R3 | Frontend: React + Vite + TypeScript + Tailwind + shadcn/ui | ☑ |
+| R4 | LLM: OpenAI SDK, JSON mode; **vision** when input is an image | ☑ |
+| R5 | Input paths: public menu **URL** + uploaded **PDF/image** | ☑ |
+| R6 | Extracted per dish: name, price, allergens (list), one-line description, **confidence flag** (derivation is our documented choice) | ☑ |
+| R7 | Results persisted to Postgres and shown in a clean UI | ☑ |
+| R8 | **Exactly one** meaningful automated test — type chosen and justified in DECISIONS.md | ☑ |
+| R9 | Structured Pino logs on the backend | ☑ |
+| R10 | BMAD drives planning **and** implementation; artifacts checked into the repo | ☑ |
+| R11 | Every prompt to any LLM captured in `prompts/` (first-class deliverable) | ☑ |
+| R12 | `.env.example` only — no real keys ever committed (history included) | ☑ |
 
 ## 2. Deliverables (all required)
 
-- ☐ Repo with runnable app + README (fresh install/run in **under 5 minutes**)
-- ☐ `DECISIONS.md` — trade-offs, alternatives considered, what was cut and why
-- ☐ BMAD artifacts — product brief / PRD / architecture / stories / dev-story output
-- ☐ `prompts/` — organized so a reviewer can follow the thought sequence
+- ☑ Repo with runnable app + README — the timed fresh-clone run (plan 4.5) is Pablo's, still pending
+- ☑ `DECISIONS.md` — trade-offs, alternatives considered, what was cut and why (D1–D26)
+- ☑ BMAD artifacts — product brief / PRD / architecture / stories / per-story specs
+- ☑ `prompts/` — organized so a reviewer can follow the thought sequence (English summaries: plan 4.7)
 - ☐ Personal video (3–5 min) — who, why this role, why a fit
 - ☐ Walkthrough video (5–10 min) — what, why, what's next, **what breaks in production**
-- ☐ `BUSINESS.md` — one paragraph: price for this feature + why
+- ☐ `BUSINESS.md` — one paragraph: price for this feature + why (working notes exist; distilled in plan 6.1)
 - ☐ Single link containing everything + working email → gerdrn+hiring@gmail.com, **by 2026-08-25**
 
 ## 3. Auto-reject tripwires
