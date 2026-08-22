@@ -55,9 +55,16 @@ To try it without hunting for a menu, generate the sample one and upload it in t
 npx tsx server/scripts/sample-menu.ts
 ```
 
-It writes `la-parra.pdf`: six dishes, two of which come back `reliable` and four
-`uncertain` with the rule named under each row. It is the same PDF the test uploads. A
-public URL that also works: `https://vox-restaurant.de/wp-content/uploads/2026/07/Vox-Speisekarte-Englisch-1.pdf`
+It writes `la-parra.pdf` into the folder you ran it from — the repo root. In the UI,
+choose *upload* and pick it from there (`open -R la-parra.pdf` reveals it in Finder). It is
+the same PDF the test uploads: six dishes, two come back `reliable`, four `uncertain` with
+the rule named under each row.
+
+What to try on the result: confirm a `reliable` row, mark an `uncertain` one as follow-up
+with a note, then go back to `/` — the run in the recent list shows how many rows are
+resolved. The extracted columns never change; a review is a verdict, not an edit.
+
+A public URL that also works: `https://vox-restaurant.de/wp-content/uploads/2026/07/Vox-Speisekarte-Englisch-1.pdf`
 (34 dishes, every row `uncertain` — see B42 under *What breaks in production*).
 
 **Port already in use?** Postgres is the usual clash. Change the host port in
