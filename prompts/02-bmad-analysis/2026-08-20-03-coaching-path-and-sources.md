@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD analysis — product brief (discovery)
+- **In English**: Chooses the coaching path, points to the challenge documents in docs/challenge, and states the goal: turn any menu (URL/PDF/photo) into structured, reviewable rows in under a minute, with Ana's attention ideally only on the uncertain rows; EU regulatory framework.
 
 ## Prompt (verbatim)
 

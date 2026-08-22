@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD analysis — PRD (post-close repo mechanics)
+- **In English**: Asks to create the branch, open the PR and merge.
 
 ## Prompt (verbatim)
 

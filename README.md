@@ -174,7 +174,7 @@ Every variable except the first two is optional and documented in `.env.example`
 | `DATABASE_URL` | `postgres://postgres:postgres@localhost:5432/menu_extraction` | Matches `docker-compose.yml`. |
 | `PORT` | `3000` | Fastify listen port. |
 | `OPENAI_MODEL` | `gpt-5.6-luna` | Extraction model. |
-| `MODEL_TIMEOUT_MS` | `120000` | The single technical timeout. One retry, then the run fails honestly. |
+| `MODEL_TIMEOUT_MS` | `120000` | The single technical timeout. Exceeding it fails the run as `model_timeout` — no retry. |
 | `RUN_STALE_AFTER_MS` | `180000` | A `processing` run with no stage change for this long reads as `interrupted`. |
 | `SOURCE_MIN_TEXT_CHARS` | `200` | Below this, a source is treated as `visual` (sent as an image) instead of `text`. |
 

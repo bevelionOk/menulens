@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD — epics & stories (step 3, Epic 1 review)
+- **In English**: Approves epic 1 with three notes: reuse unreachable_url; watch the length of story 1.4 so the agent does not build an over-complex crawler; praises the normalisation chain in story 1.6; and for story 1.8 insists the test must guarantee each rule T1-T6 fires at least once.
 
 ## Prompt (verbatim)
 

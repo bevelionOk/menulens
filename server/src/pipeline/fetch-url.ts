@@ -128,7 +128,16 @@ export async function fetchSource(url: string, log: FastifyBaseLogger): Promise<
       await response.body?.cancel();
       throw new AcquisitionError('unreachable_url', 'non-2xx response', { final_url: current.href, status: response.status });
     }
-    const bytes = await readCapped(response, current.href);
+    let bytes: Buffer;
+    try {
+      bytes = await readCapped(response, current.href);
+    } catch (err) {
+      // The 15 s signal firing mid-body, or the peer resetting the stream, rejects here with
+      // a plain TypeError — outside this catch the run would stay `processing` until it read
+      // as `interrupted`, instead of failing honestly (Phase-4 review).
+      if (err instanceof AcquisitionError) throw err;
+      throw new AcquisitionError('unreachable_url', 'body read failed', { final_url: current.href, err });
+    }
     // A 0-byte 2xx has nothing to classify (a 0-byte PDF would otherwise persist as `visual`).
     if (bytes.length === 0) {
       throw new AcquisitionError('no_usable_text', 'empty body', { final_url: current.href, status: response.status });

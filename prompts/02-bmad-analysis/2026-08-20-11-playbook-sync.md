@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD analysis — post-brief upkeep
+- **In English**: Asks whether anything in the PRD section of the playbook needs updating after the brief.
 
 ## Prompt (verbatim)
 

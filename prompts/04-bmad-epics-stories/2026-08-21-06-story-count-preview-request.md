@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD — epics & stories (step 2 menu)
+- **In English**: Asks to review how many stories the three epics add up to in total.
 
 ## Prompt (verbatim)
 

@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD — epics & stories (elicitation pass)
+- **In English**: Asks whether the proposed findings adhere to risk mitigation and the requirements.
 
 ## Prompt (verbatim)
 

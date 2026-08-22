@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD — architecture
+- **In English**: Answers: the topology is a Fastify service plus a Vite SPA and Postgres; a shared FE/BE package is better since duplicating types hurts maintainability. Asks to go through all questions and then run a final validation with `/bmad-advanced-elicitation`.
 
 ## Prompt (verbatim)
 

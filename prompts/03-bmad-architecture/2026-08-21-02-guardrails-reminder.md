@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD — architecture
+- **In English**: Reminds to account for RISKS.md and all of REQUIREMENTS.md so as not to overshoot the scope.
 
 ## Prompt (verbatim, mid-turn)
 

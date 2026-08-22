@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD — architecture (`/bmad-advanced-elicitation`)
+- **In English**: Asks, as before, to apply the five techniques and then compare: what separates them, what unites them, what the bridge is, and the integral conclusion; is the decision ratified or rectified.
 
 ## Prompt (verbatim)
 

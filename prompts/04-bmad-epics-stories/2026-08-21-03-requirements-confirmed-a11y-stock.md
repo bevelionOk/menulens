@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD — epics & stories (step 1 → 2)
+- **In English**: Confirms the requirements; exclude accessibility work since it is not requested, and use the stock defaults.
 
 ## Prompt (verbatim)
 

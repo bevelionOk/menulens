@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD analysis — PRD
+- **In English**: Questions the 10 MB per-photo cap and asks to consider HEIC support via a simple tool since many iPhone users cannot convert; accepts the 3-minute threshold for testing. As Product Owner answers: prices in EUR (country selector would be over-engineering; ranges for missing prices, asks what triage means), two rows for variants to keep things simple for Ana, never invent an allergen declaration (report as absence and potential inference, relate to D4), same language as the platform. Asks bmad-party-mode for opinions on these decisions.
 
 ## Prompt (verbatim)
 

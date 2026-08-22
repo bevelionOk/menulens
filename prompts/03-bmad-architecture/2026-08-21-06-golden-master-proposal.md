@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD — architecture
+- **In English**: Proposes replacing the arbiter unit test with a golden-master integration test: post a demo fixture to the real API with a mocked OpenAI client and a real database, covering the whole flow, isolating AI non-determinism, validating the JSONB boundary, at zero API cost. Asks whether the assistant agrees.
 
 ## Prompt (verbatim)
 

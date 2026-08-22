@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD analysis — PRD
+- **In English**: Warns that the playbook may be outdated: it is a frame and an example, never the governing authority. Ratifies the NFRs and asks to leave out anything that could trigger reviewer penalties or over-engineering, and to report back when the whole segment is finished.
 
 ## Prompt (verbatim)
 

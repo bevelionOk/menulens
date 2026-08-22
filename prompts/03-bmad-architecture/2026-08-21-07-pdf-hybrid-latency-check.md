@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD — architecture
+- **In English**: Asks whether the proposed option 1 could slow Ana's reading noticeably or is negligible, and states the hybrid-by-class approach is the logical one.
 
 ## Prompt (verbatim)
 

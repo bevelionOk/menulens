@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD analysis — product brief (elicitation)
+- **In English**: Answers the five method options: reframe around where Ana's attention goes (allergens as legal danger), explore what could make Ana fail, trace causes backwards, stick to scope and REQUIREMENTS.md, and keep the fifth for perspective; asks to run all five.
 
 ## Prompt (verbatim)
 

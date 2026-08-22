@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD analysis — product brief
+- **In English**: Invokes the `/bmad-product-brief` skill to open the product-brief session.
 
 ## Prompt (verbatim)
 

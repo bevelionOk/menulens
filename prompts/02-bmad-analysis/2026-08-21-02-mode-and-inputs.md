@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD analysis — PRD
+- **In English**: Selects the Coaching (Vision + Features) mode for the PRD; for inputs, suggests the playbook may be added but stresses RISKS.md must be considered to stay in scope, avoid over-engineering and have mitigations ready.
 
 ## Prompt (verbatim)
 

@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD — epics & stories (step 2)
+- **In English**: Approves the epics, and asks how a merged history would look once Ana has processed a run, and for a clearer explanation of the difference between that and separating by failed states.
 
 ## Prompt (verbatim)
 

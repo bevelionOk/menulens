@@ -62,7 +62,7 @@ export const FAILURE_COPY: Record<StoredFailureReason, FailureCopy> = {
   model_timeout: {
     title: 'The model ran out of time',
     detail:
-      'The extraction call passed its timeout, twice. Nothing was saved. A retry starts a new run and often succeeds; a very long menu may keep timing out.',
+      'The extraction call passed its timeout and was not retried. Nothing was saved. A retry starts a new run and often succeeds; a very long menu may keep timing out.',
   },
   model_error: {
     title: 'The model call failed',
