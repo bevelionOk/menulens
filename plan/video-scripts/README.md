@@ -1,7 +1,7 @@
 # The two videos — direction and recording setup
 
 Scripts: [walkthrough.md](walkthrough.md) (5–10 min, target 9:00) and [personal.md](personal.md)
-(3–5 min, target 3:45). Phase plan: [../05-communication-videos.md](../05-communication-videos.md).
+(3–5 min, target 4:05). Phase plan: [../05-communication-videos.md](../05-communication-videos.md).
 
 The lines in both scripts are anchors, not a teleprompter (R-09: outlines, not scripts).
 Every number spoken is on screen at the moment it is said, and every number has a source
@@ -17,7 +17,7 @@ what the script expects, say what it did; do not stop the take.
 | Language | English (D7) | English (D7) |
 | Takes | Max two (plan/05). Re-record one segment only if it went over time or stated a wrong number | Max two |
 | Host | YouTube unlisted (D6); link checked in an incognito window | Same |
-| Length | Brief: 5–10 min. Target 9:00, stop at 9:30 | Brief: 3–5 min. Target 3:45, stop at 4:30 |
+| Length | Brief: 5–10 min. Target 9:00, stop at 9:30 | Brief: 3–5 min. Target 4:05, stop at 4:45 |
 
 ## Spoken tone — REQUIREMENTS §4 applied to speech
 
