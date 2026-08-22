@@ -14,7 +14,7 @@ only when no rule fired.
 Requirements: **Node ≥ 22.13**, **Docker** (for Postgres), and an **OpenAI API key**.
 
 ```bash
-git clone <repo-url> && cd full-stack-challenge
+git clone https://github.com/bevelionOk/menulens.git && cd menulens
 ```
 
 ```bash
