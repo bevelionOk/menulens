@@ -1,28 +1,3 @@
 # BUSINESS.md
 
-> **Status: working draft.** The final deliverable is exactly **one paragraph** answering:
-> *what would you charge a customer for this feature, and why?* The notes below are the
-> measured inputs it will be distilled from before submission.
-
-## Working notes (to be distilled)
-
-**Measured unit cost** (2026-08-20 smoke test + current OpenAI pricing): one menu extraction
-costs ~$0.003 on the budget tier (gpt-5.6-luna) and ~$0.032 on the balanced tier
-(gpt-5.6-terra). Even with retries and generous margins, raw COGS per menu is under $0.05 —
-i.e. the LLM cost is negligible; the price must be driven by **value and risk**, not tokens.
-
-**Value side**: manual transcription of a restaurant menu into structured data takes roughly
-15–30 minutes of operator time per menu (plus errors). The feature replaces that with
-seconds of compute plus a short human review pass guided by the confidence flags.
-
-**Risk side (the real pricing driver)**: allergen data is safety-critical — a wrong
-"allergen-free" label has legal and human consequences. Our own smoke test showed the model
-answering confidently wrong on ambiguous input (see DECISIONS.md D4). This feature therefore
-cannot honestly be sold as fully automated extraction; what is sellable is **extraction +
-confidence-guided human review**, where the flag concentrates reviewer attention on the
-uncertain rows. The price should include that framing, and the margin should cover the
-liability-driven need for review tooling.
-
-**Pricing shapes to choose from in the final paragraph**: per-menu credit pricing
-(e.g. bundle of extractions at a price that yields >90% gross margin over COGS),
-or a flat monthly tier for platforms ingesting menus continuously.
+The customer is the platform that onboards restaurants, not the restaurant, and the unit is one menu processed. I would charge **€2 per menu, with a 200,000-character cap on the input**, sold as a review workflow — extraction plus a `reliable`/`uncertain` flag on every row with the evidence quoted under it — and never as automated extraction. The model costs $0.0069 for a real 34-dish menu on `gpt-5.6-luna` (measured 2026-08-22; $0.061 on the terra tier, which did not improve the flag), so the gross margin at €2 is above 99%, and the cap is what keeps it there: without it one 10 MB text source bills about $0.50 per attempt, twice on the retry (B29). The price is anchored on the operator's time, not on tokens: manual transcription takes 15–30 minutes per menu (the persona's number, not measured) at roughly €30 per hour loaded, €7.50–15 per menu, and €2 takes a quarter of that saving *if* the review is faster than the typing it replaces — the one unmeasured claim in this business, since on the two real menus every row came back `uncertain` (38 of 38, B42) and the tool removed the typing and none of the reading. The liability side is the other half of the price: a wrong allergen in a `reliable` row is a safety event, the measurement found one way it happens (an ingredient word quoted as a declaration, 6 of 34 rows, B45), so what is sold is the review record — which row was looked at, when, against which quote — not a promise that the rows are right. Would I ship it? As Ana's internal tool behind the platform's login, yes, after three fixes in `server/src/core/` measured in hours (B45, B10, B14); as a paid feature, not before auth, rate limits, the input cap, a 429 retry and verdicts that survive a re-run — two to three weeks — and not before a week of timing the review on real menus, because €2 is a bet on a number nobody has measured. The analysis is `_bmad-output/planning-artifacts/business/ship-readiness-2026-08-22.md`; the decision record is D28.

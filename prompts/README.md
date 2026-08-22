@@ -16,6 +16,7 @@ Grouped by phase:
 | `05-bmad-sprint-planning/` | BMAD readiness gate + sprint tracking |
 | `06-implementation/` | Dev prompts (backend, frontend, LLM extraction), code reviews and scope decisions, in sequence |
 | `07-hardening/` | Phase 4: whole-repo review (the one multi-agent pass, D2), hostile-input sweep, failure modes, prompt-log audit |
+| `08-submission/` | Phases 5–6: the business note (BUSINESS.md), videos, submission |
 | `runtime/` | Versioned runtime prompts the server loads at boot (e.g. `extraction-v1.md`) — not session prompts |
 
 ## File format

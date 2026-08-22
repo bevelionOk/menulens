@@ -83,22 +83,20 @@ the terminal state before the next).
 | 13 | On a `done` run: confirm one row, mark one `follow-up` with a note | Verdicts recorded, **extracted columns unchanged** | The invariant: a review is a verdict about the data, never an edit of it. |
 | 14 | Same run, from a terminal: post a batch with one real and one forged `dish_id` | `400`; the real decision **was not applied** either | All-or-nothing on the batch. Highlight 52 has the md5 version of this demo. |
 | 15 | Start a run, kill the server mid-run, restart, open the run | `interrupted` after 3 min, with a retry path; the recent-runs list on `/` still shows it | "Stale is derived, never written. Nothing was saved that you cannot see." |
-| 16 | Upload the Vox PDF **by URL**, then the photo | 34 rows and 4 rows, all `uncertain` | The measured case for B42: on menus that do not print allergen prose, every row lands in the queue. Say it as a number: 38 of 38. |
+| 16 | Upload the Vox PDF **by URL**, then the photo | 34 rows and 4 rows, all `uncertain` — or a few `reliable` on ingredient quotes, which is B45 (6 of 34 on a re-run, 22 Aug) | The measured case for B42: on menus that do not print allergen prose, every row lands in the queue. Say it as a number: 38 of 38. |
 
 ### What the 22 August session covered, and what it did not
 
 Covered: the photo (4 rows), the Vox URL→PDF (34 rows), `confirm` on 10 rows, `follow-up`
 with a note on 2, and both states visible in the recent-runs list.
 
-Not yet covered, in the order worth doing:
+Covered since, by the D27 sweep on the same day: scenarios 3 and 4 (`empty` on casalucio
+and Wikipedia), 7 (the injection PDF), 12 and 14 (the 409 and the forged batch); scenario 1
+(`la-parra.pdf`, 6 rows, 3 `reliable`, all six reviewed) in Pablo's second timed run.
 
-1. **Scenario 1 (`la-parra.pdf`).** No run so far has produced a single `reliable` row, so
-   the contrast the flag exists for has never been on screen. This fixture is the only
-   input that declares allergens in prose.
-2. **One `empty`** — scenario 3 or 4.
-3. **The injection PDF** — scenario 7.
-4. **409 and the forged batch** — scenarios 12 and 14, two curl commands.
-5. **`interrupted`** — scenario 15.
+Not yet on screen:
+
+1. **`interrupted`** — scenario 15.
 
 Commands for 12 and 14:
 
@@ -117,5 +115,5 @@ curl -s -X POST localhost:3000/api/runs/<run-id>/reviews -H 'content-type: appli
   the most valuable find of Phase 4 (highlight 56).
 - Elapsed times on your real menus, for the copy's "about 9 to 12 seconds" (B25).
 
-Findings go to `plan/production-breaks.md` (next number **B42**) or, if it is a README
+Findings go to `plan/production-breaks.md` (next number **B47**) or, if it is a README
 problem, straight into the README.

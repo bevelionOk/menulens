@@ -29,6 +29,12 @@ Backbone comes from Phase 4 outputs. Suggested structure (~90 s each):
 5. **What breaks in production**: the failure-modes list (4.4) — hallucinated allergens,
    fragile URL fetching, provider limits, hostile inputs
 6. What comes next if this shipped for real
+7. **Business, ~45 s** (JOB.md asks for "business risk" in this video): the BUSINESS.md
+   numbers, said once — $0.0069 measured for a 34-dish menu, €2 per menu with an input
+   cap, the platform as customer; 38 of 38 rows to review on real menus (B42) and the 6
+   false `reliable` rows the measurement found (B45); the three-tier ship-it answer
+   (internal after three fixes in hours; paid after two to three weeks and a measured
+   review time; unreviewed never). Same numbers as the paragraph — no new ones on camera.
 
 | Task | Owner |
 |---|---|

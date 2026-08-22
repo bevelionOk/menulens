@@ -59,8 +59,9 @@ The API listens on **http://localhost:3000** and the UI on **http://localhost:51
 proxies `/api` to the server).
 
 Open the UI, choose *upload* and pick `la-parra.pdf` from the repo root (`open -R
-la-parra.pdf` reveals it in Finder). It is the same PDF the test uploads: six dishes, two
-come back `reliable`, four `uncertain` with the rule named under each row.
+la-parra.pdf` reveals it in Finder). It is the same PDF the test uploads: six dishes; two,
+sometimes three, come back `reliable` (the model is not deterministic — B46), the rest
+`uncertain` with the rule named under each row.
 
 What to try on the result: confirm a `reliable` row, mark an `uncertain` one as follow-up
 with a note, then go back to `/`. In the recent-runs list, **State** is the extraction
@@ -115,7 +116,7 @@ shipped, the 11 deleted ones stay in the PRD, marked as cut.
 
 ## What breaks in production
 
-The register is [`plan/production-breaks.md`](plan/production-breaks.md): 44 failure modes,
+The register is [`plan/production-breaks.md`](plan/production-breaks.md): 46 failure modes,
 each with why it was accepted or what the first fix would be. The summary, and the
 hostile-input sweep that checked it, is **D27**. By kind:
 
@@ -123,7 +124,7 @@ hostile-input sweep that checked it, is **D27**. By kind:
 |---|---|---|
 | Reaching the menu — URL fetch, SSRF, JS/image sites | 6 | JS or image menus come back `empty`; residual SSRF ranges; redirect stalls |
 | The model call — availability, cost, drift | 9 | A 429 fails the run; no char cap on billed text; no PDF page/time budget; SDK pinned to one version |
-| What the arbiter cannot see | 9 | Every row is `uncertain` on a menu that declares no allergens in prose; visual sources pass unverified; hidden HTML text verifies |
+| What the arbiter cannot see | 11 | Every row is `uncertain` on a menu that declares no allergens in prose; an ingredient word quoted as a declaration passes as `reliable`; the `reliable` set changes between runs; visual sources pass unverified; hidden HTML text verifies |
 | Lifecycle and clocks | 8 | Non-atomic seriality gate; two timeouts that can disagree; DB and Node clocks on one anchor |
 | One process, no bounds | 2 | Unpaginated list; unbounded strings |
 | Copy and contract drift | 8 | The screen says something other than what the server did |
@@ -131,6 +132,10 @@ hostile-input sweep that checked it, is **D27**. By kind:
 
 The ones I would fix first:
 
+- **An ingredient word passes as an allergen declaration (B45).** Measured on the Vox PDF: 6
+  of 34 rows `reliable`, each on a quote like `Lobster tail` or `hazelnut`, on a menu that
+  declares no allergens. The arbiter checks that the quote exists, not that it declares
+  anything. Fix: T1 downgrades a `declared` entry whose quote has no declaration marker.
 - **DNS rebinding (B2).** The SSRF guard validates the resolved address, then Node's `fetch`
   resolves again; a hostile host can answer with a private IP on the second lookup. Fix: a
   pinned-address dispatcher.
@@ -147,12 +152,13 @@ The ones I would fix first:
 
 ## How to read this repo
 
-Ten minutes: [`DECISIONS.md`](DECISIONS.md) (D4, D19, D24, D27), the PRD at
+Ten minutes: [`BUSINESS.md`](BUSINESS.md), [`DECISIONS.md`](DECISIONS.md) (D4, D19, D24, D27, D28), the PRD at
 `_bmad-output/planning-artifacts/prds/prd-full-stack-challenge-2026-08-21/prd.md`, and
 `prompts/06-implementation/`.
 
 | Path | What it is |
 |---|---|
+| `BUSINESS.md` | What I would charge, why, and whether I would ship it — one paragraph. The analysis behind it: `_bmad-output/planning-artifacts/business/`. |
 | `docs/challenge/` | The brief, pinned verbatim, and how I read it (`INTERPRETATION.md`). |
 | `_bmad-output/planning-artifacts/` | PRD, architecture spine, epics, and the review of each. |
 | `_bmad-output/implementation-artifacts/` | One spec per story, plus the deferred-work register. |

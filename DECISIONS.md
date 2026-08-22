@@ -781,3 +781,49 @@ prompt. That was the "optional" item of plan 04, made mandatory.
 No second test (R8). No worker threads, no queue, no auth — each is a register entry
 with its first fix. Pablo's timed fresh-clone run (4.5) is his, unaided; the guide is
 `plan/guides/manual-test-guide.md`.
+
+## D28 · 2026-08-22 — The business note: model tier closed by measurement, two new failure modes, and would-you-ship-it
+
+**Context**: the rubric row "Business mindset — pricing, risk framing, would-you-ship-it"
+is scored on BUSINESS.md and the walkthrough. A review on 22 August found BUSINESS.md
+unchanged since the first commit, no price, no customer, the luna-vs-terra choice D3
+promised to measure never measured, and no document answering "would you ship it". Pablo
+set three things (prompt 51): measure terra now; price per menu, the platform as customer;
+and a full analysis of the production failures and the discarded conditions before any
+ship-it answer. Run as a `bmad-agent-analyst` session; the analysis is
+`_bmad-output/planning-artifacts/business/ship-readiness-2026-08-22.md`.
+
+**Measurement** (4 inputs × 2 tiers, same prompt and arbiter, isolated database): luna
+$0.0010–0.0069 per menu, terra $0.0063–0.061; the 34-dish Vox PDF $0.0069 on luna. Luna
+returned 6 `reliable` rows on Vox, each a `declared` allergen whose quote is an ingredient
+word (`Lobster tail`, `hazelnut`) on a menu that declares nothing — the same PDF had given
+0 of 34 a day earlier. Terra labelled all 34 `inferred`, read one declared line luna
+missed, split the la-parra fixture into twelve rows and self-flagged all twelve.
+
+**Decisions.**
+1. **D3 closed: `gpt-5.6-luna` stays.** Terra's stricter provenance labels are not a
+   property of the tier a product can rely on (luna gave the strict answer one run out of
+   two); the rule belongs in the arbiter, where it holds for any model. Terra's
+   dish-boundary regression and 5–9× cost buy nothing the rule does not.
+2. **B45 and B46 registered.** B45: an ingredient word quoted as a declaration verifies
+   under T6 and reaches Ana `reliable`; first fix in `core/` — T1 treats a `declared`
+   entry whose quote has no declaration marker as `inferred`. B46: the `reliable` set is
+   not stable across runs or tiers; verdicts are keyed to a run. Both measured.
+3. **Would-you-ship-it has three answers**, written in BUSINESS.md: as Ana's internal tool
+   behind the platform's login, yes after B45, B10 and B14 — hours, all in `core/`; as a
+   paid feature, not before auth, rate limits, an input cap, a 429 retry, verdicts that
+   survive a re-run and the evidence panel, and not before review time on real menus is
+   measured; as unreviewed automation, never.
+4. **Price: €2 per menu processed, input capped at 200 k characters**, platform as
+   customer. Margin above 99% at measured cost; the anchor is the operator's 15–30 minutes
+   per menu, of which €2 takes about a quarter of the saving. The value claim is unproven
+   on real menus (B42: 38 of 38 rows to review) and the paragraph says so.
+5. **Contradictions found and how they are handled.** B10's mitigation names the evidence
+   panel D24 cut → replaced by the B10 first fix (no `reliable` on visual runs). The spine
+   lists `GET /api/runs/:id/artifact` and `/history`, neither built → recorded here; the
+   spine stays as written (prompt 38). The manual-test guide's "not yet covered" list and
+   next register number were stale → updated. REQUIREMENTS said D1–D26 → D1–D28.
+
+**Why**: the brief asks what to charge *and why*; the why is the measured cost, the
+unmeasured value, and a gate with one measured hole. A one-line "yes, ship it" would
+have been contradicted by the repo's own register.
