@@ -81,7 +81,7 @@ wanted it.
 
 The correction is dated in the repo, not reconstructed after the fact. My own adversarial
 review flagged the requirement mass as HIGH severity on 21 August
-(`_bmad-output/planning-artifacts/review-overengineering.md`). D19 answered it weakly — a
+(`_bmad-output/planning-artifacts/prds/prd-full-stack-challenge-2026-08-21/review-overengineering.md`). D19 answered it weakly — a
 priority ladder that let scope be cut later, which is a plan to decide rather than a
 decision. D24 exercised that ladder a day later, before the deadline forced it: eleven
 acceptance criteria deleted, three stories merged into one, and the remaining test surface
@@ -114,7 +114,8 @@ would be. The ones I would fix first:
 ## How to read this repo
 
 If you have ten minutes: [`DECISIONS.md`](DECISIONS.md) (D4, D19, D24),
-`_bmad-output/planning-artifacts/prd.md`, and `prompts/06-implementation/`.
+`_bmad-output/planning-artifacts/prds/prd-full-stack-challenge-2026-08-21/prd.md`, and
+`prompts/06-implementation/`.
 
 | Path | What it is |
 |---|---|
