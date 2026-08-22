@@ -19,6 +19,10 @@ import { REVIEW_STATUS_LABEL, formatTimestamp } from '@/lib/copy'
 
 export type ReviewDecision = { dish_id: string; action: ReviewAction; note: string | null }
 
+// Matches the cap `reviewRequestSchema` enforces on the server: a note the field lets you
+// type but the API refuses is a rejection the UI could have prevented.
+const NOTE_MAX_LENGTH = 2000
+
 type ReviewTableProps = {
   dishes: Dish[]
   onDecide: (decision: ReviewDecision) => void
@@ -120,13 +124,14 @@ function ReviewRow({ dish, onDecide, pending, busy }: ReviewRowProps) {
                 <Textarea
                   autoFocus
                   value={note}
+                  maxLength={NOTE_MAX_LENGTH}
                   onChange={(event) => setNote(event.target.value)}
                   placeholder="Optional note — what to check, who to ask"
                   aria-label={`Follow-up note for ${dish.name}`}
                 />
                 <div className="flex gap-2">
                   <Button size="sm" onClick={submitFollowup} disabled={busy}>
-                    Save follow-up
+                    {pending ? 'Saving…' : 'Save follow-up'}
                   </Button>
                   <Button
                     size="sm"

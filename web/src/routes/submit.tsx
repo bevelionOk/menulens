@@ -25,6 +25,21 @@ import { formatTimestamp } from '@/lib/copy'
 // is renamed past the picker still gets the server's 415 copy, shown verbatim below.
 const ACCEPT = 'image/jpeg,image/png,image/webp,application/pdf'
 
+// E5 — the same cap `@fastify/multipart` enforces. Checked here for the reason
+// `validateUrl` exists, only more so: without it a 200 MB pick is streamed in full across
+// the network to earn a 413 that was knowable before the first byte left.
+const MAX_UPLOAD_BYTES = 10 * 1024 * 1024
+
+function validateFile(file: File | null): string | null {
+  if (!file) return 'Choose a PDF or a photo first.'
+  if (file.size === 0) return 'That file is empty. Choose a PDF, JPG, PNG or WebP with content.'
+  if (file.size > MAX_UPLOAD_BYTES) {
+    const mb = (file.size / (1024 * 1024)).toFixed(1)
+    return `That file is ${mb} MB and the cap is 10 MB. Export the PDF smaller, or photograph the menu instead of scanning it.`
+  }
+  return null
+}
+
 // E1 — caught here, before any request. These are the same four rules the server applies
 // in `POST /api/runs`; the point of duplicating them is that a typo should not cost a
 // round trip, not that the client is the authority. The server still decides.
@@ -52,6 +67,7 @@ export function SubmitPage() {
   const [url, setUrl] = useState('')
   const [urlError, setUrlError] = useState<string | null>(null)
   const [file, setFile] = useState<File | null>(null)
+  const [fileError, setFileError] = useState<string | null>(null)
 
   const runsQuery = useQuery({
     queryKey: ['runs'],
@@ -83,6 +99,9 @@ export function SubmitPage() {
 
   const busy = create.isPending
   const blocked = busy || activeRun !== null
+  // `create` serves both forms, so which button says "working" depends on what was sent.
+  const urlPending = busy && typeof create.variables === 'string'
+  const filePending = busy && typeof create.variables !== 'string'
 
   const submitUrl = (event: FormEvent) => {
     event.preventDefault()
@@ -94,7 +113,9 @@ export function SubmitPage() {
 
   const submitFile = (event: FormEvent) => {
     event.preventDefault()
-    if (!file) return
+    const problem = validateFile(file)
+    setFileError(problem)
+    if (problem || !file) return
     create.mutate(file)
   }
 
@@ -128,7 +149,7 @@ export function SubmitPage() {
                 disabled={blocked}
               />
               <Button type="submit" disabled={blocked}>
-                Extract
+                {urlPending ? 'Starting…' : 'Extract'}
               </Button>
             </div>
             {urlError && (
@@ -147,13 +168,23 @@ export function SubmitPage() {
                 type="file"
                 accept={ACCEPT}
                 className="h-auto py-1.5"
-                onChange={(event) => setFile(event.target.files?.[0] ?? null)}
+                aria-invalid={fileError !== null}
+                aria-describedby={fileError ? 'menu-file-error' : undefined}
+                onChange={(event) => {
+                  setFile(event.target.files?.[0] ?? null)
+                  if (fileError) setFileError(null)
+                }}
                 disabled={blocked}
               />
               <Button type="submit" variant="outline" disabled={blocked || file === null}>
-                Upload
+                {filePending ? 'Uploading…' : 'Upload'}
               </Button>
             </div>
+            {fileError && (
+              <p id="menu-file-error" className="text-sm text-destructive">
+                {fileError}
+              </p>
+            )}
           </form>
 
           {activeRun && (
