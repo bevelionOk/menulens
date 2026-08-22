@@ -88,7 +88,7 @@ shipped, the 11 deleted ones stay in the PRD, marked as cut.
 
 ## What breaks in production
 
-The register is [`plan/production-breaks.md`](plan/production-breaks.md): 41 failure modes,
+The register is [`plan/production-breaks.md`](plan/production-breaks.md): 43 failure modes,
 each with why it was accepted or what the first fix would be. The summary, and the
 hostile-input sweep that checked it, is **D27**. By kind:
 
@@ -96,7 +96,7 @@ hostile-input sweep that checked it, is **D27**. By kind:
 |---|---|---|
 | Reaching the menu — URL fetch, SSRF, JS/image sites | 6 | JS or image menus come back `empty`; residual SSRF ranges; redirect stalls |
 | The model call — availability, cost, drift | 9 | A 429 fails the run; no char cap on billed text; no PDF page/time budget; SDK pinned to one version |
-| What the arbiter cannot see | 7 | Visual sources pass unverified; hidden HTML text verifies; separators and punctuation mis-flag |
+| What the arbiter cannot see | 9 | Every row is `uncertain` on a menu that declares no allergens in prose; visual sources pass unverified; hidden HTML text verifies |
 | Lifecycle and clocks | 8 | Non-atomic seriality gate; two timeouts that can disagree; DB and Node clocks on one anchor |
 | One process, no bounds | 2 | Unpaginated list; unbounded strings |
 | Copy and contract drift | 7 | The screen says something other than what the server did |
@@ -107,6 +107,9 @@ The ones I would fix first:
 - **DNS rebinding (B2).** The SSRF guard validates the resolved address, then Node's `fetch`
   resolves again; a hostile host can answer with a private IP on the second lookup. Fix: a
   pinned-address dispatcher.
+- **Every row is `uncertain` on a menu without allergen prose (B42).** Measured on two real
+  menus: 38 of 38 rows. `reliable` needs a menu that declares allergens in text. Fix: read
+  icon legends and letter-code keys, or make "no allergens stated" a run-level fact.
 - **Hidden HTML text passes evidence verification (B28).** The arbiter checks that a quoted
   phrase exists in the page text, not that a diner could see it. Fix: drop hidden elements
   in the stripper.

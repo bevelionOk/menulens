@@ -479,3 +479,25 @@ photo of the same page, get rows.
 An English-reading reviewer scored the prompt log 13/20 because most prompts are Spanish.
 Every one of the 122 entries now carries an `In English` summary next to the verbatim
 prompt, which stays as written.
+
+## Session 14 · 2026-08-22 — First real menus, run by Pablo
+
+**60. Thirty-eight rows, thirty-eight uncertain** `[BREAKS]` `[WHY]`
+Two real menus: a phone photo of an Italian lunch card (4 dishes) and a German restaurant's
+PDF fetched by URL (34 dishes). Every row came back `uncertain`, all of them on T1. Neither
+menu declares allergens in prose — one uses icons, the other names none — so the model
+infers them from dish names and the arbiter refuses to call an inference declared. Correct
+by the rule and useless as a queue: the triage list is the whole menu. Registered as B42.
+The demo pairs it with the fixture menu, which prints `Contiene huevo y leche` and produces
+`reliable` rows, so the flag is visibly doing something in one case and nothing in the other.
+
+**61. The discount row** `[WHY]`
+The photo's first dish prints `€ 6,00 € 5,70 - 5%`. Persisted as that exact string, price
+value `null`, T2 and T5 fired, and the model's own note reads "Two prices and a discount
+are printed without a clearly defined price". The Vox PDF has the same shape once:
+`16/ 27 6` for a two-size pasta. Neither was guessed at.
+
+**62. Thirty-four names, all traceable** `[WHY]`
+T4 did not fire on any row of the Vox PDF: every dish name the model returned was found in
+the PDF's own text layer after normalization. The rule that catches invented dish names
+stayed silent on a menu where nothing was invented.

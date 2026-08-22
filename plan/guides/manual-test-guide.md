@@ -28,8 +28,15 @@ README bugs are the cheapest ones left to fix.
 
 ### Inputs
 
-Real menus are the main course: use two or three of your own (a PDF, a phone photo of a
-printed card, one restaurant URL). For the hostile set, this generator reuses the test
+Real menus first. Two are already proven (run on 22 August, both `done`):
+
+- **URL → PDF**: `https://vox-restaurant.de/wp-content/uploads/2026/07/Vox-Speisekarte-Englisch-1.pdf`
+  — a public restaurant PDF served over HTTP, 615 KB, 52,919 characters of text layer,
+  34 dishes. Exercises the URL path and the PDF text layer in one run.
+- **Photo**: a phone photo of a printed Italian lunch card, 43 KB, class `visual`,
+  4 dishes. Allergens are icons and one row prints `€ 6,00 € 5,70 - 5%`.
+
+Add one or two of your own for variety. For the hostile set, this generator reuses the test
 fixture's PDF builder so the inputs are reproducible (run from the repo root; writes to
 `./menus`):
 
@@ -72,6 +79,22 @@ the terminal state before the next).
 | 13 | On a `done` run: confirm one row, mark one `follow-up` with a note | Verdicts recorded, **extracted columns unchanged** | The invariant: a review is a verdict about the data, never an edit of it. |
 | 14 | Same run, from a terminal: post a batch with one real and one forged `dish_id` | `400`; the real decision **was not applied** either | All-or-nothing on the batch. Highlight 52 has the md5 version of this demo. |
 | 15 | Start a run, kill the server mid-run, restart, open the run | `interrupted` after 3 min, with a retry path; the recent-runs list on `/` still shows it | "Stale is derived, never written. Nothing was saved that you cannot see." |
+| 16 | Upload the Vox PDF **by URL**, then the photo | 34 rows and 4 rows, all `uncertain` | The measured case for B42: on menus that do not print allergen prose, every row lands in the queue. Say it as a number: 38 of 38. |
+
+### What the 22 August session covered, and what it did not
+
+Covered: the photo (4 rows), the Vox URL→PDF (34 rows), `confirm` on 10 rows, `follow-up`
+with a note on 2, and both states visible in the recent-runs list.
+
+Not yet covered, in the order worth doing:
+
+1. **Scenario 1 (`la-parra.pdf`).** No run so far has produced a single `reliable` row, so
+   the contrast the flag exists for has never been on screen. This fixture is the only
+   input that declares allergens in prose.
+2. **One `empty`** — scenario 3 or 4.
+3. **The injection PDF** — scenario 7.
+4. **409 and the forged batch** — scenarios 12 and 14, two curl commands.
+5. **`interrupted`** — scenario 15.
 
 Commands for 12 and 14:
 
