@@ -77,3 +77,39 @@ Collected by build reviews for later focused attention. Append-only.
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-6-triage-core-the-deterministic-arbiter.md`
   summary: `setTerminal`/`setStage` do not report how many rows their guarded UPDATE matched, so a `saving` transaction could commit dish rows onto a run that is no longer `processing`.
   evidence: Edge-case review — the guard `and(eq(runs.id, id), eq(runs.status, 'processing'))` silently no-ops; only a second writer can trigger it and none exists today (the staleness net derives `interrupted`, never writes), which is why this is deferred rather than patched. Fix: return the rowcount and throw inside the transaction.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-1-7-m1-submit-watch-review.md`
+  summary: Story 1.8's golden-master must also read `GET /api/runs` once and fold the fixture run's list row into the same golden — the list is a second derivation of `state`, `dish_count` and `review_progress` that the detail assertion cannot see.
+  evidence: Verification-gap review — inverting the aggregate predicate, flipping the newest-first order, or dropping the `groupBy` key all leave the detail payload untouched, so `/` could report the wrong counts, the wrong order, or a wrong `processing` state (which drives the UI's one-run-at-a-time lock) with CI green.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-1-7-m1-submit-watch-review.md`
+  summary: Story 1.8's golden-master must exercise `POST /api/runs/:id/reviews` — a confirm, a follow-up with a note, and a forged batch — then re-read the detail into a second golden section.
+  evidence: Verification-gap review — deleting `eq(dishes.run_id, runId)` from the review UPDATE lets a verdict be written across run boundaries with `matched` still equal to the batch size, so no rollback fires; the specified golden never issues a review request and captures its payload before any review exists.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-1-7-m1-submit-watch-review.md`
+  summary: The web API client ignores the `AbortSignal` TanStack Query supplies and sets no timeout, so polls are never cancelled on navigation and a server that accepts a connection without answering hangs the query forever.
+  evidence: Blind and edge-case reviews — `request()` in `web/src/lib/api.ts` takes no signal; "reconnecting…" never appears because the query never fails.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-1-7-m1-submit-watch-review.md`
+  summary: No React error boundary anywhere — any render throw blanks the whole page instead of degrading one row.
+  evidence: Blind review — `main.tsx` wraps `App` in providers only; an allergen id or enum value the client's label maps do not know is enough to throw during render.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-1-7-m1-submit-watch-review.md`
+  summary: Nothing announces state changes to assistive technology — no `aria-live` on the stage card, the reconnecting indicator, the save alerts or the row-level "Saving…", and the tables have no captions.
+  evidence: Blind review — a screen-reader user watching a run has no way to know it finished.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-1-7-m1-submit-watch-review.md`
+  summary: A retry launched from a row in the recent-runs list reports its error inside the submit-form card, far from the row that triggered it — there is no per-row error slot.
+  evidence: Blind review — `RecentRuns` reuses the shared create mutation whose error surfaces in `submitError`.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-1-7-m1-submit-watch-review.md`
+  summary: Decide whether evidence quotes should be visible on `reliable` rows — today `ReasonsList` renders only for `uncertain`, so a reviewer is asked to accept "auto-checked" without being able to see what it rested on.
+  evidence: Blind review — a deliberate product call, not an omission to fix silently; story 2.4 (cut) would have owned the richer version.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-1-7-m1-submit-watch-review.md`
+  summary: `reopen` clears `followup_note` and `reviewed_at` with no audit trail, and the review log line carries only a decision count — after a reopen there is no way to answer what the note said.
+  evidence: Blind review — FR27 frames the record as an audit trail; `reopen` has no UI affordance today (D24), so nothing exercises it either.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-1-7-m1-submit-watch-review.md`
+  summary: Neither new route declares a Fastify response schema, and `runListResponseSchema` is used only as a TypeScript type on the client — a server drift from the declared contract is caught by nothing at runtime and nothing in CI.
+  evidence: Blind review — the review endpoint's `RunDetail` response shape is not even declared in `shared/src/api.ts` the way the other two responses are.
