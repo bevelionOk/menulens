@@ -13,7 +13,7 @@
 | 4.6 | Secret scan over working tree + full git history | Claude | Must be empty by construction (D-gitignore), verify anyway |
 | 4.7 | Prompt-log audit: sequence readable start to finish; outcomes filled in; optional English summaries if we judge they help the reviewer | Both | Reviewer-eye pass |
 
-## Status — 2026-08-22
+## Status — 2026-08-22 · **Phase closed**: exit criteria met (findings closed or registered, fresh-clone 3:38 < 5:00, failure modes written in D27, repo clean)
 
 | # | Status |
 |---|---|
@@ -21,7 +21,7 @@
 | 4.2 | **Done** — commit `466dc29`; the one test and typecheck green |
 | 4.3 | **Done** — 18 inputs, results table in D27; the generator for the hostile set is in the manual-test guide |
 | 4.4 | **Done** — D27 "Production failure modes" |
-| 4.5 | **Owed to Pablo** — run the guide, unaided, with a stopwatch |
+| 4.5 | **Done 2026-08-22** — fresh clone, README only, unaided: **3:00** to the UI open, **3:38** to the sample run `done`. Two README defects found and fixed on the way (#19: the `.env` edit as a command; this PR: where the sample file lands). One false start discounted — a leftover test container of mine with the clone's project name |
 | 4.6 | **Done** — clean; D27 |
 | 4.7 | **Done** — 64 English summaries added; "optional" became mandatory |
 

@@ -501,3 +501,10 @@ are printed without a clearly defined price". The Vox PDF has the same shape onc
 T4 did not fire on any row of the Vox PDF: every dish name the model returned was found in
 the PDF's own text layer after normalization. The rule that catches invented dish names
 stayed silent on a menu where nothing was invented.
+
+**63. Three minutes thirty-eight** `[PERSONAL]`
+The fresh-clone run, 22 August, unaided: 3:00 from `git clone` to the UI open, 3:38 to the
+sample menu `done`. The first attempt was thrown away at six minutes because a test
+container of mine from that morning had the clone's project name. Two README lines were
+wrong and got fixed the same hour: the `.env` edit was not a command, and the sample file's
+location was not stated.
