@@ -6,9 +6,10 @@ have financial consequences; production features shipped with BMAD, not tutorial
 writing, trade-offs; no daily standups, no detailed tickets, no pairing to decide; one
 weekly sync, otherwise autonomous; 20–40 h/week, remote, English.
 
-Text by Pablo, 2026-08-22 (prompt 58). Spoken text 595 words ≈ 4:05 at 150 wpm.
-Frame: webcam only, eye level; a card with the beat names and the numbers of beat 2 in
-hand; two takes at most. Recording setup: [README.md](README.md).
+Text by Pablo, 2026-08-22 (prompt 58). Spoken text 595 words ≈ 4:05 at 150 wpm, ≈ 4:35 at
+130 wpm; the brief's cap is 5:00. The review's rows (after the script) are proposed, not
+applied — Pablo decides. Frame: webcam only, eye level; a card with the beat names and the
+numbers of beat 2 in hand; two takes at most. Recording setup: [README.md](README.md).
 
 | # | Beat | Starts | Length |
 |---|---|---|---|
@@ -95,6 +96,37 @@ hand; two takes at most. Recording setup: [README.md](README.md).
 > pablo@bevelion.com.
 
 ---
+
+## Review 2026-08-22 — `bmad-review` structure + prose, proposed, not applied
+
+Style guide: REQUIREMENTS §4. Reader: the evaluator, listening once. Pace on camera in a
+second language: plan for 130 wpm, not 150.
+
+| Pass | Original | Revised | Words |
+|---|---|---|---|
+| structure | Beat 1: "Bevelion began as an idea for freelancers drafted with Gemini and Grok; from September 2025 it was built with Roo Code and a local Qwen — those rules are still in the repository; Claude Code since July 2026; parallel agents since August 13th." | CONDENSE: "Bevelion began in January 2025 as an idea for freelancers; code since September 2025, with Claude Code since July 2026." The private repository cannot be opened by the viewer; the agent dates put the method at two weeks old, and the artifacts score fluency, not tenure. | −22 |
+| structure | Beat 1: "the Cryptobus and its podcasts, the CryptoVille festival" | CONDENSE: "a festival, a podcast" — the names carry nothing outside Liechtenstein. | −6 |
+| structure | Beat 0 "Since January 2025 I have been building Bevelion" vs beat 1 "from September 2025 it was built" | MERGE the dates: beat 0 "Since 2025 I have been building Bevelion…"; beat 1 carries January (the idea) and September (the code). | 0 |
+| structure | Beat 4: "Central European Time, Barcelona and Dresden: full overlap with a reviewer in Europe." | CONDENSE (beat 0 already places you): "Full overlap with a reviewer in Europe." | −6 |
+| structure | Beat 2: "since August 9th" | CUT the date; say the scope exactly as it is true — before every action, every commit, or every PR. | −3 |
+| structure | Beat 2, if a take runs long | The D26 sentence is the one to drop (−27). PRESERVE the four questions: the only process claim that also exists in Bevelion. | — |
+| structure | PRESERVE | "I started writing software in January 2025, when the models could." — the fact the evaluator will find anyway; said first, it is the stronger position. The 405 incident. "agents review agents, and I sign the decisions." "What that repository cannot give me is a reviewer…" | — |
+| prose | Beat 1: "Bevelion also taught me that timeouts are treacherous: … That is why this app has one timeout and derives everything else at read time." | "In Bevelion a ten-minute test timeout fired on every cold compile and read as failing tests. This app has one timeout and derives everything else at read time." ("taught me" is a lesson, "That is why" a coda — §4.) | −8 |
+| prose | Beat 1: "when the models could" | Consider: "when the models could write it"? The antecedent is two sentences back. | +2 |
+| prose | Beat 3: "build, explain in writing, get reviewed, ship" — two sentences after "I am the only human" | "build, explain in writing, ship — reviewed by agents, so far." | +3 |
+| prose | Beat 3: "23 pull requests" | Recount at recording (23 merged, #24 open on 2026-08-22). | 0 |
+| prose | Beat 1: the 405 incident | Consider adding the fix in one clause (≤ 10 words): ownership of the fix, not only of the finding. **Open item 1.** | +10 |
+| prose | Beat 1: "30 Rust crates" | The listing's stack is TypeScript. If Bevelion has a TypeScript or React front end, name it in four words; if not, leave it — this repository is the TypeScript evidence. **Open item 2.** | +4 |
+
+Net if all rows are accepted: ≈ −26 words (≈ 570, 4:23 at 130 wpm). The remaining pace
+lever is the D26 sentence.
+
+## Open items
+
+1. The one-clause fix for the 405 incident — what "completed" requires now.
+2. Does Bevelion have a TypeScript front end? The stack in four words, or nothing.
+3. The prompts used with the agent that drafted this text (prompt 57) go in `prompts/` —
+   R11, "every prompt you fed to any LLM". Entry 60, verbatim, with the tool named.
 
 ## Evidence map — claims the listing asks for, and where the proof is
 
