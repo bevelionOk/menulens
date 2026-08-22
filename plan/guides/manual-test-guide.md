@@ -68,7 +68,7 @@ the terminal state before the next).
 
 | # | Do | Expect | What it proves — the sentence for the script |
 |---|---|---|---|
-| 1 | Upload `la-parra.pdf` | `done`, 6 rows; the `18 $` row and `desde 6 €` row `uncertain` (T2/T3), the rest `reliable` with fired rules listed | "The flag is the product. A row is reliable only when *no* rule fired, and the rules are printed under the row." |
+| 1 | Upload `la-parra.pdf` | `done`, 6 rows: Tortilla and Croquetas `reliable` (allergens declared in prose); Ensalada `uncertain` (T2 `desde`), Pulpo `uncertain` (T3 `$`), Tabla de quesos and Postre `uncertain` (T1 inferred / none) | "The flag is the product. A row is reliable only when *no* rule fired, and the rules are printed under the row." |
 | 2 | Upload one of **your** menus | Rows; some `uncertain` | Show a real `uncertain` and read its reasons aloud — that is Ana's queue. Mention the ~9–12 s measured wait and that the timer is measured, not a progress bar. |
 | 3 | Paste a restaurant URL whose menu is images (e.g. `https://www.casalucio.es/carta/`) | `empty`, zero dishes | "It found the page, found no menu in the text, and said so instead of inventing one." Then upload a photo of the same page → rows. (B40: the screen should hint at this; it does not yet.) |
 | 4 | Paste `https://en.wikipedia.org/wiki/Paella` | `empty` | Same honesty on a page full of food words. |
