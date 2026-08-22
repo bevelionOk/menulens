@@ -48,7 +48,8 @@ re-bound the port. `docker compose up -d --force-recreate` fixed it. Not a READM
 an artefact of my own test setup on the same machine. Rule for me: scratch containers get a
 project name no folder of Pablo's will ever have.
 
-Two README defects found by the run, both fixed: the `.env` edit was prose between command
-blocks (#19), and the sample-menu step did not say where the file lands or how to find it
-in the upload dialog (this PR). The "what to try" paragraph — confirm, follow-up, check the
+Three README defects found by the run, all fixed the same day: the `.env` edit was prose
+between command blocks (#19); the sample-menu step did not say where the file lands or how
+to find it in the upload dialog (#20); and the clone line said `cd full-stack-challenge` —
+the local folder's name — when the repository is `menulens` (#21). The "what to try" paragraph — confirm, follow-up, check the
 list — went in with it, as agreed before the run.
