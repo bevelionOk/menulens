@@ -6,7 +6,7 @@ import {
   reviewRequestSchema,
   type SourceType,
 } from 'shared';
-import { type DishRowLike, isActive, toRunDetail } from '../core/run-state';
+import { isActive, toRunDetail, toRunSummary } from '../core/run-state';
 import { db } from '../db/client';
 import {
   applyReviews,
@@ -36,14 +36,6 @@ const ACCEPTED_TYPES = new Map<string, SourceType>([
 // and sent as `image/jpeg` passes by design: no magic-byte sniffing (spec Ask-First).
 const HEIC_NAME = /\.(heic|heif)$/i;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-
-// `toRunDetail` counts `dish_count` and `review_progress` off a dish array; the list has
-// the two numbers, not the rows. Feeding it an array of that shape keeps the list and the
-// detail on one derivation instead of two that can drift (AD-5, 2.1 AC4).
-const countShaped = (total: number, resolved: number): DishRowLike[] =>
-  Array.from({ length: total }, (_, i) => ({
-    review_status: i < resolved ? ('confirmed' as const) : ('pending' as const),
-  }));
 
 const unsupportedFile = (message?: string) =>
   new ApiError(
@@ -119,15 +111,9 @@ export const runsRoutes: FastifyPluginAsync<RunsRoutesOptions> = async (app, { e
     const now = new Date();
     const rows = await listRunsWithCounts();
     return {
-      runs: rows.map(({ dish_count, resolved_count, ...run }) => {
-        const { dishes: _dishes, ...summary } = toRunDetail(
-          run,
-          countShaped(dish_count, resolved_count),
-          now,
-          env.RUN_STALE_AFTER_MS,
-        );
-        return summary;
-      }),
+      runs: rows.map(({ dish_count, resolved_count, ...run }) =>
+        toRunSummary(run, { total: dish_count, resolved: resolved_count }, now, env.RUN_STALE_AFTER_MS),
+      ),
     };
   });
 

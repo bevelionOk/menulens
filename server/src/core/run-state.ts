@@ -1,4 +1,4 @@
-import type { RunDetail, RunState, RunStatus } from 'shared';
+import type { RunDetail, RunState, RunStatus, RunSummary } from 'shared';
 
 // Pure run-state derivation (AD-5, AD-10): `active` / `interrupted` come from
 // `status` + `stage_changed_at` + the staleness threshold — no stored column, no
@@ -37,25 +37,44 @@ export interface DishRowLike {
   review_status: RunDetail['dishes'][number]['review_status'];
 }
 
-// `RunDetail`-shaped, with `Date` where the wire has ISO strings; Fastify serializes.
+// The two numbers the summary is made of. The list reads them straight from a grouped
+// SQL count; the detail counts them off the rows it already has.
+export interface ReviewCounts {
+  total: number;
+  resolved: number;
+}
+
+export function countReviews(dishes: DishRowLike[]): ReviewCounts {
+  return { total: dishes.length, resolved: dishes.filter((d) => d.review_status !== 'pending').length };
+}
+
+// The wire shape with `Date` where the serialized form has ISO strings; Fastify serializes.
+type WithDates<T> = Omit<T, 'created_at' | 'stage_changed_at'> & { created_at: Date; stage_changed_at: Date };
+
+// The one derivation (AD-5, 2.1 AC4): `state`, `dish_count` and `review_progress` from a
+// run row plus two counts — never a stored column. Counts are the input because that is the
+// smaller of the two things a caller can have: the list has only counts, the detail has rows
+// and can produce counts, so both reach the same rule instead of two that can drift.
+export function toRunSummary(
+  run: RunRowLike,
+  counts: ReviewCounts,
+  now: Date,
+  staleAfterMs: number,
+): WithDates<RunSummary> {
+  return {
+    ...run,
+    state: deriveState(run, now, staleAfterMs),
+    dish_count: counts.total,
+    review_progress: { resolved: counts.resolved, total: counts.total },
+  };
+}
+
+// The detail is the summary plus the rows it counted.
 export function toRunDetail<D extends DishRowLike>(
   run: RunRowLike,
   dishes: D[],
   now: Date,
   staleAfterMs: number,
-): Omit<RunDetail, 'created_at' | 'stage_changed_at' | 'dishes'> & {
-  created_at: Date;
-  stage_changed_at: Date;
-  dishes: D[];
-} {
-  return {
-    ...run,
-    state: deriveState(run, now, staleAfterMs),
-    dish_count: dishes.length,
-    review_progress: {
-      resolved: dishes.filter((d) => d.review_status !== 'pending').length,
-      total: dishes.length,
-    },
-    dishes,
-  };
+): WithDates<Omit<RunDetail, 'dishes'>> & { dishes: D[] } {
+  return { ...toRunSummary(run, countReviews(dishes), now, staleAfterMs), dishes };
 }
