@@ -56,6 +56,17 @@ The brief: *"Effort is your call. We want to see judgment, not hours."* We will 
 - Custom design system — stock shadcn/ui components
 - Speculative features (menu editing, i18n, exports, …) unless the PRD justifies them
 
+**Writing rule (2026-08-23), for every document a reviewer reads — README, DECISIONS, prompt
+outcomes, BUSINESS.md, video scripts:**
+
+- A statement of fact carries no justifying coda ("because…", "— which is…", "rather than…").
+  If the reason matters, it lives in DECISIONS.md under its number.
+- No management vocabulary: thesis, judgment, honest/honesty, ritual, first-class, "the point".
+  "Deliverable" only when quoting the brief.
+- Nothing addressed to the evaluator in the second person.
+- Process is shown with artifacts and dates, not described with adjectives.
+- Lessons: at most one sentence, only in DECISIONS.md.
+
 **Guard question before every execution:** *does this map to a line in §1–§2 or a rubric row in §6? If not — cut it and log the cut in DECISIONS.md.*
 
 ## 5. Alignment signals (not required, but scored or cheap wins — from JOB.md)
