@@ -3,6 +3,11 @@
 **Goal**: both required videos recorded, uploaded, and linked. The personal video is an
 **auto-reject if missing** — this phase cannot slip past Aug 24.
 
+**Scripts (2026-08-22):** [video-scripts/walkthrough.md](video-scripts/walkthrough.md),
+[video-scripts/personal.md](video-scripts/personal.md); recording setup, seeded runs and the
+after-recording checklist in [video-scripts/README.md](video-scripts/README.md). The segment
+list below is the outline those scripts were written from.
+
 ## Setup (once, ~15 min)
 
 | Task | Owner |
