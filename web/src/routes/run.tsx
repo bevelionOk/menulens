@@ -31,6 +31,8 @@ const POLL_MS: Partial<Record<RunState, number>> = {
   interrupted: 15000,
 }
 
+const KNOWN_STATES: string[] = ['processing', 'interrupted', 'failed', 'empty', 'done'];
+
 export function RunPage() {
   const { id = '' } = useParams()
   const navigate = useNavigate()
@@ -146,6 +148,20 @@ export function RunPage() {
           <AlertTitle>{EMPTY_COPY.title}</AlertTitle>
           <AlertDescription>
             {EMPTY_COPY.detail}
+            {retryControl}
+          </AlertDescription>
+        </Alert>
+      )}
+
+      {/* FG6: a state this bundle does not know must not render a header over nothing.
+          The server's enum is closed and shared, so this only fires on a stale bundle —
+          which is exactly when a silent blank page would be hardest to diagnose. */}
+      {!KNOWN_STATES.includes(run.state) && (
+        <Alert>
+          <AlertTitle>This run is in a state this page does not recognise</AlertTitle>
+          <AlertDescription>
+            The server reports <code>{run.state}</code>. Reload the page — if it persists, the
+            app is older than the server.
             {retryControl}
           </AlertDescription>
         </Alert>

@@ -2,7 +2,7 @@
 title: 'M1 — Submit, Watch, Review (stories 1.7 + 2.1 + 2.2, history folded)'
 type: 'feature'
 created: '2026-08-22'
-status: 'in-progress'
+status: 'done'
 review_loop_iteration: 0
 baseline_commit: '0a94f317d4b961fa507997dfe5e4a87947683e07'
 context:
@@ -82,14 +82,14 @@ context:
 ## Tasks & Acceptance
 
 **Execution:**
-- [ ] `server/src/db/runs-repo.ts` -- `listRunsWithCounts()`: `listRuns()` plus a grouped dish aggregate (`count(*)`, `count(*) filter (where review_status <> 'pending')`) keyed by `run_id`; and `applyReviews(tx, runId, decisions)` writing only `review_status` / `followup_note` / `reviewed_at`, returning the number of rows matched so an unknown `dish_id` can fail the transaction.
-- [ ] `server/src/routes/runs.ts` -- `GET /api/runs` → `{ runs: [...] }` newest first, each row through the same derivation as the detail route. `POST /api/runs/:id/reviews` → parse with `reviewRequestSchema`, 404 on unknown run, one transaction, 4xx envelope + full rollback if any `dish_id` misses; returns the updated `RunDetail`.
-- [ ] `web/package.json` -- add `@tanstack/react-query` and `react-router`. Nothing else.
-- [ ] `web/src/main.tsx`, `web/src/App.tsx` -- `QueryClientProvider` + router with `/` and `/runs/:id`.
-- [ ] `web/src/lib/api.ts` -- one typed client: `createRun`, `getRun`, `listRuns`, `postReviews`; parses the error envelope and throws a typed error carrying `code` + `message`.
-- [ ] `web/src/routes/submit.tsx` -- URL field with inline validation (E1), file input with the accept list, submit disabled while any run is active (mirrors 409), and the recent-runs list (date, source, state, dish count, "N of M resolved", deep-link, retry on failed/interrupted, "no extractions yet" empty state).
-- [ ] `web/src/routes/run.tsx` -- polling via `refetchInterval` while active; stage copy + measured elapsed timer; one branch per terminal state (E2/E3/E7/E8/E9) with actionable copy and retry; and the review table with per-row confirm / mark-for-follow-up.
-- [ ] `web/src/components/` -- the shadcn components actually used (button, input, table, badge, card, alert-ish) and the small presentational pieces: allergen badge (provenance-aware, dish-level unknown), flag badge ("auto-checked" / "needs review"), reasons list, disclaimer.
+- [x] `server/src/db/runs-repo.ts` -- `listRunsWithCounts()`: `listRuns()` plus a grouped dish aggregate (`count(*)`, `count(*) filter (where review_status <> 'pending')`) keyed by `run_id`; and `applyReviews(tx, runId, decisions)` writing only `review_status` / `followup_note` / `reviewed_at`, returning the number of rows matched so an unknown `dish_id` can fail the transaction.
+- [x] `server/src/routes/runs.ts` -- `GET /api/runs` → `{ runs: [...] }` newest first, each row through the same derivation as the detail route. `POST /api/runs/:id/reviews` → parse with `reviewRequestSchema`, 404 on unknown run, one transaction, 4xx envelope + full rollback if any `dish_id` misses; returns the updated `RunDetail`.
+- [x] `web/package.json` -- add `@tanstack/react-query` and `react-router`. Nothing else.
+- [x] `web/src/main.tsx`, `web/src/App.tsx` -- `QueryClientProvider` + router with `/` and `/runs/:id`.
+- [x] `web/src/lib/api.ts` -- one typed client: `createRun`, `getRun`, `listRuns`, `postReviews`; parses the error envelope and throws a typed error carrying `code` + `message`.
+- [x] `web/src/routes/submit.tsx` -- URL field with inline validation (E1), file input with the accept list, submit disabled while any run is active (mirrors 409), and the recent-runs list (date, source, state, dish count, "N of M resolved", deep-link, retry on failed/interrupted, "no extractions yet" empty state).
+- [x] `web/src/routes/run.tsx` -- polling via `refetchInterval` while active; stage copy + measured elapsed timer; one branch per terminal state (E2/E3/E7/E8/E9) with actionable copy and retry; and the review table with per-row confirm / mark-for-follow-up.
+- [x] `web/src/components/` -- the shadcn components actually used (button, input, table, badge, card, alert-ish) and the small presentational pieces: allergen badge (provenance-aware, dish-level unknown), flag badge ("auto-checked" / "needs review"), reasons list, disclaimer.
 
 **Acceptance Criteria:**
 - Given `/` with no runs, then "no extractions yet" shows with a pointer to the form; given prior runs, they list newest first with state, dish count and "N of M resolved", each deep-linking to `/runs/:id` (3.1 AC1–AC3).
@@ -114,6 +114,58 @@ context:
 - **Server lane** — the first two tasks: `server/src/db/runs-repo.ts` and `server/src/routes/runs.ts`. Touches nothing under `web/`.
 - **Web lane** — every remaining task: `web/package.json`, `web/src/**`. Touches nothing under `server/` or `shared/`. It codes against the contract in `shared/src/api.ts` and `shared/src/run.ts`, which already describe both new endpoints exactly, so it never waits for the server lane.
 
+**Post-review amendments (3 layers, ~50 raw findings → 30 unique: 14 patched / 9 deferred / 7 rejected):** the review write path took four: a `confirm` carrying a note used to persist it (and to leave a stale note behind on a row that already had one), so a "confirmed" badge could sit above follow-up text; `decisions: []` opened a transaction, matched 0 of 0, logged `reviews applied` and returned 200 — a no-op reported as a review, with a lying log line; the batch and the note were both unbounded on an unauthenticated POST (now 200 decisions and 2000 characters, the caps exported so the error copy names the real numbers); and `countShaped` fabricated an array of fake dish rows per run on every 2-second poll, labelling every resolved row `confirmed` even when it was `followup` — replaced by a real count-based `toRunSummary`, so list and detail now share one derivation instead of sharing it by accident. On the web: an unreadable 2xx threw a raw `SyntaxError` past the `ApiClientError` narrowing and left the form silently re-enabled — the exact dead end FG6 forbids; `interrupted` was treated as terminal though the server explicitly lets a stale run finish, so a completed run showed "interrupted" until a manual reload; `INTERRUPTED_COPY` claimed "Nothing partial was saved", which the server cannot back; and a state the bundle does not know rendered a header over an empty page. Plus label fallbacks, indexed allergen keys, honest copy for an uncertain row with no recorded reasons, a trimmed `price_raw` test, pending labels on both submit buttons, a 10 MB client-side check that no longer streams the file to earn a knowable 413, and the note textarea capped to match the schema. Deferred (9), two of them story 1.8's: the golden-master must also pin the list derivation and the review write path — deleting `eq(dishes.run_id, runId)` lets a verdict be written across run boundaries with `matched` still equal to the batch size, and nothing the test was specified to assert would see it. Rejected under the guard: pagination (Ask-First; B19), a single-transaction list read (B20), a `status !== 'done'` guard (dishes do not exist until the saving transaction commits), response-schema validation, auth and rate limiting (B24), an undo affordance (D24 cut it), filters and sorting over the table.
+
+**Deviation from an acceptance criterion, recorded rather than argued away:** the Boundaries say "two new web dependencies only" and the final acceptance criterion says `web/package.json` has exactly two added dependencies. It has three entries — `@tanstack/react-query`, `react-router`, and `shared`. The third is the sibling workspace whose imports are all `import type` and are erased at build; `server/package.json` has always declared it the same way, and leaving it undeclared meant resolving through the workspaces root symlink alone. The cap was meant to bound third-party surface, and it holds. The letter of the AC does not, so it is written here instead of quietly satisfied.
+
+**Measured:** 1,692 lines across 24 files. A real run through the UI on `gpt-5.6-luna`: 11 dishes, honest stages with a measured timer, 6 `reliable` / 5 `uncertain`. Confirming rows from the browser left the md5 over every extracted column byte-identical — the same hash measured before the first review write, unchanged across every write since. A forged batch (one valid decision, one unknown `dish_id`) returned 400 and applied **neither**.
+
+## Suggested Review Order
+
+**The two new routes (2.1)**
+
+- One derivation for list and detail — a count-based summary, no fabricated rows.
+  [`run-state.ts`](../../server/src/core/run-state.ts)
+  [`runs.ts`](../../server/src/routes/runs.ts)
+
+- The batch verdict: one transaction, and a matched-count mismatch rolls back everything.
+  [`runs-repo.ts`](../../server/src/db/runs-repo.ts)
+
+- Only review columns are ever in the `set`, and `confirm` never carries a note.
+  [`runs-repo.ts`](../../server/src/db/runs-repo.ts)
+
+**Honest waiting (1.7)**
+
+- Polling is a function of server state, not a timer the component has to remember to stop — and `interrupted` keeps polling, because the server lets a stale run finish.
+  [`run.tsx`](../../web/src/routes/run.tsx)
+
+- Every user-facing string in one auditable file: stages, failures, the empty state, the measured expectation.
+  [`copy.ts`](../../web/src/lib/copy.ts)
+
+- No response is unreadable and no error is silent — including a state this bundle does not know.
+  [`api.ts`](../../web/src/lib/api.ts)
+  [`run.tsx`](../../web/src/routes/run.tsx)
+
+**The review screen (2.2)**
+
+- "auto-checked" / "needs review", never "safe"; provenance on every allergen badge; dish-level unknown rendered distinctly.
+  [`review-table.tsx`](../../web/src/components/review-table.tsx)
+  [`allergen-badges.tsx`](../../web/src/components/allergen-badges.tsx)
+
+- The fired rules, inline, with their recorded detail — and honest copy when an uncertain row has none.
+  [`reasons-list.tsx`](../../web/src/components/reasons-list.tsx)
+
+**History, folded into `/` (3.1)**
+
+- Recent runs with derived state, counts and progress; retry; and the submit lock that mirrors the server's 409.
+  [`submit.tsx`](../../web/src/routes/submit.tsx)
+
+**Peripherals**
+
+- Nine deferrals (two are what 1.8's golden must additionally pin) and production rows B19–B27.
+  [`deferred-work.md`](deferred-work.md)
+  [`production-breaks.md`](../../plan/production-breaks.md)
+
 ## Verification
 
 **Commands:**
@@ -123,4 +175,4 @@ context:
 - Confirm one row and follow-up another with a note; `psql`: `select review_status, followup_note, reviewed_at from dishes where run_id=…` -- expected: only those three columns changed; `GET /api/runs` shows "2 of 11 resolved".
 - `curl` a review batch with one bogus `dish_id` -- expected: 4xx envelope, and `select count(*) from dishes where review_status <> 'pending'` unchanged.
 - Reproduce E1/E4/E5/E2/E3/E7/E8/E9 -- expected: each renders its own copy; `empty` is not styled as a failure.
-- `grep -rniE "spinner|progress-?bar|eta|%" web/src` -- expected: no dishonest progress affordance.
+- `grep -rnE "(<Spinner|animate-spin|role=\"progressbar\"|<Progress|estimated|remaining|ETA )" web/src` -- expected: no matches. (The original form of this check — `spinner|progress-?bar|eta|%` — was written before the UI existed and now returns ~20 false positives: Tailwind column widths like `w-[32%]`, the substring "eta" inside `detail`/`RunDetail`, and `oklch` alpha values. A check that cannot separate a violation from noise is not a check.)
