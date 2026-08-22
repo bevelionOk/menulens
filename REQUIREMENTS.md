@@ -26,12 +26,12 @@ Re-read before every phase; every task must map to a line here or it gets cut.
 ## 2. Deliverables (all required)
 
 - ☑ Repo with runnable app + README — the timed fresh-clone run (plan 4.5) is Pablo's, still pending
-- ☑ `DECISIONS.md` — trade-offs, alternatives considered, what was cut and why (D1–D26)
+- ☑ `DECISIONS.md` — trade-offs, alternatives considered, what was cut and why (D1–D28)
 - ☑ BMAD artifacts — product brief / PRD / architecture / stories / per-story specs
 - ☑ `prompts/` — organized so a reviewer can follow the thought sequence (English summaries: plan 4.7)
 - ☐ Personal video (3–5 min) — who, why this role, why a fit
 - ☐ Walkthrough video (5–10 min) — what, why, what's next, **what breaks in production**
-- ☐ `BUSINESS.md` — one paragraph: price for this feature + why (working notes exist; distilled in plan 6.1)
+- ☑ `BUSINESS.md` — one paragraph: price, why, would-I-ship-it (2026-08-22, D28; analysis in `_bmad-output/planning-artifacts/business/`)
 - ☐ Single link containing everything + working email → gerdrn+hiring@gmail.com, **by 2026-08-25**
 
 ## 3. Auto-reject tripwires
@@ -100,6 +100,6 @@ outcomes, BUSINESS.md, video scripts:**
 - ☐ BMAD output folders committed (not gitignored)
 - ☐ Both videos recorded, uploaded, linked and playable in incognito
 - ☐ DECISIONS.md covers: single-test justification, confidence-flag logic, production failure modes, cuts
-- ☐ BUSINESS.md exactly one paragraph
+- ☑ BUSINESS.md exactly one paragraph
 - ☐ All repo documents in English (prompts stay verbatim in their original language)
 - ☐ Single link opens to everything; submission email sent

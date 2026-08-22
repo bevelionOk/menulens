@@ -508,3 +508,34 @@ sample menu `done`. The first attempt was thrown away at six minutes because a t
 container of mine from that morning had the clone's project name. Two README lines were
 wrong and got fixed the same hour: the `.env` edit was not a command, and the sample file's
 location was not stated.
+
+## Session 15 · 2026-08-22 — The business note, with Mary
+
+**64. Six `reliable` rows that the rule should have refused** `[BREAKS]` `[WHY]`
+The Vox PDF, run again on luna the afternoon after it gave 0 of 34: 6 of 34 `reliable`.
+Every one a `declared` allergen whose quote is an ingredient word — `Lobster tail`,
+`hazelnut`, `Mozzarella di Bufala` — on a menu whose only allergen line says to ask the
+staff. T6 checks that the quote exists in the text; it does. Registered as B45; the fix is
+one rule in `core/`: a declaration needs a declaration marker.
+
+**65. Terra: nine times the price, twelve rows** `[JUDGMENT]`
+Same four menus on `gpt-5.6-terra`: 34 of 34 `inferred` on Vox (correct), one declared
+line read that luna missed, and the six-dish fixture returned as twelve rows — each dish
+plus a `½ ración` twin priced `null`, all twelve self-flagged. $0.061 against $0.0069. D3
+closed on luna; the provenance rule goes in the arbiter, where it holds for any model.
+
+**66. One question, three answers** `[JUDGMENT]` `[NEXT]`
+Would I ship it: as Ana's internal tool, yes after three fixes in hours (B45, B10, B14);
+as a paid feature, after two to three weeks and a measured review time; as unreviewed
+automation, never. €2 per menu with an input cap, the platform as the customer, margin
+above 99%, value unproven on real menus (38 of 38 rows to review). The paragraph in
+BUSINESS.md says all of it in one breath.
+
+**67. "You had the hours"** `[JUDGMENT]` `[BREAKS]`
+The elicitation pass on the business note, from the evaluator's seat: the strongest attack
+on "three fixes measured in hours, not made" had no written answer. Now it does (D28 §6):
+the brief scores the explanation, the deadline is two days out, the one test does not cover
+the visual path, the fixes are first under *Next*. Two more things the pass found: the UI
+copy says 9–12 seconds and the Vox menu takes 25 (B25 — do not time it on camera), and the
+B45 run lived only in a scratch database — its payloads are now committed next to the
+analysis, which is what the video shows instead of a live repeat.
