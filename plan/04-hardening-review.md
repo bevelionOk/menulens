@@ -13,5 +13,17 @@
 | 4.6 | Secret scan over working tree + full git history | Claude | Must be empty by construction (D-gitignore), verify anyway |
 | 4.7 | Prompt-log audit: sequence readable start to finish; outcomes filled in; optional English summaries if we judge they help the reviewer | Both | Reviewer-eye pass |
 
+## Status — 2026-08-22
+
+| # | Status |
+|---|---|
+| 4.1 | **Done** — three parallel reviewers (correctness / security / stack), 29 findings → 19 deduplicated → 4 fixed, 14 registered (B28–B41). Method and results in D27; prompts in `prompts/07-hardening/` |
+| 4.2 | **Done** — commit `466dc29`; the one test and typecheck green |
+| 4.3 | **Done** — 18 inputs, results table in D27; the generator for the hostile set is in the manual-test guide |
+| 4.4 | **Done** — D27 "Production failure modes" |
+| 4.5 | **Owed to Pablo** — run the guide, unaided, with a stopwatch |
+| 4.6 | **Done** — clean; D27 |
+| 4.7 | **Done** — 64 English summaries added; "optional" became mandatory |
+
 **Exit criteria**: review findings closed or consciously deferred (documented);
 README fresh-clone test passes; failure-modes list written; repo clean.

@@ -16,6 +16,7 @@ Prompts are grouped by phase so a reviewer can follow the thought sequence:
 | `04-bmad-epics-stories/` | BMAD epic & story breakdown |
 | `05-bmad-sprint-planning/` | BMAD readiness gate + sprint tracking |
 | `06-implementation/` | Dev prompts (backend, frontend, LLM extraction) — code review and scope decisions are logged here too, in sequence |
+| `07-hardening/` | Phase 4: whole-repo adversarial review (the one multi-agent pass, D2), hostile-input sweep, failure-modes write-up, prompt-log audit |
 | `runtime/` | Versioned runtime prompts the server loads at boot (e.g. `extraction-v1.md`) — not session prompts |
 
 ## File format
