@@ -11,6 +11,8 @@ export type AppDeps = { extract: ExtractFn };
 // `index.ts` passes the real adapter, the golden-master passes a mock. This module never
 // imports `openai` or the adapter, so the test path loads no SDK.
 export function buildApp(deps: AppDeps) {
+  // Structured logging is Fastify's built-in Pino instance: every stage transition, every
+  // triaged dish and every model call is one JSON line (NFR5).
   const app = fastify({ logger: true });
 
   // FR2 cap: 10 MB, one file per run. Exceeding it surfaces as FST_REQ_FILE_TOO_LARGE.

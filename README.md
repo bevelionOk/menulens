@@ -49,6 +49,82 @@ proxies `/api` to the server). Open the UI and paste a menu URL.
 `.env` and change the proxy target in `web/vite.config.ts` to the same port — Vite does not
 read `.env`.
 
+## What's built, what I cut, and why
+
+I wrote a full PRD — 36 requirements, 84 acceptance criteria — before writing code, because
+that is what BMAD is for and because deciding on paper is cheaper than deciding in
+TypeScript. Then I built six stories and measured what they cost: two of them produced more
+lines of specification than of code. On 22 August I stopped and cut.
+
+| Area | Status |
+|---|---|
+| Run lifecycle, persistence, honest failure states | **Shipped** |
+| Source acquisition — URL fetch with an SSRF guard, PDF text layer, `text`/`visual` class decision | **Shipped** |
+| Extraction — one model call behind a seam, one retry, one timeout | **Shipped** |
+| The triage arbiter — six rules, evidence verification, persisted match offsets | **Shipped** |
+| Submit, watch, review — the UI and the review endpoint | **In flight (M1)** |
+| Recent runs on the submit page | **In flight (M1)** |
+| The one automated test + CI | **In flight** |
+| Batch review, reopen, per-row notes (story 2.3) | **Cut — D24** |
+| The evidence panel with source-vs-extraction highlighting (story 2.4) | **Cut — D24** |
+
+Of the 84 acceptance criteria: **44 shipped, 11 deleted in writing on 22 August, the rest is
+M1 and the one test.** The decision lives in [`DECISIONS.md`](DECISIONS.md) as **D24**.
+
+### Why there are more requirements than features
+
+Stories 2.3 and 2.4 are deleted, not deferred-in-spirit: FR20, FR23, FR26 and FR27's reopen
+affordance will not exist in this submission. The PRD still contains them, annotated as cut,
+because deleting the requirement would hide the decision — and the decision is the part worth
+reading. I would rather show you a requirement I chose not to build than pretend I never
+wanted it.
+
+The correction is dated in the repo, not reconstructed after the fact. My own adversarial
+review flagged the requirement mass as HIGH severity on 21 August
+(`_bmad-output/planning-artifacts/review-overengineering.md`). D19 answered it weakly — a
+priority ladder that let scope be cut later, which is a plan to decide rather than a
+decision. D24 exercised that ladder a day later, before the deadline forced it: eleven
+acceptance criteria deleted, three stories merged into one, and the remaining test surface
+capped at exactly one test.
+
+### What I would build next, in order
+
+1. The rest of M1 — the review actions are the product's thesis: the app's job is to hand a
+   human a shorter, honest list, and her verdict is the deliverable.
+2. The evidence panel. Cheap now: story 1.6 already persists the character offsets of every
+   verified quote, so highlighting the source needs no re-matching.
+3. The items in `_bmad-output/implementation-artifacts/deferred-work.md`, in that file's order.
+
+## What breaks in production
+
+The full register is [`plan/production-breaks.md`](plan/production-breaks.md) — 18 named
+failure modes collected story by story, each with why it was accepted or what the first fix
+would be. The ones I would fix first:
+
+- **DNS rebinding (B2).** The SSRF guard validates the resolved address, then Node's `fetch`
+  resolves again — a hostile host can answer with a private IP on the second lookup. The fix
+  is a pinned-address dispatcher.
+- **No retry on a transient 429 (B6).** "One retry, one timeout" is kept literal, so a rate
+  limit fails the run and a human has to resubmit.
+- **Visual sources cannot be machine-verified (B10).** With no ground text, an evidence quote
+  passes through unverified — the flag is only as honest as the human's visual check.
+- **`"1.250 €"` parses as 1.25 (B14).** A single separator is read as a decimal. The honest
+  fix is to refuse the value and flag the row, not to guess.
+
+## How to read this repo
+
+If you have ten minutes: [`DECISIONS.md`](DECISIONS.md) (D4, D19, D24),
+`_bmad-output/planning-artifacts/prd.md`, and `prompts/06-implementation/`.
+
+| Path | What it is |
+|---|---|
+| `docs/challenge/` | The brief, pinned verbatim, and how I read it (`INTERPRETATION.md`). |
+| `_bmad-output/planning-artifacts/` | PRD, architecture spine, epics — and the adversarial reviews that attacked each of them. |
+| `_bmad-output/implementation-artifacts/` | One spec per story, plus the deferred-work register. |
+| `prompts/` | Every prompt I wrote, verbatim, in order — plus the runtime extraction prompt. |
+| `plan/` | How I ran the five days. Working notes, not a deliverable. |
+| `.claude/skills/` | Vendored BMAD v6.11.0, so the toolchain is reproducible. Not my code. |
+
 ## Configuration
 
 Every variable except the first two is optional and documented in `.env.example`:
@@ -80,6 +156,9 @@ POST /api/runs ──▶ fetching_source ──▶ extracting ──▶ validati
   currency, T4 dish name not traceable in the source, T5 the model's own self-flag, T6 an
   evidence quote that does not verify against the source text. Every fired rule is persisted
   with a human-readable reason.
+- **Structured logs.** Fastify's built-in Pino instance: every stage transition, every
+  triaged dish (rule ids only, never dish names or quoted text) and every model call with its
+  token usage is one JSON line.
 - **Nothing derived is stored.** `interrupted`, review progress and done-ness are computed at
   read time from timestamps and rows.
 
