@@ -21,8 +21,14 @@ git clone <repo-url> && cd full-stack-challenge
 cp .env.example .env
 ```
 
-Put your key in `.env` (`OPENAI_API_KEY=sk-…`). The default `DATABASE_URL` already matches
-the bundled `docker-compose.yml`; everything else has a working default.
+```bash
+nano .env
+```
+
+Replace `sk-...` on the first line with your OpenAI key, then save (`Ctrl-O`, `Enter`,
+`Ctrl-X`). Any editor works — `open -e .env` on macOS, `code .env` with VS Code. Leave the
+rest: `DATABASE_URL` already matches the bundled `docker-compose.yml`, and everything else
+has a working default.
 
 ```bash
 docker compose up -d --wait
