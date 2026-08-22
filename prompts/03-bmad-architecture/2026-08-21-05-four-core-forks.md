@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD — architecture
+- **In English**: Selects the recommended option on four forks: pure core with IO at the edges, a unit test of the T1-T6 arbiter (later superseded), Postgres bytea for source artifacts, and jsonb on the dish row.
 
 ## Prompt (selections, verbatim options chosen)
 

@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD analysis — product brief (discovery)
+- **In English**: Answers three questions: retracts the under-one-minute target in favour of a realistic 3 minutes, arguing the real issue is where Ana focuses (the UNCERTAIN rows) and the precision of that split; asks to invoke `/bmad-advanced-elicitation` for modern, effective options on points 2 and 3 before taking definitions.
 
 ## Prompt (verbatim)
 

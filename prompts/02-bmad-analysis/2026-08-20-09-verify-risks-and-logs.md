@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD analysis — product brief (verification)
+- **In English**: Before reviewing the draft, asks to verify it against plan/RISKS.md (any violations or everything mitigated) and check whether BUSINESS.md, DECISIONS.md and REQUIREMENTS.md are up to date, while Pablo reads.
 
 ## Prompt (verbatim)
 

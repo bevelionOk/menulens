@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD analysis — product brief (drafting)
+- **In English**: Confirms the revised core and gives the go-ahead to proceed.
 
 ## Prompt (verbatim)
 

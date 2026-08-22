@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD — epics & stories (elicitation pass)
+- **In English**: Approves and asks to apply all eight fixes.
 
 ## Prompt (verbatim)
 

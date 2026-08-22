@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD — epics & stories (session close)
+- **In English**: Closes the session and asks to remove the worktree.
 
 ## Prompt (verbatim)
 

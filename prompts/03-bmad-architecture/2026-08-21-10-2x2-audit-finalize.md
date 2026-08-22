@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD — architecture
+- **In English**: Asks the four coverage questions, then whether playbooks and documentation are updated, requirements 100% met, and risks mitigated (especially over-engineering and reviewer penalties); after answering, proceed with Finalize.
 
 ## Prompt (verbatim)
 

@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD — epics & stories (step 2 → 3)
+- **In English**: Rule: compress the stories only if there is no risk of losing the tags for a dev agent; otherwise keep the original and remove redundancies. The advanced-elicitation pass is reserved for when the set is complete.
 
 ## Prompt (verbatim)
 

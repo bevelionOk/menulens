@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD analysis — post-brief upkeep
+- **In English**: Adds a forgotten requirement: as each section progresses, highlight what matters for the video script. Asks for a review of the whole conversation focused on the brief and its findings, and to create the video-script highlights for this section before closing; each later section will update the script accordingly.
 
 ## Prompt (verbatim)
 

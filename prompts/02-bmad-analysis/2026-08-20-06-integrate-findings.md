@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD analysis — product brief (elicitation)
+- **In English**: Before accepting, asks to relate all the method answers together and derive suggestions from the whole, since the product is integral and should not be handled as separate points; asks for another pass.
 
 ## Prompt (verbatim)
 

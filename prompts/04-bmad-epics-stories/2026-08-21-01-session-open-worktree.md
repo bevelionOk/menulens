@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD — epics & stories (session open)
+- **In English**: Invokes `/bmad-create-epics-and-stories` in a new dedicated worktree, asking to take into account everything worked on so far.
 
 ## Prompt (verbatim)
 

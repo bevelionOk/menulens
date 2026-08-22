@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD — epics & stories (step 2 menu)
+- **In English**: With 13-14 stories, asks whether the set is out of scope or strictly necessary and whether any optimisation is possible without losing what was built; also asks whether using Party Mode (global view) and advanced elicitation for story creation would cost too much time and resources.
 
 ## Prompt (verbatim)
 

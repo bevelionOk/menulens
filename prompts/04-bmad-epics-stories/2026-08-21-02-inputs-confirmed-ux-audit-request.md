@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD — epics & stories (step 1)
+- **In English**: Confirms the inputs; bmad-ux was skipped on purpose because all UX decisions were taken in the PRD, and if any are missing they should be taken now with justification.
 
 ## Prompt (verbatim)
 

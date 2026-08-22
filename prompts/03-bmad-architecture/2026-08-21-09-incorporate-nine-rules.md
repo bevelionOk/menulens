@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD — architecture
+- **In English**: Agrees the seams needed adjusting so builds do not diverge, and asks to incorporate the nine rules (with the assistant's implicit PRD reading).
 
 ## Prompt (verbatim)
 

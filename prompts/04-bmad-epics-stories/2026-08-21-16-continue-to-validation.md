@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD — epics & stories (step 3 → 4)
+- **In English**: Selects menu option C to continue to validation.
 
 ## Prompt (verbatim)
 

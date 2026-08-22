@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD analysis — PRD
+- **In English**: Asks to incorporate the heartbeat point into the files, since it had been found inconvenient to use, unless the decisions or the relevant file say otherwise.
 
 ## Prompt (verbatim)
 

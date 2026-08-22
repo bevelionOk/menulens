@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD — epics & stories (elicitation pass close)
+- **In English**: Selects the exit option to close the elicitation pass.
 
 ## Prompt (verbatim)
 

@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD — epics & stories (step 3, Epic 2 review)
+- **In English**: Approves epic 2 with no comments.
 
 ## Prompt (verbatim)
 

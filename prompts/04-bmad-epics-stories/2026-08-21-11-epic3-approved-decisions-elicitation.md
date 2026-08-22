@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD — epics & stories (step 3 close)
+- **In English**: Approves epic 3, asks to add the key decisions to DECISIONS.md and then run the advanced-elicitation pass.
 
 ## Prompt (verbatim)
 

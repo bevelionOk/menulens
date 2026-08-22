@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD analysis — PRD
+- **In English**: Asks to run all five methods and then, as before, compare the results: what differs, what is similar, the bridge between them, and an integral solution without over-engineering that fits the scope; anything out of scope is to be discarded.
 
 ## Prompt (verbatim)
 

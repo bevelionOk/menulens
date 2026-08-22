@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD analysis — PRD
+- **In English**: Invokes `/bmad-prd` to start the PRD, asking to check the brief, the addendum and any other documents needed.
 
 ## Prompt (verbatim)
 

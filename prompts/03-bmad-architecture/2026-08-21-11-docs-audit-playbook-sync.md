@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD — architecture (post-close verification)
+- **In English**: Asks whether all documents were really updated, noting the video-script highlights were missed.
 
 ## Prompt (verbatim)
 

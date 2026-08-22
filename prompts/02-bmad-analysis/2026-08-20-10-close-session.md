@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD analysis — product brief (finalize)
+- **In English**: After reading the brief and addendum, asks whether D4 is resolved in the PRD, whether anything remains here, whether bmad-party-mode should be convened, and confirms ADRs belong to later stages; if all is fine, asks to complete and record everything pending and close.
 
 ## Prompt (verbatim)
 

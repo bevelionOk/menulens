@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD — epics & stories (step 2, approval)
+- **In English**: Decides that runs Ana has not yet processed must be shown separately, since merging them would confuse her and hurt the UX.
 
 ## Prompt (verbatim)
 

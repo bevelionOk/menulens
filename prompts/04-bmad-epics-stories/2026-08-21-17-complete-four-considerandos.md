@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD — epics & stories (session close)
+- **In English**: Confirms, and asks for the usual four verification questions (the considerations).
 
 ## Prompt (verbatim)
 

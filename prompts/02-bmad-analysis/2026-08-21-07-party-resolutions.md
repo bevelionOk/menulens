@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD analysis — PRD
+- **In English**: Resolves the party debate: reuse Pablo's pattern as consistent with the chosen line, and ratifies the assumption that platform and menus are in the language Ana speaks, as long as REQUIREMENTS and RISKS limits are respected and there is no over-engineering.
 
 ## Prompt (verbatim)
 

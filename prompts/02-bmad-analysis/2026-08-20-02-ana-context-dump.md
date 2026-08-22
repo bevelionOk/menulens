@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD analysis — product brief (discovery)
+- **In English**: Sets the context: Pablo will emulate Ana, an onboarding ops person at an ordering platform who transcribes menus by hand, with legal responsibility for allergens; menus take 15-30 minutes each and the current alternative is spreadsheet plus copy/paste. Out of scope: menu editing or publishing; only structured extraction and review.
 
 ## Prompt (verbatim)
 

@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD — architecture (`/bmad-architecture`)
+- **In English**: Invokes `/bmad-architecture` in a new worktree and asks to pick up everything done so far for this section.
 
 ## Prompt (verbatim)
 

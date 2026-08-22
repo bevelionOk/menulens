@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD analysis — PRD
+- **In English**: Approves the skeleton as faithful to brief and addendum, then answers three ingestion questions: accept file types with size limits for photos; reconsider timeouts (asks for a durable method so work is not lost, requesting the advanced-elicitation view); and Ana must see real progress with stage and an estimated time remaining, since a perceived hang hurts UX.
 
 ## Prompt (verbatim)
 

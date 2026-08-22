@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD analysis — product brief (validation before acceptance)
+- **In English**: Praises the review-loop idea and, before accepting, asks to re-check all challenge documents relevant to the brief against four questions: am I considering what I should, am I considering what I should not, am I missing what I should consider, am I missing what I should not consider.
 
 ## Prompt (verbatim)
 

@@ -3,6 +3,7 @@
 - **Tool**: Claude Code (desktop)
 - **Model**: Claude Fable 5
 - **Phase**: BMAD — architecture
+- **In English**: Selects Coaching mode for the architecture session and the spine as the only deliverable.
 
 ## Prompt (selections, verbatim options chosen)
 
