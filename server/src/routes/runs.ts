@@ -1,5 +1,11 @@
 import type { FastifyPluginAsync } from 'fastify';
-import { createRunUrlRequestSchema, reviewRequestSchema, type SourceType } from 'shared';
+import {
+  createRunUrlRequestSchema,
+  REVIEW_BATCH_MAX,
+  REVIEW_NOTE_MAX,
+  reviewRequestSchema,
+  type SourceType,
+} from 'shared';
 import { type DishRowLike, isActive, toRunDetail } from '../core/run-state';
 import { db } from '../db/client';
 import {
@@ -142,10 +148,13 @@ export const runsRoutes: FastifyPluginAsync<RunsRoutesOptions> = async (app, { e
     if (!UUID.test(id)) throw new ApiError(404, 'not_found', 'Run not found.');
     const parsed = reviewRequestSchema.safeParse(request.body);
     if (!parsed.success) {
+      // One message for every shape rejection, including the two bounds — an empty batch is
+      // a client bug, not a review, and must not come back as a 200 that changed nothing.
       throw new ApiError(
         400,
         'invalid_request',
-        'Body must be JSON `{ "decisions": [{ "dish_id": "<uuid>", "action": "confirm|followup|reopen", "note": null }] }`.',
+        'Body must be JSON `{ "decisions": [{ "dish_id": "<uuid>", "action": "confirm|followup|reopen", "note": null }] }` ' +
+          `with 1 to ${REVIEW_BATCH_MAX} decisions and a note of at most ${REVIEW_NOTE_MAX} characters.`,
       );
     }
     const { decisions } = parsed.data;
