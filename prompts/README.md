@@ -1,12 +1,11 @@
 # Prompt Log — Vibe-Coder Challenge
 
-Every prompt I gave the assistant during this challenge is recorded here, verbatim —
-typos, Spanish and all — in chronological order. This folder is a first-class deliverable
-per the challenge brief.
+Every prompt I gave the assistant during this challenge, verbatim — typos, Spanish and
+all — in chronological order.
 
 ## Organization
 
-Prompts are grouped by phase so a reviewer can follow the thought sequence:
+Grouped by phase:
 
 | Folder | Phase |
 |---|---|
@@ -15,8 +14,8 @@ Prompts are grouped by phase so a reviewer can follow the thought sequence:
 | `03-bmad-architecture/` | BMAD architecture spine |
 | `04-bmad-epics-stories/` | BMAD epic & story breakdown |
 | `05-bmad-sprint-planning/` | BMAD readiness gate + sprint tracking |
-| `06-implementation/` | Dev prompts (backend, frontend, LLM extraction) — code review and scope decisions are logged here too, in sequence |
-| `07-hardening/` | Phase 4: whole-repo adversarial review (the one multi-agent pass, D2), hostile-input sweep, failure-modes write-up, prompt-log audit |
+| `06-implementation/` | Dev prompts (backend, frontend, LLM extraction), code reviews and scope decisions, in sequence |
+| `07-hardening/` | Phase 4: whole-repo review (the one multi-agent pass, D2), hostile-input sweep, failure modes, prompt-log audit |
 | `runtime/` | Versioned runtime prompts the server loads at boot (e.g. `extraction-v1.md`) — not session prompts |
 
 ## File format
@@ -28,10 +27,5 @@ Each file is one prompt (or one tightly-coupled exchange), named
 - **Prompt**: the exact text sent, unedited
 - **Outcome**: short note on what the prompt produced and what was kept, changed, or discarded
 
-Prompts are logged as written — including typos and Spanish/English mixing — because
-the point is to show the real working process, not a polished afterthought.
-
-**Language convention**: all repo documents are English; prompts are preserved verbatim in
-the language they were actually written in (mostly Spanish — the author's native language).
-Each entry's metadata, intent and outcome notes are in English so a reviewer can follow
-the sequence without translating anything.
+**Language**: repo documents are English; prompts stay in the language they were written
+in (mostly Spanish). Each entry's metadata, `In English` line and outcome are in English.
