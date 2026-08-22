@@ -144,13 +144,25 @@ It is a golden-master over the whole path:
 npm test
 ```
 
+It needs no setup beyond the quick start above: `docker compose up -d --wait` creates a
+second, disposable database (`menu_extraction_test`) alongside the dev one, and the test
+applies the committed migrations to it itself. It **truncates every row** in the database it
+runs against, so it refuses to start against any database whose name does not end in
+`_test` — pointing it at your dev database fails with instructions rather than deleting your
+history.
+
 It builds the app with the model seam as its only mock, POSTs a fixture through the real
 HTTP surface, polls the run to completion against real Postgres, and compares the payload to
 one committed golden. The fixture is crafted so **every triage rule T1–T6 fires at least
 once and one row stays fully `reliable`** — and each rule is asserted by its id, so a
 regression fails saying *which* rule stopped firing rather than diffing a blob. The
 reasoning, and the list of behaviours that stay verified by hand instead, are in
-[`DECISIONS.md`](DECISIONS.md) as **D25**.
+[`DECISIONS.md`](DECISIONS.md) as **D25** — including the four blind spots this single test
+cannot see, named rather than left for you to find.
+
+CI runs it against a Postgres service container, and one step before it checks that the
+committed migrations actually produce the schema the code declares — a check, not a second
+test, argued in **D26**.
 
 ## Configuration
 

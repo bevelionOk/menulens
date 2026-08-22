@@ -628,46 +628,55 @@ therefore inside the line D25 draws. The rest stay out: each needs its own fixtu
 entry point, or an injected failure. Naming them is the point — a gate whose blind spots
 are written down is worth more than one whose owner believes it covers everything.
 
-## D26 · 2026-08-22 — A check is not a test: the schema/migration drift guard in CI
+## D26 · 2026-08-22 — A check is not a test: the migration/schema guard in CI
 
-**Context**: `server/drizzle/*.sql` is generated from `server/src/db/schema.ts` by hand.
-Nothing in CI executed either, so an edit to `schema.ts` without regenerating shipped with
-a green build and failed at the first runtime query. The obvious guard —
-`npm run -w server db:generate` then `git diff --exit-code server/drizzle` — collided with
-R8's "exactly one automated test". Pablo ratified it at the story-1.8 checkpoint on the
-condition that the distinction be argued, not assumed.
+**Context**: `server/drizzle/*.sql` is what a fresh clone actually applies; `schema.ts` is
+what the code believes it is talking to. Nothing in CI compared them, so the two could
+diverge with a green build and fail at the first runtime query. The obvious guard collided
+with R8's "exactly one automated test". Pablo ratified a guard at the story-1.8 checkpoint
+on the condition that the distinction between a check and a test be argued, not assumed.
 
 **Options**: (a) leave the gap and rely on discipline; (b) add the guard and call the repo's
-test count two; (c) add the guard as a **check**, distinct in kind from a test, and defend
-the distinction in writing.
-**Decision**: (c) — one CI step of its own, named "schema/migration drift guard", placed
-before the test step so its failure reads as "you changed the schema without generating a
-migration", never as a failing test.
+test count two; (c) add it as a **check**, distinct in kind from a test, and defend the
+distinction in writing.
+**Decision**: (c) — one CI step of its own, named, placed between `db:migrate` and the test
+so its failure reads as "the migrations do not produce the schema", never as a failing test.
 
-**Why the distinction is not semantics**: a test executes the system and asserts something
+**What it verifies — and why the first version of this entry was wrong.** The obvious
+implementation is `drizzle-kit generate` followed by `git diff --exit-code server/drizzle`,
+and that is what shipped first. The story-1.8 review showed it does not verify what this
+entry claimed: `drizzle-kit generate` diffs `schema.ts` against `drizzle/meta/*_snapshot.json`
+and appends a migration — it never re-reads the committed SQL. A hand-edited `0000_*.sql`
+that drops a constraint passes it, gets applied by `db:migrate`, and produces exactly the
+fresh-clone mismatch this guard exists to prevent. Rather than document that residual, the
+guard was replaced. It now runs **against the database CI just migrated**:
+
+```
+npx drizzle-kit push --dialect postgresql --schema ./src/db/schema.ts --url "$DATABASE_URL" --verbose
+```
+
+and fails unless the output contains `No changes detected`. That asserts the property that
+actually matters — *the migrations a fresh clone applies produce the schema the code
+expects* — instead of a proxy for it. Verified in both directions against a real database
+before shipping: correctly migrated → `No changes detected`; a migration hand-stripped of
+`dishes_run_id_position_unique` → the restoring `ALTER TABLE … ADD CONSTRAINT`, step fails;
+a column added to `schema.ts` without generating → detected too, so the weaker check is
+subsumed and was deleted rather than kept alongside. The assertion is on the positive
+string, not the exit code: `push` exits 0 even when it emits statements, so requiring the
+success phrase means an unexpected output format fails the step closed.
+
+**Why this is a check and not a test**: a test executes the system and asserts something
 about its behaviour — it needs a fixture, an entry point, and a claim that can be right or
-wrong about a running program. The drift guard runs no application code and has no fixture.
-It regenerates a migration from `schema.ts` and asserts that two **committed artifacts agree
-with each other**. That is the same category as
-`tsc --noEmit`, which has sat in `checks` since story 1.1 and which nobody would count as a
+wrong about a running program. This step runs no application code and has no fixture. It
+compares a declared schema with an applied one and reports the difference. That is the
+category `tsc --noEmit` has occupied in `checks` since story 1.1, which nobody counts as a
 test. R8 caps automated *tests* because a candidate who writes forty of them is answering a
 different question than the one asked; it does not forbid the build from checking its own
-consistency. The risk is concrete rather than theoretical: a schema edit without a migration
-leaves a fresh clone booting against a database that does not match the code — and a timed
-fresh-clone run by the reviewer is exactly how this repo gets evaluated. If the distinction
-ever stops being defensible, the honest move is to delete the guard, not to redefine "test".
+consistency. If the distinction ever stops being defensible, the honest move is to delete
+the guard, not to redefine "test".
 
-**Correction (same day, from the story-1.8 review): what this guard does not catch.** The
-first version of this entry claimed the step "can fail for exactly one reason". That
-overstates it, and the overstatement is worth more as a correction than as a quiet edit.
-`drizzle-kit generate` diffs `schema.ts` against `drizzle/meta/*_snapshot.json` and appends
-a new migration; it never re-reads or re-derives the committed `.sql`. So the guard catches
-the case it was built for — a schema edited without generating — but a hand-edited
-`0000_*.sql` that drops a constraint while the snapshot stays untouched passes it cleanly,
-`db:migrate` applies the weakened DDL, and the fresh clone boots against a database that
-does not match the code. That is precisely the failure this entry says the guard prevents,
-and it survives. Two things followed: the check now uses `git status --porcelain` so newly
-*generated* files cannot slip past as untracked, and this residual is stated rather than
-implied. Closing it properly means applying the committed SQL to an empty database and
-comparing the result to the schema — a real verification, correctly outside a CI step that
-claims to be cheap.
+**The lesson worth more than the guard**: the first version of this argument was right about
+the category and wrong about the scope — it asserted the step "can fail for exactly one
+reason" without anyone having checked what it detected. Verifying that took five minutes and
+a throwaway database. An argument written into DECISIONS.md earns the same empirical
+standard as the code it defends.
