@@ -52,7 +52,33 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     throw new ApiClientError(0, 'network_error', 'Could not reach the server.')
   }
   if (!response.ok) throw await toApiError(response)
-  return (await response.json()) as T
+  try {
+    return (await response.json()) as T
+  } catch {
+    // A 2xx whose body is empty or is not JSON — a proxy answering for a server that is
+    // not there, or an SPA fallback returning index.html. Letting the raw SyntaxError out
+    // would slip past every `instanceof ApiClientError` check in the UI and leave a form
+    // silently re-enabled with nothing said (FG6: no silent dead end).
+    throw new ApiClientError(
+      response.status,
+      'internal_error',
+      `The server answered ${response.status} but the response was not readable. Is the API running behind /api?`,
+    )
+  }
+}
+
+// The UI narrows on `ApiClientError`; anything else thrown inside a query or mutation
+// (a bug in a success handler, an aborted request) must still reach the screen with words
+// on it rather than as a silent null.
+export function describeError(error: unknown): { code: ApiFailureCode; message: string } {
+  if (error instanceof ApiClientError) return { code: error.code, message: error.message }
+  if (error instanceof Error && error.message.length > 0) {
+    return { code: 'internal_error', message: error.message }
+  }
+  return {
+    code: 'internal_error',
+    message: 'The request did not complete and the browser could not say why. Try again.',
+  }
 }
 
 const json = (body: unknown): RequestInit => ({

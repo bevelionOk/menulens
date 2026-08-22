@@ -17,7 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { ApiClientError, createRunFromFile, createRunFromUrl, listRuns } from '@/lib/api'
+import { createRunFromFile, createRunFromUrl, describeError, listRuns } from '@/lib/api'
 import { formatTimestamp } from '@/lib/copy'
 
 // FR1 accept set. `image/heic` is absent on purpose (E4): listing it would stop iOS from
@@ -92,7 +92,7 @@ export function SubmitPage() {
     create.mutate(file)
   }
 
-  const submitError = create.error instanceof ApiClientError ? create.error : null
+  const submitError = create.error ? describeError(create.error) : null
 
   return (
     <div className="grid gap-8">

@@ -11,7 +11,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { useElapsed } from '@/hooks/use-elapsed'
-import { ApiClientError, createRunFromUrl, getRun, postReviews } from '@/lib/api'
+import { createRunFromUrl, describeError, getRun, postReviews } from '@/lib/api'
 import {
   EMPTY_COPY,
   EXPECTATION_COPY,
@@ -63,9 +63,9 @@ export function RunPage() {
   }
 
   if (!run) {
-    const error = runQuery.error
-    const message =
-      error instanceof ApiClientError ? error.message : 'Could not load this run.'
+    const message = runQuery.error
+      ? describeError(runQuery.error).message
+      : 'Could not load this run.'
     return (
       <Alert variant="destructive">
         <AlertTitle>Run unavailable</AlertTitle>
@@ -79,8 +79,8 @@ export function RunPage() {
     )
   }
 
-  const retryError = retry.error instanceof ApiClientError ? retry.error : null
-  const reviewError = review.error instanceof ApiClientError ? review.error : null
+  const retryError = retry.error ? describeError(retry.error) : null
+  const reviewError = review.error ? describeError(review.error) : null
 
   const retryControl = (
     <RetryControl
