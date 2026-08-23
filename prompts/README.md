@@ -45,7 +45,8 @@ in (mostly Spanish). Each entry's metadata, `Intent`/`In English` line and outco
   same session-level loop.
 - **Not in the log**: prompts the assistant wrote for its own subagents, and the BMAD
   skills' internal prompts (`.claude/skills/`). One-word approvals are logged on purpose
-  as the decision record.
+  as the decision record. Three `.memlog.md` files under `_bmad-output/` are the BMAD
+  skills' working memory, written in the chat language (Spanish); they are not deliverables.
 
 ### Prompts that carry judgment
 
