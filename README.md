@@ -16,7 +16,7 @@ only when no rule fired.
 | The app | Quick start, below |
 | The one test, and why that one | `server/test/golden-master.test.ts`; D16, D25 |
 | BMAD artifacts | `_bmad-output/planning-artifacts/` (brief → PRD → architecture → epics); `_bmad-output/implementation-artifacts/` (one spec per story, `sprint-status.yaml`) |
-| Prompts | `prompts/` — 134 entries, plus the runtime extraction prompt |
+| Prompts | `prompts/` — 135 entries, plus the runtime extraction prompt |
 | Decisions | [`DECISIONS.md`](DECISIONS.md), index at the top |
 | Business | [`BUSINESS.md`](BUSINESS.md) |
 | What breaks in production | [`plan/production-breaks.md`](plan/production-breaks.md) |

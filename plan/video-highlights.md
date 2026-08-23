@@ -547,3 +547,31 @@ the visual path, the fixes are first under *Next*. Two more things the pass foun
 copy says 9–12 seconds and the Vox menu takes 25 (B25 — do not time it on camera), and the
 B45 run lived only in a scratch database — its payloads are now committed next to the
 analysis, which is what the video shows instead of a live repeat.
+
+## Session 16 — Final review before the videos (2026-08-23)
+
+**68. Where the €2 came from** `[WHY]` `[JUDGMENT]`
+Pablo read the whole repo and did not believe the price: "if the cost is 0.0069 per menu,
+where do the 2 euros come from?" The answer was a share of a 15–30-minute saving nobody had
+measured; his own runs (38 of 38 rows to review) put the saving at 5–10 minutes, of which €2
+took 40–80 %. Document-extraction APIs charge about $0.03 a page. €0.50 (D29): eight times
+the all-in cost, 10–20 % of the saving, and a stated condition for moving to €1–2.
+
+**69. "It looked out of scope"** `[JUDGMENT]` `[BREAKS]`
+Two scorers (78/100 and 67.5/95 before the videos) discounted the same line: three rules
+specified in hours and left unmade. Pablo had chosen to document and not fix because the
+fixes looked outside the challenge's scope; once the reviewers read it as a choice against
+correctness in a safety path, he reversed it. B45, B10 and B14 were built, re-measured and
+reviewed with `bmad-code-review` in one afternoon. The review found the fix's own hole:
+a decimal price inside a quote read as a legend code list — patched before it shipped.
+
+**70. The golden did change** `[WHY]`
+D28 §8 had said the fix would not touch the golden master. It did: the fixture already held
+five `declared` entries quoting ingredient phrases — the B45 shape — so rows 2–4 gained T6 and
+T1 reasons. The document claimed what the fixture contradicted; the fixture won, and D29 says so.
+
+**71. Same PDF, three runs, three answers** `[BREAKS]` `[NEXT]`
+Vox on the 22nd: 0 of 34 `reliable` in the morning, 6 in the afternoon. On the 23rd, after the
+rule: 0 of 34 — but the model labelled every allergen `inferred` that run, so the rule had
+nothing to check live; the replay of the 19 quotes from the 22nd shows it (0 markers). Verdicts
+are keyed to a run (B46); the walkthrough shows the rule from the record, never live.
