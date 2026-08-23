@@ -29,7 +29,9 @@ export interface TriagedDish {
 export function triageDish(signal: ModelDishSignal, ctx: TriageContext): TriagedDish {
   const reasons: ConfidenceReason[] = [];
 
-  // T6 first: unproven `declared` becomes `inferred` before the gate looks.
+  // T6 first: an unproven `declared` (no quote, quote not found, quote with no declaration
+  // marker) becomes `inferred` before the gate looks; on a visual source a verified-looking
+  // `declared` keeps its label but T6 still fires, so the row is never `reliable` (B10).
   const evidence = verifyEvidence(signal.allergens, ctx.source_class, ctx.ground);
   reasons.push(...evidence.reasons);
 
