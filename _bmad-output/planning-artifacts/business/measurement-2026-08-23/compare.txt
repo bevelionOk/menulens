@@ -1,0 +1,41 @@
+date       menu       status   rows  rel att     in   out     ms    cost$  rules
+2026-08-22 german     done        5    1   1   1538   599   5735   0.0010  {'T1': 4, 'T2': 1, 'T5': 1}
+2026-08-23 german     done        5    1   1   1538   813   7894   0.0013  {'T1': 4, 'T2': 1, 'T5': 1}
+2026-08-22 la-parra   done        6    2   1   1563   879   8737   0.0014  {'T1': 3, 'T2': 2, 'T3': 1, 'T5': 1}
+2026-08-23 la-parra   done        6    2   1   1563   851  10122   0.0013  {'T1': 4, 'T2': 2, 'T3': 1, 'T5': 2, 'T6': 2}
+2026-08-22 no-prices  done        5    0   1   1516   586   5143   0.0010  {'T1': 5, 'T2': 5, 'T5': 5}
+2026-08-23 no-prices  done        5    0   1   1516   591   5375   0.0010  {'T1': 5, 'T2': 5, 'T5': 5}
+2026-08-22 vox        done       34    6   1  14147  3367  25204   0.0069  {'T1': 28, 'T2': 1, 'T5': 1}
+2026-08-23 vox        done       34    0   1  14147  2908  22595   0.0063  {'T1': 34, 'T2': 1, 'T5': 2}
+
+## german: names only on 08-22: ['Wiener Schnitzel vom Kalb'] | only on 08-23: ['Wiener Schnitzel vom Kalb mit Kartoffelsalat']
+  - Apfelstrudel mit Vanillesauce: allergens: [] -> [('gluten', 'inferred'), ('milk', 'inferred')]
+  - Rinderbraten mit Kloessen: allergens: [] -> [('gluten', 'inferred')]
+
+## la-parra: names only on 08-22: [] | only on 08-23: []
+  - Ensalada de la casa: allergens: [('mustard', 'declared'), ('sesame', 'declared')] -> [('mustard', 'inferred'), ('sesame', 'inferred')] | rules: ['T2', 'T5'] -> ['T1', 'T2', 'T5', 'T6', 'T6']
+  - Pulpo a la brasa: rules: ['T1', 'T2', 'T3'] -> ['T1', 'T2', 'T3', 'T5']
+  T6 reasons on 08-23 (2):
+    Ensalada de la casa: mustard: evidence quote carries no declaration marker
+    Ensalada de la casa: sesame: evidence quote carries no declaration marker
+
+## no-prices: names only on 08-22: [] | only on 08-23: []
+
+## vox: names only on 08-22: ['Pan-seared label rouge salmon'] | only on 08-23: ['Pan-seared Label Rouge salmon']
+  - Asian cucumber salad: flag: 'reliable' -> 'uncertain' | allergens: [('sesame', 'declared'), ('soybeans', 'declared')] -> [('sesame', 'inferred'), ('soybeans', 'inferred')] | rules: [] -> ['T1']
+  - Braised fennel: allergens: [('celery', 'declared'), ('milk', 'inferred'), ('nuts', 'inferred')] -> [('milk', 'inferred'), ('nuts', 'inferred'), ('sesame', 'inferred')] | rules: ['T1'] -> ['T1', 'T5']
+  - Crunchy salad hearts: allergens: [('eggs', 'inferred'), ('fish', 'inferred'), ('milk', 'declared')] -> [('eggs', 'inferred'), ('fish', 'inferred'), ('milk', 'inferred')]
+  - Lobster bisque: flag: 'reliable' -> 'uncertain' | allergens: [('crustaceans', 'declared'), ('milk', 'declared')] -> [('crustaceans', 'inferred'), ('milk', 'inferred')] | rules: [] -> ['T1']
+  - Mozzarella di Bufala: flag: 'reliable' -> 'uncertain' | allergens: [('milk', 'declared')] -> [('milk', 'inferred')] | rules: [] -> ['T1']
+  - Oktopus: flag: 'reliable' -> 'uncertain' | allergens: [('molluscs', 'declared'), ('soybeans', 'declared')] -> [('eggs', 'inferred'), ('molluscs', 'inferred'), ('soybeans', 'inferred')] | rules: [] -> ['T1']
+  - Piña Colada: allergens: [('milk', 'inferred')] -> [('milk', 'inferred'), ('nuts', 'inferred')]
+  - Raspberry lemon cream cheese cake: allergens: [('eggs', 'inferred'), ('gluten', 'inferred'), ('milk', 'declared')] -> [('eggs', 'inferred'), ('gluten', 'inferred'), ('milk', 'inferred')]
+  - Romain lettuce: allergens: [('eggs', 'inferred'), ('fish', 'inferred')] -> [('eggs', 'inferred'), ('fish', 'inferred'), ('milk', 'inferred')]
+  - Sautéed chanterelles: flag: 'reliable' -> 'uncertain' | allergens: [('nuts', 'declared')] -> [('nuts', 'inferred')] | rules: [] -> ['T1']
+  - Seared corn-fed chicken: allergens: [('gluten', 'inferred'), ('milk', 'inferred')] -> []
+  - Selection of international cheeses: allergens: [('gluten', 'inferred'), ('milk', 'declared')] -> [('gluten', 'inferred'), ('milk', 'inferred')]
+  - Steamed halibut: flag: 'reliable' -> 'uncertain' | allergens: [('fish', 'declared'), ('nuts', 'declared')] -> [('fish', 'inferred'), ('nuts', 'inferred')] | rules: [] -> ['T1']
+  - Tagliatelle Ragù: allergens: [('gluten', 'inferred'), ('milk', 'declared')] -> [('gluten', 'inferred'), ('milk', 'inferred')]
+  - Tatar de Boeuf: allergens: [('gluten', 'inferred'), ('milk', 'declared')] -> [('gluten', 'inferred'), ('milk', 'inferred')]
+  - Truffled Tagliatelle: allergens: [('gluten', 'inferred'), ('milk', 'declared')] -> [('gluten', 'inferred'), ('milk', 'inferred')]
+  - Wild broccoli: allergens: [] -> [('milk', 'inferred'), ('nuts', 'inferred')]
