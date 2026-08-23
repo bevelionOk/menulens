@@ -70,7 +70,7 @@ the terminal state before the next).
 
 | # | Do | Expect | What it proves — the sentence for the script |
 |---|---|---|---|
-| 1 | Upload `la-parra.pdf` | `extracted`, 6 rows, 2, sometimes 3 `reliable` (B46): Tortilla and Croquetas `reliable` (allergens declared in prose); Ensalada `uncertain` (T2 `desde`), Pulpo `uncertain` (T3 `$`), Tabla de quesos and Postre `uncertain` (T1 inferred / none) | "The flag is the product. A row is reliable only when *no* rule fired, and the rules are printed under the row." |
+| 1 | Upload `la-parra.pdf` | `extracted`, 7 rows, 2, sometimes 3 `reliable` (B46): Tortilla and Croquetas `reliable` (allergens declared in prose); Ensalada `uncertain` (T2 `desde`), Pulpo `uncertain` (T3 `$`), Tabla de quesos and Postre `uncertain` (T1 inferred / none), Bogavante `uncertain` (T2 `1.250 €`, a thousands separator; its `(c, l)` legend key keeps `crustaceans` declared) | "The flag is the product. A row is reliable only when *no* rule fired, and the rules are printed under the row." |
 | 2 | Upload one of **your** menus | Rows; some `uncertain` | Show a real `uncertain` and read its reasons aloud — that is Ana's queue. Mention the ~9–12 s measured wait and that the timer is measured, not a progress bar. |
 | 3 | Paste a restaurant URL whose menu is images (e.g. `https://www.casalucio.es/carta/`) | `empty`, zero dishes | "It found the page, found no menu in the text, and said so instead of inventing one." Then upload a photo of the same page → rows. (B40: the screen should hint at this; it does not yet.) |
 | 4 | Paste `https://en.wikipedia.org/wiki/Paella` | `empty` | Same honesty on a page full of food words. |
@@ -94,7 +94,7 @@ with a note on 2, and both states visible in the recent-runs list.
 
 Covered since, by the D27 sweep on the same day: scenarios 3 and 4 (`empty` on casalucio
 and Wikipedia), 7 (the injection PDF), 12 and 14 (the 409 and the forged batch); scenario 1
-(`la-parra.pdf`, 6 rows, 2, sometimes 3 `reliable` (B46), all six reviewed) in Pablo's second timed run.
+(`la-parra.pdf`, 6 rows at the time — 7 since 2026-08-23 —, 2, sometimes 3 `reliable` (B46), all reviewed) in Pablo's second timed run.
 
 Not yet on screen:
 

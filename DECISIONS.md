@@ -635,7 +635,7 @@ fail one way:
   route arm, the content-type dispatch, charset decoding and `html-to-text` are all
   outside the gate. Removing `text/html` from the accepted set fails every URL menu with a
   green build.
-- **`empty` and `failed` are unobserved.** The mocked seam always returns six dishes and
+- **`empty` and `failed` are unobserved.** The mocked seam always returns six dishes (seven since 2026-08-23, D29) and
   never throws, so the zero-dish E9 branch and both failure paths never run. Deleting the
   zero-dish guard yields a `done` run with no rows — the exact state AD-5 forbids — and the
   golden, which has six dishes, notices nothing.

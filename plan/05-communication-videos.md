@@ -29,17 +29,18 @@ Backbone comes from Phase 4 outputs. Suggested structure (~90 s each):
 5. **What breaks in production**: the failure-modes list (4.4) — hallucinated allergens,
    fragile URL fetching, provider limits, hostile inputs
 6. What comes next if this shipped for real
-7. **Business, ~45 s** (JOB.md asks for "business risk" in this video): the BUSINESS.md
-   numbers, said once — $0.0069 measured for a 34-dish menu, €2 per menu with an input
-   cap, the platform as customer; 38 of 38 rows to review on real menus (B42) and the 6
-   false `reliable` rows the measurement found (B45); the three-tier ship-it answer
-   (internal after three fixes in hours; paid after two to three weeks and a measured
-   review time; unreviewed never). Same numbers as the paragraph — no new ones on camera.
-   Say that the three fixes were not made on purpose (D28 §6) and sit first under *Next*.
-   Show B45 from the committed measurement
-   (`_bmad-output/planning-artifacts/business/measurement-2026-08-22/`), never live — the
-   run is not deterministic. Do not time the Vox URL on camera against the "about 9 to 12
-   seconds" copy: it takes ~25 s (B25); time la-parra, or name B25 when it shows.
+7. **Business, ~45 s** (JOB.md asks for "business risk" in this video). Moved to right
+   after the live run on 2026-08-23 (script §1b): the BUSINESS.md numbers, said once —
+   $0.0069 measured for a 34-dish menu, about €0.06 all-in at 500 menus a month, €0.50 per
+   menu (was €2, D28 → D29), the platform as customer; 38 of 38 rows to review on real
+   menus (B42); the 6 false `reliable` rows the measurement found on the 22nd (B45) and the
+   rule added on the 23rd; the three-tier ship-it answer (internal now; paid after two to
+   three weeks and a measured review time; unreviewed never). Same numbers as the
+   paragraph — no new ones on camera. Show B45 from the committed measurement
+   (`_bmad-output/planning-artifacts/business/measurement-2026-08-22/` and the 23rd's
+   replay), never live — the run is not deterministic (B46). Do not time the Vox URL on
+   camera against the "about 9 to 12 seconds" copy: it takes ~25 s (B25); time la-parra,
+   or name B25 when it shows.
 
 | Task | Owner |
 |---|---|
