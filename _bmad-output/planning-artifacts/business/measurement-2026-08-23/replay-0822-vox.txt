@@ -1,0 +1,20 @@
+uncertain Tatar de Boeuf                       milk         "Crème fraîche" -> marker=false
+reliable  Mozzarella di Bufala                 milk         "Mozzarella di Bufala" -> marker=false
+uncertain Crunchy salad hearts                 milk         "Pecorino" -> marker=false
+reliable  Lobster bisque                       crustaceans  "Lobster tail" -> marker=false
+reliable  Lobster bisque                       milk         "lobster butter" -> marker=false
+uncertain Pan-seared label rouge salmon        fish         "salmon" -> marker=false
+uncertain Pan-seared label rouge salmon        milk         "Beurre Blanc" -> marker=false
+uncertain Truffled Tagliatelle                 milk         "Pecorino" -> marker=false
+reliable  Steamed halibut                      fish         "halibut" -> marker=false
+reliable  Steamed halibut                      nuts         "hazelnut" -> marker=false
+reliable  Oktopus                              molluscs     "Oktopus" -> marker=false
+reliable  Oktopus                              soybeans     "Soy" -> marker=false
+uncertain Braised fennel                       celery       "celeriac" -> marker=false
+uncertain Tagliatelle Ragù                     milk         "Pecorino" -> marker=false
+reliable  Asian cucumber salad                 soybeans     "Soy" -> marker=false
+reliable  Asian cucumber salad                 sesame       "sesame" -> marker=false
+reliable  Sautéed chanterelles                 nuts         "Hazelnut" -> marker=false
+uncertain Selection of international cheeses   milk         "cheeses" -> marker=false
+uncertain Raspberry lemon cream cheese cake    milk         "cream cheese" -> marker=false
+reliable after replay: 0 of 34

@@ -5,6 +5,7 @@
 - **Model**: Claude Fable 5
 - **Phase**: 06-implementation (story 1-3-persist-first-run-lifecycle-api, close)
 - **Intent**: Pablo's go-ahead to merge the story's PR and remove the worktree and its database container.
+- **In English**: "merged! teardown!" — story merged, remove the worktree and the database.
 
 ## Prompt
 

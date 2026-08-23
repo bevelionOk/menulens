@@ -6,6 +6,7 @@
 - **Intent**: Before the first commit, capture the smoke-test finding in durable
   deliverables (not just the prompt log), start BUSINESS.md, and settle repo
   name/visibility strategy.
+- **In English**: Before committing, could we start BUSINESS.md with the finding? What repo name will you use — it has to be public via bevelion, right? Is the confidence-flag detail written down somewhere? Follow-up: yes, we must document the critical thinking in real time; after this and the first commit comes getting familiar with everything.
 
 ## Prompt (verbatim)
 

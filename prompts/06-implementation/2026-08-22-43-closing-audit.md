@@ -5,6 +5,7 @@
 - **Model**: Claude Opus 5
 - **Phase**: 06-implementation (phase close)
 - **Intent**: Close the implementation phase the way every milestone in this project was closed — by asking what was considered and what was missed, in both directions.
+- **In English**: Phase 4 starts tomorrow in another task. Now the close ritual with the four key questions: A) did you consider what you should have? B) did you consider something you should not have? C) did you miss something you should have considered? D) did you leave out what should be left out? Thanks for everything! Then: no, create a mini branch to commit everything pending so nothing is left out and I start hardening clean tomorrow.
 
 ## Prompts
 

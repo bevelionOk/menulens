@@ -9,6 +9,40 @@ menu text it saw it in; deterministic code verifies those quotes against the sou
 marks each row `reliable` or `uncertain`, naming the rule that fired. A row is `reliable`
 only when no rule fired.
 
+## How to read this repo
+
+| What | Where |
+|---|---|
+| The app | Quick start, below |
+| The one test, and why that one | `server/test/golden-master.test.ts`; D16, D25 |
+| BMAD artifacts | `_bmad-output/planning-artifacts/` (brief → PRD → architecture → epics); `_bmad-output/implementation-artifacts/` (one spec per story, `sprint-status.yaml`) |
+| Prompts | `prompts/` — 135 entries, plus the runtime extraction prompt |
+| Decisions | [`DECISIONS.md`](DECISIONS.md), index at the top |
+| Business | [`BUSINESS.md`](BUSINESS.md) |
+| What breaks in production | [`plan/production-breaks.md`](plan/production-breaks.md) |
+| Videos | Section below |
+| Vendored BMAD skills (not my code) | `.claude/skills/`, `_bmad/` |
+
+Ten minutes: [`BUSINESS.md`](BUSINESS.md), [`DECISIONS.md`](DECISIONS.md) (D4, D19, D24, D25, D28, D29), the PRD at
+`_bmad-output/planning-artifacts/prds/prd-full-stack-challenge-2026-08-21/prd.md`, and
+`prompts/06-implementation/`.
+
+| Path | What it is |
+|---|---|
+| `BUSINESS.md` | What I would charge, why, and whether I would ship it — one paragraph. The analysis behind it: `_bmad-output/planning-artifacts/business/`. |
+| `docs/challenge/` | The brief, pinned verbatim, and how I read it (`INTERPRETATION.md`). |
+| `_bmad-output/planning-artifacts/` | PRD, architecture spine, epics, and the review of each. |
+| `_bmad-output/implementation-artifacts/` | One spec per story, plus the deferred-work register. |
+| `prompts/` | Every prompt I wrote, verbatim, in order, plus the runtime extraction prompt. |
+| `plan/` | How I ran the five days. Working notes. |
+
+## Videos
+
+| Video | Link |
+|---|---|
+| Walkthrough (5–10 min) | link pending — to be recorded 2026-08-24 |
+| Personal (3–5 min) | link pending — to be recorded 2026-08-24 |
+
 ## Quick start
 
 Requirements: **Node ≥ 22.13**, **Docker** (for Postgres), and an **OpenAI API key**.
@@ -59,18 +93,21 @@ The API listens on **http://localhost:3000** and the UI on **http://localhost:51
 proxies `/api` to the server).
 
 Open the UI, choose *upload* and pick `la-parra.pdf` from the repo root (`open -R
-la-parra.pdf` reveals it in Finder). It is the same PDF the test uploads: six dishes; two,
-sometimes three, come back `reliable` (the model is not deterministic — B46), the rest
-`uncertain` with the rule named under each row.
+la-parra.pdf` reveals it in Finder). It is the same PDF the test uploads: seven dishes; two,
+sometimes three, come back `reliable` (the automated test mocks the model and fixes one
+`reliable` row; live runs give two or three — B46), the rest `uncertain` with the rule named
+under each row.
 
 What to try on the result: confirm a `reliable` row, mark an `uncertain` one as follow-up
 with a note, then go back to `/`. In the recent-runs list, **State** is the extraction
-(`extracted` = the rows are saved) and **Reviewed** is your progress (`6 of 6 resolved`). The
+(`extracted` = the rows are saved) and **Reviewed** is your progress (`7 of 7 resolved`). The
 extracted columns never change; a review is a verdict, not an edit.
 
 A public URL that also works: `https://vox-restaurant.de/wp-content/uploads/2026/07/Vox-Speisekarte-Englisch-1.pdf`
-(34 dishes; every row `uncertain` on one run, 6 `reliable` on another — B42 and B45 under
-*What breaks in production*).
+(34 dishes; every row `uncertain` — B42 under *What breaks in production*. One run on the
+22nd gave 6 `reliable` rows on ingredient quotes, B45; the rule that closes it was added on
+the 23rd — shown by replaying that run's 19 quotes, since the live run of the 23rd returned
+every allergen `inferred`, B46).
 
 **Port already in use?** Postgres is the usual clash. Change the host port in
 `docker-compose.yml` and the port in `DATABASE_URL` to match. For the API, set `PORT` in
@@ -79,8 +116,8 @@ read `.env`.
 
 ## Scope
 
-Planned with BMAD: a PRD with 36 requirements and 84 acceptance criteria, broken into
-three epics and 13 stories (8 + 4 + 1). After the first six stories I measured what each
+Planned with BMAD: a PRD with 36 functional requirements and 5 non-functional, 84 acceptance
+criteria, broken into three epics and 13 stories (8 + 4 + 1). After the first six stories I measured what each
 had cost and cut scope ([`DECISIONS.md`](DECISIONS.md), **D24**): 1.7, 2.1 and 2.2 merged
 into one deliverable, 2.3 and 2.4 deleted, 3.1 folded into the submit page, the test
 surface capped at one test. 11 stories delivered, 2 cut; 73 of the 84 acceptance criteria
@@ -100,14 +137,18 @@ shipped, the 11 deleted ones stay in the PRD, marked as cut.
 
 ### Next, in order
 
-1. The three `core/` fixes the business note names as stop-ship for an internal
-   deployment: B45 (a declaration needs a declaration marker), B10 (no `reliable` on visual
-   runs), B14 (refuse a thousands separator). Hours each; not made before submission on
-   purpose (D28).
+1. Read legend codes and icon keys as declarations (B42), so that a real menu can have
+   `reliable` rows: today the marker list accepts `(a, g)` and `1,3,7` inside a quote but
+   not a bare `A, C, G` line or a single code (`t6-verify.ts`, calibration data).
 2. The review actions cut from story 2.3: batch confirm, reopen, per-row notes.
 3. The evidence panel. Story 1.6 already persists the character offsets of every verified
    quote, so highlighting the source needs no re-matching.
 4. `_bmad-output/implementation-artifacts/deferred-work.md`, in that file's order.
+
+Done on 2026-08-23, after the final review (D29): B45 (a declaration needs a declaration
+marker), B10 (no `reliable` row on a visual source), B14 (a thousands separator is refused,
+not read as a decimal) — `server/src/core/`, reviewed; B45 re-measured, B10 and B14 pinned
+in the one test.
 
 ### Known limitations
 
@@ -116,9 +157,12 @@ shipped, the 11 deleted ones stay in the PRD, marked as cut.
 - **The recent-runs list is unpaginated.** It grows without bound.
 - **Evidence quotes are shown, not highlighted in the source.** The offsets are persisted;
   the panel that would use them is story 2.4.
-- **A `reliable` row can be wrong on a menu that names ingredients but declares no
-  allergens.** Measured: 6 of 34 on the Vox PDF (B45). The flag means no rule fired; one
-  rule is missing.
+- **The `reliable` set is not stable across runs (B46).** The same Vox PDF gave 0 of 34 and
+  6 of 34 on the 22nd (the 6 were ingredient quotes, B45, since fixed) and 0 of 34 on the
+  23rd; verdicts are keyed to a run.
+- **What counts as a declaration marker is a list** (`contiene`, `allergens`, `(a, g)`,
+  `1,3,7`, …): a single code or a bare letter line is not read, and `(M)` is. Calibration
+  data, in `t6-verify.ts`.
 - **Image and JS-rendered menus behind a URL come back `empty`.** Upload the menu as a PDF
   or a photo instead.
 
@@ -132,7 +176,7 @@ hostile-input sweep that checked it, is **D27**. By kind:
 |---|---|---|
 | Reaching the menu — URL fetch, SSRF, JS/image sites | 6 | JS or image menus come back `empty`; residual SSRF ranges; redirect stalls |
 | The model call — availability, cost, drift | 9 | A 429 fails the run; no char cap on billed text; no PDF page/time budget; SDK pinned to one version |
-| What the arbiter cannot see | 11 | Every row is `uncertain` on a menu that declares no allergens in prose; an ingredient word quoted as a declaration passes as `reliable`; the `reliable` set changes between runs; visual sources pass unverified; hidden HTML text verifies |
+| What the arbiter cannot see | 11 | Every row is `uncertain` on a menu that declares no allergens in prose; the `reliable` set changes between runs; hidden HTML text verifies; an ingredient word quoted as a declaration passed as `reliable` and visual sources passed unverified until the 23rd (B45, B10 fixed) |
 | Lifecycle and clocks | 8 | Non-atomic seriality gate; two timeouts that can disagree; DB and Node clocks on one anchor |
 | One process, no bounds | 2 | Unpaginated list; unbounded strings |
 | Copy and contract drift | 8 | The screen says something other than what the server did |
@@ -140,10 +184,6 @@ hostile-input sweep that checked it, is **D27**. By kind:
 
 The ones I would fix first:
 
-- **An ingredient word passes as an allergen declaration (B45).** Measured on the Vox PDF: 6
-  of 34 rows `reliable`, each on a quote like `Lobster tail` or `hazelnut`, on a menu that
-  declares no allergens. The arbiter checks that the quote exists, not that it declares
-  anything. Fix: T1 downgrades a `declared` entry whose quote has no declaration marker.
 - **DNS rebinding (B2).** The SSRF guard validates the resolved address, then Node's `fetch`
   resolves again; a hostile host can answer with a private IP on the second lookup. Fix: a
   pinned-address dispatcher.
@@ -154,25 +194,12 @@ The ones I would fix first:
   phrase exists in the page text, not that a diner could see it. Fix: drop hidden elements
   in the stripper.
 - **No retry on a transient 429 (B6).** A rate limit fails the run and a human resubmits.
-- **Visual sources cannot be machine-verified (B10).** With no ground text, an evidence
-  quote passes through unverified.
-- **`"1.250 €"` parses as 1.25 (B14).** Fix: refuse the value and flag the row.
 
-## How to read this repo
-
-Ten minutes: [`BUSINESS.md`](BUSINESS.md), [`DECISIONS.md`](DECISIONS.md) (D4, D19, D24, D27, D28), the PRD at
-`_bmad-output/planning-artifacts/prds/prd-full-stack-challenge-2026-08-21/prd.md`, and
-`prompts/06-implementation/`.
-
-| Path | What it is |
-|---|---|
-| `BUSINESS.md` | What I would charge, why, and whether I would ship it — one paragraph. The analysis behind it: `_bmad-output/planning-artifacts/business/`. |
-| `docs/challenge/` | The brief, pinned verbatim, and how I read it (`INTERPRETATION.md`). |
-| `_bmad-output/planning-artifacts/` | PRD, architecture spine, epics, and the review of each. |
-| `_bmad-output/implementation-artifacts/` | One spec per story, plus the deferred-work register. |
-| `prompts/` | Every prompt I wrote, verbatim, in order, plus the runtime extraction prompt. |
-| `plan/` | How I ran the five days. Working notes. |
-| `.claude/skills/` | Vendored BMAD v6.11.0. Not my code. |
+Fixed on 2026-08-23 (D29), after being the first three on this list: **B45** — an ingredient
+word quoted as a declaration (`Lobster tail`, `hazelnut`; 6 of 34 rows `reliable` on the Vox
+PDF) now fails T6 for lack of a declaration marker; **B10** — a `declared` allergen on a
+photo or scan fires T6, so no visual row is `reliable`; **B14** — `"1.250 €"` is refused (T2)
+instead of being stored as 1.25.
 
 ## The one test
 
@@ -191,7 +218,8 @@ to start against any database whose name does not end in `_test`.
 It builds the app with the model seam as its only mock, POSTs a fixture through the real
 HTTP surface, polls the run to completion against real Postgres, and compares the payload
 to one committed golden. The fixture makes every triage rule T1–T6 fire at least once and
-leaves one row `reliable`; each rule is asserted by its id, so a regression names the rule
+leaves one row `reliable` (the mock fixes the model output; live runs of the same PDF give
+two or three — B46); each rule is asserted by its id, so a regression names the rule
 that stopped firing. Why this test and not another, and the four behaviours it does not
 cover, are in **D25**.
 
@@ -246,3 +274,7 @@ POST /api/runs ──▶ fetching_source ──▶ extracting ──▶ validati
 | `prompts/` | Every prompt used to build this, logged verbatim, plus the runtime extraction prompt. |
 | `docs/`, `plan/`, `_bmad-output/` | The BMAD trail: brief, PRD, architecture, epics, per-story specs. |
 | `DECISIONS.md` | Every ratified decision, including what was cut and why. |
+
+## Contact
+
+Pablo Javier — pablo@bevelion.com — github.com/bevelionOk

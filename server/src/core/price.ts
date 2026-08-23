@@ -1,7 +1,9 @@
 // FR10 price parsing (spec 1.6 Boundaries): `price_value` only for exactly one numeric
 // token, no range/"from" marker, no non-EUR currency marker, one decimal separator
-// (comma or dot). A bare number is EUR by the platform assumption; `€` is confirmation.
-// Everything else is null — a triage signal (T2/T3), never a guess.
+// (comma or dot) followed by one or two digits — a three-digit group (`1.250`, `12,345`)
+// reads as a thousands separator and is refused (B14). A bare number is EUR by the
+// platform assumption; `€` is confirmation. Everything else is null — a triage signal
+// (T2/T3), never a guess.
 
 export type Currency = 'eur' | 'other' | 'mixed' | 'none';
 
@@ -35,6 +37,8 @@ export function parsePrice(priceRaw: string | null): ParsedPrice {
   const token = tokens[0]!;
   // Both separators, or the same one twice (`1.250.000`), is ambiguous.
   if (token.replace(/\d/g, '').length > 1) return { value: null, currency };
+  // One separator followed by three or more digits is a thousands group, not a decimal.
+  if (/[.,]\d{3}/.test(token)) return { value: null, currency };
   const value = Number(token.replace(',', '.'));
   // `dishes.price_value` is numeric(10,2): a value out of that range would abort the whole
   // `saving` transaction and discard every dish in the run, so an implausible number

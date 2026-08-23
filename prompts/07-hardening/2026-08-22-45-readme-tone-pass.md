@@ -1,6 +1,6 @@
-# 2026-08-23 — 45 — Tone pass: remove AI-typical prose from the README and the other reviewer-facing files
+# 2026-08-22 — 45 — Tone pass: remove AI-typical prose from the README and the other reviewer-facing files
 
-- **Date**: 2026-08-23
+- **Date**: 2026-08-22
 - **Tool**: Claude Code
 - **Model**: Claude Fable 5
 - **Phase**: 07-hardening (communication)

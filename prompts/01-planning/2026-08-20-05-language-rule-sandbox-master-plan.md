@@ -6,6 +6,7 @@
 - **Intent**: Set the repo language policy, decide where BMAD practice happens so the
   repo only records real usage, and get the full challenge plan (phases + tasks through
   final submission) into the repo for review before execution.
+- **In English**: I forgot: the whole repo must be in English, no Spanish, to ease the review. I understand how to use BMAD, but using it here would be recorded as testing — should I practise outside? And I want the full plan in the repo, phases and tasks through the final posting, videos at the end; split it into sections so I can review. Follow-up: the BMAD prompts and my own communication stay in Spanish; I meant the documents.
 
 ## Prompt (verbatim)
 

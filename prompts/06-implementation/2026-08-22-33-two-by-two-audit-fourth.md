@@ -5,6 +5,7 @@
 - **Model**: Claude Opus 5
 - **Phase**: 06-implementation (M1 review round)
 - **Intent**: Force an honest accounting of the implementation stage before declaring it finished — and ask what the hardening review produced.
+- **In English**: While the adversarial review runs, answer: A) did you consider everything needed to finish the implementation stage? B) did you consider something you should not have? C) did you miss something you should have considered? D) did you leave out what should be left out? And after this and the push, PR, merge with close ritual — what results did the hardening review give?
 
 ## Prompt
 

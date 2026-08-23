@@ -5,6 +5,7 @@
 - **Phase**: Planning (methodology familiarization)
 - **Intent**: Confirm the policy when a BMAD agent proposes skills outside the planned
   chain (e.g. brainstorming).
+- **In English**: If the agent proposes skills outside what we planned, like bmad-brainstorming, I should mark them out of scope because they can take time and add nothing — right?
 
 ## Prompt (verbatim)
 

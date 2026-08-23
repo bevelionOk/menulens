@@ -5,6 +5,7 @@
 - **Model**: Claude Fable 5
 - **Phase**: 06-implementation (story 1-2-shared-contract-data-layer)
 - **Intent**: Answer the checkpoint — gate the envelope-code decision through the over-engineering guard, accept the `bytea` route, confirm the 5433 local environment, ask whether real credentials are needed, forbid a spec split, and approve.
+- **In English**: Point 2: check it against the over-engineering guard, otherwise accepted. Point 3: understood, you bring it via Drizzle. The local environment must run on 5433 for now — I cannot take down my other project's database, we are testing. Do you need the real .env for real tests? Careful with a real split, avoid it please. K and A (keep the spec whole, approve).
 
 ## Prompt
 

@@ -18,6 +18,13 @@ export const MENU_LINES = [
   'Pulpo a la brasa 18 $ Servido sobre patata panadera.',
   'Tabla de quesos artesanos con nueces 14,00 €',
   'Postre del día 5,00 €',
+  // A thousands group the parser must refuse (B14) and a legend key, the marker shape a
+  // menu without prose declarations uses (B45): the price is not a code, the key is.
+  'Bogavante del día 1.250 € (c, l)',
+  // The legend the key resolves against. Not a dish: the mocked seam returns a fixed list,
+  // and no fixture name overlaps it, so T4 is untouched. `(c, l)` occurs only on the dish
+  // line, so the quote's first match is the dish, not the legend.
+  'Leyenda de alérgenos: (c) crustáceos, (l) lácteos',
 ];
 
 // The few characters a Spanish menu needs that WinAnsi puts outside Latin-1.

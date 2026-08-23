@@ -5,6 +5,7 @@
 - **Model**: Claude Opus 5
 - **Phase**: 06-implementation (Phase-5 input)
 - **Intent**: Hold video production in its own phase, but keep capturing script material while the memory is fresh — especially the story cut.
+- **In English**: Very good, that is what I wanted to hear about the hardening. Forget the videos until this is finished; they are scheduled in order. What you must keep maintaining are the highlights for the scripts, including the story cut we made.
 
 ## Prompt
 

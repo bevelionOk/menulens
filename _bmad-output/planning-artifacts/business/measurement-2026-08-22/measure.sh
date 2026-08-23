@@ -1,6 +1,8 @@
 #!/bin/zsh
 set -u
-S=/private/tmp/claude-501/-Users-pablojavier-dev-full-stack-challenge/107938d4-e9dc-4732-9080-643a03f41c96/scratchpad
+# $S is a scratch folder with results/ and menus/: la-parra.pdf from `npx tsx server/scripts/sample-menu.ts`,
+# german.pdf and no-prices.pdf from the heredoc in plan/guides/manual-test-guide.md (hostile set).
+S=${S:-/tmp/menulens-measure}
 REPO=/Users/pablojavier/dev/full-stack-challenge
 DB=postgres://postgres:postgres@localhost:5433/menu_extraction
 API=http://localhost:3100/api/runs

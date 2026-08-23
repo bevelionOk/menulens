@@ -5,6 +5,7 @@
 - **Model**: Claude Fable 5
 - **Phase**: 06-implementation (story 1-6-triage-core-the-deterministic-arbiter, spec approval)
 - **Intent**: Keep the spec whole and approve it, singling out the price-parsing judgment (a bare number with no currency symbol is EUR, not "ambiguous") as the detail that matters.
+- **In English**: Excellent, so far everything is going well; those details matter, especially the bare number even when it shows no currency — good observation. K (keep the spec whole).
 
 ## Prompt
 

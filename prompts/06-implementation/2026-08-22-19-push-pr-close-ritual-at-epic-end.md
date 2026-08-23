@@ -5,6 +5,7 @@
 - **Model**: Claude Fable 5
 - **Phase**: 06-implementation (story 1-4-source-acquisition-class-decision, close)
 - **Intent**: Approve the review triage as presented, authorize push + PR, and set the process for the rest of Epic 1: the close ritual (DECISIONS.md, video highlights, playbook sync) runs once at the end of the epic instead of per story.
+- **In English**: Good decisions, proceed with what is "next" — that is the working mode, excellent! The close ritual we do at the end of the epic.
 
 ## Prompt
 

@@ -5,6 +5,7 @@
 - **Model**: Claude Fable 5 (handing off to Claude Opus 5)
 - **Phase**: 06-implementation (process: session handoff)
 - **Intent**: Make the handoff explicit — the next session, on a different model, must know exactly what remains for Epics 1, 2 and 3 and how we work, without re-deriving it.
+- **In English**: Please leave Opus 5 very clear instructions on everything it has to do from here on with Epics 1, 2 and 3 — it needs clear and precise instructions; I know it is a bit dramatic.
 
 ## Prompt
 

@@ -5,6 +5,7 @@
 - **Model**: Claude Opus 5
 - **Phase**: 06-implementation (scope re-evaluation, mid-story)
 - **Intent**: Test the plan against the challenge instead of against itself — the per-story pace felt wrong, and the suspicion was that each story is a symptom of over-engineering rather than a unit of work.
+- **In English**: While the end-to-end verification runs, I need us to re-evaluate the number of stories. They are consuming too much time and I fear each story is itself a consequence of over-engineering; I doubt the challenge is designed to take this long per story. Put agents to investigate and give me a verdict and a recommendation.
 
 ## Prompt
 

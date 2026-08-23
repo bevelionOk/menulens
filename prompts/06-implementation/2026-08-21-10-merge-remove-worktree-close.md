@@ -5,6 +5,7 @@
 - **Model**: Claude Fable 5
 - **Phase**: 06-implementation (story 1-2-shared-contract-data-layer, final close)
 - **Intent**: Authorize the merge of PR #8 and the teardown of the story's isolated environment.
+- **In English**: Done — remember to remove the worktree and close the session.
 
 ## Prompt
 

@@ -5,6 +5,7 @@
 - **Model**: Claude Fable 5
 - **Phase**: 06-implementation (story 1-1-project-scaffold-foundations, ship)
 - **Intent**: Ship story 1.1 — push the worktree branch, open the PR, verify both CI jobs green (first run of the new `checks` job), and close session 6.
+- **In English**: Yes, push and let's verify everything is green, then we can close.
 
 ## Prompt
 

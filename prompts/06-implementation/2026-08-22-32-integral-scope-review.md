@@ -5,6 +5,7 @@
 - **Model**: Claude Opus 5
 - **Phase**: 06-implementation (scope defence)
 - **Intent**: The over-engineering guard was applied at every planning step and repeatedly answered "stories don't count". That answer was wrong, and the consequence — surface built that the challenge never asked for — is now a disqualification risk that has to be cut and defended, not explained away.
+- **In English**: In every planning step, in every task, I asked: is this over-engineering? and I was told no, that stories did not count as over-engineering. But in the end they did — things were built that were not asked for, and that can get us disqualified. We need an integral review to cut and justify, since the risk is high.
 
 ## Prompt
 

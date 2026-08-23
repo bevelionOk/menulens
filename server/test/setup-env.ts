@@ -26,7 +26,7 @@ if (process.env.TEST_DATABASE_URL?.trim()) {
 // Two thresholds the golden depends on, pinned here rather than inherited. Both are
 // calibration knobs a developer may legitimately change in their own `.env`, and both
 // silently rewrite the golden if they do: `SOURCE_MIN_TEXT_CHARS` decides the
-// `source_class: 'text'` the whole fixture rests on (raise it past the fixture's 354
+// `source_class: 'text'` the whole fixture rests on (raise it past the fixture's 459
 // collapsed characters and the run turns `visual`, killing every T4/T6 assertion), and
 // `RUN_STALE_AFTER_MS` decides the derived `state` and the 409 gate. The test asserts a
 // frozen payload, so it must fix the inputs that payload is a function of.

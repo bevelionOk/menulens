@@ -80,6 +80,11 @@ honest:
 - **Zero false-reliables on allergens, by construction** (the asymmetric gate) — counter:
   the gate's inputs are verified wherever ground text exists (T6); on photos, verification
   is Ana's, with the image in view.
+
+  > Amendment 2026-08-22 (D28 §7): retracted to "by rule, given a model that honours its
+  > own `declared`/`inferred` labels" — T6 verifies that a quote exists in the source, not
+  > that it declares anything (B45). The rule was added 2026-08-23 (D29).
+
 - **Enough genuinely reliable rows to make batch confirmation worthwhile** — counter:
   achieved only through declared evidence on the menu, never by loosening rules. A menu
   with no allergen info going 100% uncertain is correct behavior (FR20 explains it to

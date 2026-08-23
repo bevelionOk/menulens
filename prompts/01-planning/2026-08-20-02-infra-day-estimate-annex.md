@@ -6,6 +6,7 @@
 - **Intent**: Get an OpenAI credit estimate before creating the API key; create a
   requirements annex as an anti-over-engineering lighthouse; stand up and test all
   infrastructure (BMAD, Postgres, video recording); confirm methodology decisions.
+- **In English**: Before I answer: (1) estimate how much OpenAI credit I need, then we configure the API key; (2) put the requirements in an annex as a lighthouse against over-engineering and against dropping the tools they ask for. Agreed that today is for standing up and testing all infrastructure and getting familiar with BMAD; planning must be documented and every execution checked for over-engineering. Answers: I can generate the key after the estimate; I have no BMAD, include it in the infra; confirmed.
 
 ## Prompt (verbatim)
 

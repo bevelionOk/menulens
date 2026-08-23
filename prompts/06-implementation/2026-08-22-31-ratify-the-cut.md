@@ -5,6 +5,7 @@
 - **Model**: Claude Opus 5
 - **Phase**: 06-implementation (scope decision)
 - **Intent**: Stop the build long enough to take the scope decision deliberately, before writing a spec that the decision would invalidate.
+- **In English**: Wait. Let's evaluate the merge of 1.7 and 2.2 — that can reduce stories. What result did the investigation give?
 
 ## Prompt
 

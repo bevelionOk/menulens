@@ -5,6 +5,7 @@
 - **Model**: Claude Fable 5
 - **Phase**: 06-implementation (story 1-4 close → story 1-5 open)
 - **Intent**: Pablo confirms the merge; authorizes the 1.4 teardown and the start of story 1.5 in a fresh worktree from updated `main`, without leaving the conversation.
+- **In English**: "merged! adelante!" — merged, go ahead with the teardown and the next story.
 
 ## Prompt
 

@@ -85,7 +85,29 @@ context:
 - Given `psql` on the completed run, then `select count(*) from dishes where run_id=…` equals the extracted count and `runs.status='done'` — and a forced failure inside the transaction (scratchpad: temporarily violate the unique `(run_id, position)`) leaves zero rows and the run `processing` (AC8 atomicity).
 - Given the diff, then `grep -rn "node:\|from '\.\./pipeline\|from '\.\./db\|from '\.\./env" server/src/core` has no matches; `npm run typecheck` green on all workspaces; nothing exists beyond the Tasks.
 
+
+### Review Findings
+
+Code review 2026-08-23 (`bmad-code-review`, four layers) over the B45/B10/B14 diff — 12 findings after dedupe; `[x]` = applied (`1035f97`, `9cce65b`) or deferred as marked.
+
+- [x] [Review][Decision] Web label "(verified in the source text)" beside a T6 no-marker reason — resolved: wording changed to "(found in the source text)" [web/src/components/reasons-list.tsx:45]
+- [x] [Review][Patch] Digit-code marker matches a bare decimal price (`Pulpo a la brasa 12,50`) — strip decimal and currency-marked numbers before the test [server/src/core/t6-verify.ts:29-32]
+- [x] [Review][Patch] `visual` branch returns before the marker check [server/src/core/t6-verify.ts:51-54]
+- [x] [Review][Patch] Legend-key marker accepts diet/size tags `(v)`, `(M)`; comma lists `(a, g)` not accepted [server/src/core/t6-verify.ts:27]
+- [x] [Review][Patch] Declaration words missing: `contient`, `contienen`, `conté`, `contém`, `contain`, `contener`, `trazas`/`traces`/`spuren`, `enthalten` [server/src/core/t6-verify.ts:25]
+- [x] [Review][Patch] B14 and the legend-key marker are pinned by nothing: add one fixture row (`1.250 €`, legend quote) and a pure `verifyEvidence(…, 'visual', null)` assertion inside the single test [server/test/fixtures/extraction.ts; server/test/golden-master.test.ts]
+- [x] [Review][Patch] T6 no-marker detail does not say what a marker is [server/src/core/t6-verify.ts:61]
+- [x] [Review][Patch] `arbiter.ts` header comment no longer describes the visual path [server/src/core/arbiter.ts:6-9]
+- [x] [Review][Patch] D28 §8 deviations (T6 placement, golden changed, single digit code narrowed) unrecorded; README "not made on purpose" stale [DECISIONS.md; README.md]
+- [x] [Review][Defer] A single legend code (`Pulpo 14`) or bare letter codes (`A, C, G`) are not markers [server/src/core/t6-verify.ts:29] — deferred, calibration (B42 legend reading)
+- [x] [Review][Defer] Negated declaration in a quote (`no contiene gluten`) passes the marker test [server/src/core/t6-verify.ts:25] — deferred, the runtime prompt forbids the entry; no observed case
+- [x] [Review][Defer] `text` class with `ground === null` reports "quote not found" [server/src/core/t6-verify.ts:56] — deferred, pre-existing
+
 ## Spec Change Log
+
+- 2026-08-23 — AC6 / matrix "T6 on visual → no T6": superseded. A `declared` entry on a `visual` run now fires T6 ("quote not verifiable") and the marker check below applies; the row is never `reliable` (B10, D28 §3, D29).
+- 2026-08-23 — AC2 price parsing: the Ask-First "thousands-separator heuristics" was answered — one separator followed by three digits is refused (T2) (B14, D29).
+- 2026-08-23 — T6 gains a declaration-marker check: a found quote with no declaration marker ⇒ `inferred`, offsets kept (B45, D28 §8 — implemented in T6, not T1; D29).
 
 ## Design Notes
 
@@ -113,7 +135,7 @@ context:
 
 **T6 before the gate (AC4/AC6)**
 
-- No quote ⇒ `inferred` on every class; quote not found on a `text` run ⇒ `inferred`; `visual` passes through.
+- No quote ⇒ `inferred` on every class; quote not found on a `text` run ⇒ `inferred`; `visual` passed through until 2026-08-23 — now T6 fires on every `declared` entry and a marker-less quote is `inferred` (Spec Change Log).
   [`t6-verify.ts:16`](../../server/src/core/t6-verify.ts#L16)
 
 **The arbiter (AC3/AC7)**

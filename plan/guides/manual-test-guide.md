@@ -8,6 +8,8 @@ live.
 
 ## Part A — the timed fresh-clone test (< 5 minutes)
 
+Done 2026-08-22 — 3:38 and 3:00 (prompts 47–48).
+
 Do this in a directory that has never seen the repo, on the same laptop your other project
 runs on — that is the realistic case, and ports 3000/5432 **are** taken there.
 
@@ -17,7 +19,7 @@ runs on — that is the realistic case, and ports 3000/5432 **are** taken there.
    whether it was enough — that paragraph is the first thing a reviewer with Docker
    running will hit.
 4. Stop the stopwatch when the UI is open at `http://localhost:5173` (or the port you
-   chose) **and** one run has reached `done`.
+   chose) **and** one run has reached `extracted`.
 5. Write down: elapsed time, every moment you hesitated, every command you had to guess.
    Three lines in `prompts/07-hardening/` as a prompt entry, outcome included.
 
@@ -28,7 +30,7 @@ README bugs are the cheapest ones left to fix.
 
 ### Inputs
 
-Real menus first. Two are already proven (run on 22 August, both `done`):
+Real menus first. Two are already proven (run on 22 August, both `extracted`):
 
 - **URL → PDF**: `https://vox-restaurant.de/wp-content/uploads/2026/07/Vox-Speisekarte-Englisch-1.pdf`
   — a public restaurant PDF served over HTTP, 615 KB, 52,919 characters of text layer,
@@ -68,7 +70,7 @@ the terminal state before the next).
 
 | # | Do | Expect | What it proves — the sentence for the script |
 |---|---|---|---|
-| 1 | Upload `la-parra.pdf` | `done`, 6 rows: Tortilla and Croquetas `reliable` (allergens declared in prose); Ensalada `uncertain` (T2 `desde`), Pulpo `uncertain` (T3 `$`), Tabla de quesos and Postre `uncertain` (T1 inferred / none) | "The flag is the product. A row is reliable only when *no* rule fired, and the rules are printed under the row." |
+| 1 | Upload `la-parra.pdf` | `extracted`, 7 rows, 2, sometimes 3 `reliable` (B46): Tortilla and Croquetas `reliable` (allergens declared in prose); Ensalada `uncertain` (T2 `desde`), Pulpo `uncertain` (T3 `$`), Tabla de quesos and Postre `uncertain` (T1 inferred / none), Bogavante `uncertain` (T2 `1.250 €`, a thousands separator; its `(c, l)` legend key keeps `crustaceans` declared) | "The flag is the product. A row is reliable only when *no* rule fired, and the rules are printed under the row." |
 | 2 | Upload one of **your** menus | Rows; some `uncertain` | Show a real `uncertain` and read its reasons aloud — that is Ana's queue. Mention the ~9–12 s measured wait and that the timer is measured, not a progress bar. |
 | 3 | Paste a restaurant URL whose menu is images (e.g. `https://www.casalucio.es/carta/`) | `empty`, zero dishes | "It found the page, found no menu in the text, and said so instead of inventing one." Then upload a photo of the same page → rows. (B40: the screen should hint at this; it does not yet.) |
 | 4 | Paste `https://en.wikipedia.org/wiki/Paella` | `empty` | Same honesty on a page full of food words. |
@@ -80,7 +82,7 @@ the terminal state before the next).
 | 10 | Upload `fake.pdf` | `failed · model_error` | A lie with a `.pdf` name fails honestly, no rows. |
 | 11 | Paste `http://127.0.0.1:3000/` and `http://169.254.169.254/` | `failed · unreachable_url` instantly | SSRF guard: refused before a connection is opened. (Copy is misleading here — B31 — say so.) |
 | 12 | Start a run, and while it is `processing`, submit another | `409 · one run at a time` | Seriality by design; the submit button is disabled, curl shows the server enforces it too. |
-| 13 | On a `done` run: confirm one row, mark one `follow-up` with a note | Verdicts recorded, **extracted columns unchanged** | The invariant: a review is a verdict about the data, never an edit of it. |
+| 13 | On an `extracted` run: confirm one row, mark one `follow-up` with a note | Verdicts recorded, **extracted columns unchanged** | The invariant: a review is a verdict about the data, never an edit of it. |
 | 14 | Same run, from a terminal: post a batch with one real and one forged `dish_id` | `400`; the real decision **was not applied** either | All-or-nothing on the batch. Highlight 52 has the md5 version of this demo. |
 | 15 | Start a run, kill the server mid-run, restart, open the run | `interrupted` after 3 min, with a retry path; the recent-runs list on `/` still shows it | "Stale is derived, never written. Nothing was saved that you cannot see." |
 | 16 | Upload the Vox PDF **by URL**, then the photo | 34 rows and 4 rows, all `uncertain` — or a few `reliable` on ingredient quotes, which is B45 (6 of 34 on a re-run, 22 Aug) | The measured case for B42: on menus that do not print allergen prose, every row lands in the queue. Say it as a number: 38 of 38. |
@@ -92,7 +94,7 @@ with a note on 2, and both states visible in the recent-runs list.
 
 Covered since, by the D27 sweep on the same day: scenarios 3 and 4 (`empty` on casalucio
 and Wikipedia), 7 (the injection PDF), 12 and 14 (the 409 and the forged batch); scenario 1
-(`la-parra.pdf`, 6 rows, 3 `reliable`, all six reviewed) in Pablo's second timed run.
+(`la-parra.pdf`, 6 rows at the time — 7 since 2026-08-23 —, 2, sometimes 3 `reliable` (B46), all reviewed) in Pablo's second timed run.
 
 Not yet on screen:
 

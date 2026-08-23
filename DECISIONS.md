@@ -4,6 +4,26 @@ Trade-offs, alternatives considered, and cuts — recorded as they happen, not r
 at the end. Format per entry: context → options → decision → why. Open questions are
 marked **OPEN** and resolved by a later entry or a BMAD artifact.
 
+## Index — the entries that shape the submission
+
+| # | Date | What it settles |
+|---|---|---|
+| D2 | 08-20 | BMAD is the visible method; the custom multi-agent loop stays out of the build |
+| D4 | 08-20 → 21 | The flag is derived by deterministic rules T1–T6, not by the model's confidence |
+| D8 | 08-20 | Ship on 2026-08-25 with documented gaps; never slip |
+| D10 | 08-20 | "Under a minute" retracted to ~3 minutes per menu |
+| D13 | 08-21 | Persist-first run, polling, one technical timeout |
+| D16 | 08-21 | The one test: an integration golden-master over the real stack |
+| D18 | 08-21 | Normalization order pinned after a reviewer caught the accent-stripping bug |
+| D24 | 08-22 | Scope cut: 3 stories merged, 2 deleted, 11 ACs removed; 73 of 84 shipped |
+| D25 | 08-22 | What the one test asserts and the four checks that stay manual |
+| D26 | 08-22 | The CI migration guard replaced after its first claim proved false |
+| D27 | 08-22 | Phase 4: one adversarial pass, 18-input hostile sweep, B28–B41 |
+| D28 | 08-22 | Model tier closed on luna; B45/B46 measured; €2; would-you-ship-it in three answers |
+| D29 | 08-23 | Price revised to €0.50; B45, B10, B14 fixed, B45 re-measured, the other two pinned in the test; ruling of prompt 52 reversed |
+
+D21–D23 are build-session triage records; the rest are listed in order below.
+
 ---
 
 ## D1 · 2026-08-20 — Prompt logging from day zero, verbatim
@@ -615,10 +635,10 @@ fail one way:
   route arm, the content-type dispatch, charset decoding and `html-to-text` are all
   outside the gate. Removing `text/html` from the accepted set fails every URL menu with a
   green build.
-- **`empty` and `failed` are unobserved.** The mocked seam always returns six dishes and
+- **`empty` and `failed` are unobserved.** The mocked seam always returns six dishes (seven since 2026-08-23, D29) and
   never throws, so the zero-dish E9 branch and both failure paths never run. Deleting the
   zero-dish guard yields a `done` run with no rows — the exact state AD-5 forbids — and the
-  golden, which has six dishes, notices nothing.
+  golden, which has six dishes (seven since D29), notices nothing.
 
 The 409 seriality gate was in this list until the review; it moved into the test, because a
 second POST during the live run is an assertion about *this* run's own behaviour and
@@ -771,7 +791,7 @@ What breaks when this leaves the laptop, and what the system does about it today
 
 Secret scan over the working tree and the full history (`git log -p --all` against key,
 token and private-key patterns, plus every path ever added): nothing but `.env.example`
-with placeholders. Prompt-log audit: 122 entries, every one with an outcome; 64 Spanish
+with placeholders. Prompt-log audit: 122 entries at the time, every one with an outcome; 64 Spanish
 prompts had no English line, and an evaluator who scored the log 13/20 said they could
 not assess it — every entry now carries an `In English` summary next to the verbatim
 prompt. That was the "optional" item of plan 04, made mandatory.
@@ -797,7 +817,7 @@ ship-it answer. Run as a `bmad-agent-analyst` session; the analysis is
 $0.0010–0.0069 per menu, terra $0.0063–0.061; the 34-dish Vox PDF $0.0069 on luna. Luna
 returned 6 `reliable` rows on Vox, each a `declared` allergen whose quote is an ingredient
 word (`Lobster tail`, `hazelnut`) on a menu that declares nothing — the same PDF had given
-0 of 34 a day earlier. Terra labelled all 34 `inferred`, read one declared line luna
+0 of 34 the same morning (B42, 11:23; the measurement ran 14:38). Terra labelled all 34 `inferred`, read one declared line luna
 missed, split the la-parra fixture into twelve rows and self-flagged all twelve.
 
 **Decisions.**
@@ -824,7 +844,7 @@ missed, split the la-parra fixture into twelve rows and self-flagged all twelve.
    spine stays as written (prompt 38). The manual-test guide's "not yet covered" list and
    next register number were stale → updated. REQUIREMENTS said D1–D26 → D1–D28.
 
-6. **Not fixed before submission, on purpose** (Pablo, prompt 52). The brief's auto-reject
+6. **Not fixed before submission, on purpose** (Pablo, prompt 52). *Amended 2026-08-23, D29: the three fixes were made.* The brief's auto-reject
    is *cannot explain* what breaks; the rubric row scores the framing; the flag's derivation
    is "your choice" and no row scores its accuracy; D8 ships with documented gaps. Two days
    out, with one test that does not cover the visual path (D25), the three `core/` fixes —
@@ -836,7 +856,7 @@ missed, split the la-parra fixture into twelve rows and self-flagged all twelve.
    T6 verifies that a quote exists in the source, not that it declares anything. D4's
    reasoning (deterministic rules over model self-assessment) stands; the rule set was one
    rule short.
-8. **B45 fix, specified.** `core/arbiter.ts`, T1: a `declared` allergen whose
+8. **B45 fix, specified.** *Amended 2026-08-23, D29: implemented in `core/t6-verify.ts` as a T6 reason, and the golden did change — see D29 §2.* `core/arbiter.ts`, T1: a `declared` allergen whose
    `evidence_quote`, normalized, contains none of `contiene`, `contains`, `enthält` /
    `enthaelt`, `allergens` / `alérgenos` / `allergene`, nor a legend key (`(A)`, `(G)`, a
    digit code) is re-labelled `inferred` and T1 fires with `inferred allergens: …`. The
@@ -851,3 +871,69 @@ missed, split the la-parra fixture into twelve rows and self-flagged all twelve.
 **Why**: the brief asks what to charge *and why*; the why is the measured cost, the
 unmeasured value, and a gate with one measured hole. A one-line "yes, ship it" would
 have been contradicted by the repo's own register.
+
+## D29 · 2026-08-23 — Final review: price revised to €0.50, the three `core/` fixes made, the prompt-52 ruling reversed
+
+**Context**: Pablo's last read of the whole repo before recording (prompt 56). Five
+reviewers ran in parallel — consistency, language, two rubric scorers, a script fact-check —
+and their reports are committed at `_bmad-output/planning-artifacts/reviews/final-review-2026-08-23/`.
+Scores before any change: 78/100 and 67.5/95 (videos pending). Both discounted the same
+item: three `core/` rules described as "hours each" and left unmade.
+
+**Decisions.**
+
+1. **Price: €0.50 per menu processed** (was €2, D28 §4). The €2 was a share of an operator
+   saving of 15–30 minutes that nobody had measured (ship-readiness §5.1, A1 *Low*). On the
+   two real menus every row came back `uncertain` (B42), so the tool removed the typing and
+   none of the reading; revising 34 rows at 15–30 s each is 8–17 minutes against 15–30
+   minutes of typing — a saving of 5–10 minutes, €2.50–5 at €30/h, of which €2 took 40–80 %.
+   Cost per menu is $0.0069 of model plus about €0.05 of infrastructure at 500 menus a month
+   (€0.50 at 50). Document-extraction APIs charge about $0.03 per page for custom
+   extraction ($30 per 1,000 pages, Google Document AI / Azure Document Intelligence, checked
+   2026-08-23), about $0.10 for a three-page menu; menu data-entry vendors publish no price.
+   €0.50 is ~8× the total cost at 500 a month, 10–20 % of the plausible saving, and five
+   times an extractor that returns rows without a review record. Reprice to €1–2 when the
+   review time is measured on real menus and `reliable` exceeds ~30 % of rows (B42's legend
+   reading). Pablo's words (prompt 56): "si el costo es 0,0069 euros por menú… de dónde salen
+   los 2 euros… un servicio que encima no es óptimo". D28 stands as written; BUSINESS.md
+   carries the new number.
+
+2. **B45, B10 and B14 fixed** (`e9e5eee`, `c5e1e0f`, review patches `1035f97`), re-measured
+   (`measurement-2026-08-23/`), reviewed with `bmad-code-review` (four layers, 12 findings after
+   dedupe: 1 decision, 8 patched, 3 deferred — spec 1.6 *Review Findings*). Pablo reversed prompt 52's "document,
+   don't fix": he had chosen it because the fixes looked out of scope; they are in scope and
+   recommended (prompt 56). Deviations from D28 §8, accepted at review: the rule lives in
+   `core/t6-verify.ts` as a T6 reason (T6 is the only rule that mutates provenance; T1 stays
+   a gate); a single digit code (`Pulpo 14`) is not a marker (a lone number is more often a
+   price); prices inside a quote are stripped before the digit test (`12,50` is not `1,3,7`);
+   on a `visual` source a marker-less quote is re-labelled `inferred`, a marked one keeps
+   `declared` but T6 fires, so no visual row is `reliable` (B10). **The golden changed**: §8's
+   "both declared quotes carry a marker" was wrong — the fixture had five more `declared`
+   entries quoting ingredient phrases, which are the B45 shape; rows 2–4 gained T6 + T1
+   reasons, the `reliable` set did not move. One fixture row was added to pin B14 (`1.250 €`
+   → T2) and the legend-key marker (`(c, l)` stays `declared`); a pure assertion on the visual
+   branch sits in the same test. Still one test. B10 and B14 had no input in the
+   re-measurement; they are pinned by the test, not by a run.
+
+3. **Re-measurement**: luna, same four inputs, 18:31–18:32. Vox 0 of 34 `reliable` — but the
+   model returned every allergen `inferred` this run (B46), so the new rule had nothing to
+   check live; it is shown deterministically on the 19 `declared` quotes of the 08-22 payload
+   (`replay-0822-vox.txt`: 0 markers, 0 of 34). On la-parra the rule fired live twice
+   (`Aliño con mostaza y semillas de sésamo` → inferred). Cost $0.0063 for Vox against $0.0069 the day before.
+   No new failure mode; next register row stays B47.
+
+4. **Repo consistency** (the audit's 6 blockers and 29 minor findings): phase dates and
+   statuses, REQUIREMENTS §2/§7, prompt 45 re-dated to 2026-08-22, "a day earlier" →
+   "the same morning" (B42 and B45 were both measured on the 22nd), `prompts/04-` →
+   `06-implementation`, sprint-status stories `done`, RISKS rows pointing at the B rows that
+   realised them, `In English` on the 58 prompt entries that had only `Intent`, a reader's
+   key in `prompts/README.md`, the PRD's "by construction" line amended (D28 §7 applied to
+   the PRD), README orientation first, contact line, video placeholders, this index.
+
+5. **Not changed**: the spine (prompt 38), the test count (R8), the €2 text inside D28, the
+   three Spanish `.memlog.md` files (skill working memory, noted in `prompts/README.md`).
+
+**Why**: the reviewers read "known, specified, unmade" as a choice against correctness in a
+safety path; the price rested on an unmeasured anchor the repo itself marked as its weakest
+assumption. Both were one session of work.
+

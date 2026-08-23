@@ -6,6 +6,7 @@
 - **Intent**: Address review feedback — the phase plans were too terse to serve as a
   working guide; BMAD and implementation needed concrete examples/scenarios; risks
   lacked formal treatment. Also clarify whether the Phase 2 BMAD plan is practice or real.
+- **In English**: Is the BMAD planning for practice or for the real challenge? It needs expanding — I read all the phase files and they are too terse; expand them in place or as separate drafts with more precise instructions, especially BMAD usage with examples and scenarios, same for implementation. Do we have risks and their mitigations, for instance?
 
 ## Prompt (verbatim)
 

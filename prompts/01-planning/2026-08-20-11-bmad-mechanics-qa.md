@@ -4,6 +4,7 @@
 - **Model**: Claude Fable 5
 - **Phase**: Planning (methodology familiarization)
 - **Intent**: Clear up three mechanics questions before the first real BMAD session.
+- **In English**: Each time I invoke a BMAD slash command, does it consume OpenAI credits since it is connected? In a back-and-forth with a BMAD agent, do I have to invoke it every time or does replying continue automatically? When the agent's work is finished, do I need to issue a close command?
 
 ## Prompt (verbatim)
 

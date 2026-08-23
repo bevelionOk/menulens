@@ -5,6 +5,7 @@
 - **Model**: Claude Fable 5
 - **Phase**: 06-implementation (story 1-4-source-acquisition-class-decision, spec approval)
 - **Intent**: Confirm structured logging is Pino, approve the spec as presented (size kept whole), and ask whether the rest of Epic 1 fits in the same context because the per-story ritual is getting long.
+- **In English**: Is logging done with Pino? The decisions are ratified. Let's see whether the rest of the Epic 1 stories fit in this context, because it is getting very long.
 
 ## Prompt
 

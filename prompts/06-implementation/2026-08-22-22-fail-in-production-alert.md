@@ -5,6 +5,7 @@
 - **Model**: Claude Fable 5
 - **Phase**: 06-implementation (process rule)
 - **Intent**: Make sure the production-failure modes surfaced by the adversarial reviews — many of them rejected as out of scope — are captured for documentation, not dropped at triage.
+- **In English**: Here, pay attention to "fail in production" — it is important to keep this on alert to document!
 
 ## Prompt
 

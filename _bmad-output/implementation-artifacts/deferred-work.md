@@ -64,7 +64,7 @@ Collected by build reviews for later focused attention. Append-only.
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-6-triage-core-the-deterministic-arbiter.md`
   summary: Decide (Ask-First) how an ambiguous decimal/thousands separator is treated — `"1.250 €"` currently parses to `1.25` and `"12,345 €"` to `12.35`, both able to reach Ana as `reliable`.
-  evidence: Verified in the scratchpad matrix. The spec's Ask-First list names "thousands-separator heuristics", so the arbiter cannot widen the rule on its own; the honest fix is to refuse (T2) when the single separator is followed by exactly three digits or more than two decimals, which is a refusal rather than a guess.
+  evidence: Verified in the scratchpad matrix. The spec's Ask-First list names "thousands-separator heuristics", so the arbiter cannot widen the rule on its own; the fix is to refuse (T2) when the single separator is followed by exactly three digits or more than two decimals, which is a refusal rather than a guess. — closed 2026-08-23 (B14 fix)
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-6-triage-core-the-deterministic-arbiter.md`
   summary: Decide (Ask-First) whether the pinned normalization chain should drop default-ignorable characters (soft hyphen U+00AD, ZWSP U+200B, BOM U+FEFF) before matching.
@@ -113,3 +113,9 @@ Collected by build reviews for later focused attention. Append-only.
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-7-m1-submit-watch-review.md`
   summary: Neither new route declares a Fastify response schema, and `runListResponseSchema` is used only as a TypeScript type on the client — a server drift from the declared contract is caught by nothing at runtime and nothing in CI.
   evidence: Blind review — the review endpoint's `RunDetail` response shape is not even declared in `shared/src/api.ts` the way the other two responses are.
+
+## Deferred from: code review of spec-1-6 (2026-08-23, the B45/B10/B14 diff)
+
+- A single legend code (`Pulpo 14`) or bare letter codes (`A, C, G`) are not declaration markers; a lone number is more often a price. Calibration data, with B42's legend reading.
+- A negated declaration quoted as evidence (`no contiene gluten`, `sin alérgenos`) passes the marker test. The runtime prompt forbids creating the entry; no run has produced one.
+- On a `text` run with `ground === null` the T6 detail says "quote not found in the source text"; "no ground text" would be accurate. Pre-existing.

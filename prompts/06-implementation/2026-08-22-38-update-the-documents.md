@@ -5,6 +5,7 @@
 - **Model**: Claude Opus 5
 - **Phase**: 06-implementation (documentation pass)
 - **Intent**: Bring the four flagged documents in line with what happened — without rewriting what was planned.
+- **In English**: Yes please, update the flagged documents and leave the architecture and the 14 documents untouched — that keeps the history. The idea is NOT to change the history but to reflect it, while each document must fulfil its purpose!
 
 ## Prompt
 

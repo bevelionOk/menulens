@@ -5,6 +5,7 @@
 - **Model**: Claude Opus 5
 - **Phase**: 06-implementation (story 1.8 review triage)
 - **Intent**: Correct the sequencing — a correction written before the fix would describe a state that no longer exists.
+- **In English**: But if we fix the guard, then the claim holds — so it is not really both. It must be evaluated afterwards.
 
 ## Prompt
 

@@ -8,10 +8,10 @@
       "stage": "saving",
       "failure_reason": null,
       "state": "done",
-      "dish_count": 6,
+      "dish_count": 7,
       "review_progress": {
         "resolved": 0,
-        "total": 6
+        "total": 7
       }
     },
     "dishes": [
@@ -86,13 +86,13 @@
         "allergens": [
           {
             "id": "mustard",
-            "provenance": "declared",
+            "provenance": "inferred",
             "evidence_quote": "Aliño con mostaza y semillas de sésamo",
             "match_text": "Aliño con mostaza y semillas de sésamo"
           },
           {
             "id": "sesame",
-            "provenance": "declared",
+            "provenance": "inferred",
             "evidence_quote": "Aliño con mostaza y semillas de sésamo",
             "match_text": "Aliño con mostaza y semillas de sésamo"
           }
@@ -100,6 +100,18 @@
         "description": "Aliño con mostaza y semillas de sésamo.",
         "description_provenance": "extracted",
         "confidence_reasons": [
+          {
+            "rule": "T6",
+            "detail": "mustard: evidence quote carries no declaration marker (no contiene/allergens line, no legend key)"
+          },
+          {
+            "rule": "T6",
+            "detail": "sesame: evidence quote carries no declaration marker (no contiene/allergens line, no legend key)"
+          },
+          {
+            "rule": "T1",
+            "detail": "inferred allergens: mustard, sesame"
+          },
           {
             "rule": "T2",
             "detail": "no unambiguous price value"
@@ -118,7 +130,7 @@
         "allergens": [
           {
             "id": "molluscs",
-            "provenance": "declared",
+            "provenance": "inferred",
             "evidence_quote": "Pulpo a la brasa",
             "match_text": "Pulpo a la brasa"
           }
@@ -126,6 +138,14 @@
         "description": "Servido sobre patata panadera.",
         "description_provenance": "extracted",
         "confidence_reasons": [
+          {
+            "rule": "T6",
+            "detail": "molluscs: evidence quote carries no declaration marker (no contiene/allergens line, no legend key)"
+          },
+          {
+            "rule": "T1",
+            "detail": "inferred allergens: molluscs"
+          },
           {
             "rule": "T2",
             "detail": "no unambiguous price value"
@@ -148,13 +168,13 @@
         "allergens": [
           {
             "id": "milk",
-            "provenance": "declared",
+            "provenance": "inferred",
             "evidence_quote": "Tabla de quesos artesanos con nueces",
             "match_text": "Tabla de quesos artesanos con nueces"
           },
           {
             "id": "nuts",
-            "provenance": "declared",
+            "provenance": "inferred",
             "evidence_quote": "Tabla de quesos artesanos con nueces",
             "match_text": "Tabla de quesos artesanos con nueces"
           }
@@ -162,6 +182,18 @@
         "description": "Tabla de quesos artesanos con nueces",
         "description_provenance": "extracted",
         "confidence_reasons": [
+          {
+            "rule": "T6",
+            "detail": "milk: evidence quote carries no declaration marker (no contiene/allergens line, no legend key)"
+          },
+          {
+            "rule": "T6",
+            "detail": "nuts: evidence quote carries no declaration marker (no contiene/allergens line, no legend key)"
+          },
+          {
+            "rule": "T1",
+            "detail": "inferred allergens: milk, nuts"
+          },
           {
             "rule": "T4",
             "detail": "name not found in the source text"
@@ -194,6 +226,32 @@
         "review_status": "pending",
         "followup_note": null,
         "reviewed_at": null
+      },
+      {
+        "position": 6,
+        "name": "Bogavante del día",
+        "price_raw": "1.250 €",
+        "price_value": null,
+        "allergens": [
+          {
+            "id": "crustaceans",
+            "provenance": "declared",
+            "evidence_quote": "(c, l)",
+            "match_text": "(c, l)"
+          }
+        ],
+        "description": "Bogavante del día (c, l)",
+        "description_provenance": "extracted",
+        "confidence_reasons": [
+          {
+            "rule": "T2",
+            "detail": "no unambiguous price value"
+          }
+        ],
+        "flag": "uncertain",
+        "review_status": "pending",
+        "followup_note": null,
+        "reviewed_at": null
       }
     ]
   },
@@ -205,10 +263,10 @@
     "stage": "saving",
     "failure_reason": null,
     "state": "done",
-    "dish_count": 6,
+    "dish_count": 7,
     "review_progress": {
       "resolved": 0,
-      "total": 6
+      "total": 7
     }
   },
   "after_review": {
@@ -220,10 +278,10 @@
       "stage": "saving",
       "failure_reason": null,
       "state": "done",
-      "dish_count": 6,
+      "dish_count": 7,
       "review_progress": {
         "resolved": 2,
-        "total": 6
+        "total": 7
       }
     },
     "dishes": [
@@ -298,13 +356,13 @@
         "allergens": [
           {
             "id": "mustard",
-            "provenance": "declared",
+            "provenance": "inferred",
             "evidence_quote": "Aliño con mostaza y semillas de sésamo",
             "match_text": "Aliño con mostaza y semillas de sésamo"
           },
           {
             "id": "sesame",
-            "provenance": "declared",
+            "provenance": "inferred",
             "evidence_quote": "Aliño con mostaza y semillas de sésamo",
             "match_text": "Aliño con mostaza y semillas de sésamo"
           }
@@ -312,6 +370,18 @@
         "description": "Aliño con mostaza y semillas de sésamo.",
         "description_provenance": "extracted",
         "confidence_reasons": [
+          {
+            "rule": "T6",
+            "detail": "mustard: evidence quote carries no declaration marker (no contiene/allergens line, no legend key)"
+          },
+          {
+            "rule": "T6",
+            "detail": "sesame: evidence quote carries no declaration marker (no contiene/allergens line, no legend key)"
+          },
+          {
+            "rule": "T1",
+            "detail": "inferred allergens: mustard, sesame"
+          },
           {
             "rule": "T2",
             "detail": "no unambiguous price value"
@@ -330,7 +400,7 @@
         "allergens": [
           {
             "id": "molluscs",
-            "provenance": "declared",
+            "provenance": "inferred",
             "evidence_quote": "Pulpo a la brasa",
             "match_text": "Pulpo a la brasa"
           }
@@ -338,6 +408,14 @@
         "description": "Servido sobre patata panadera.",
         "description_provenance": "extracted",
         "confidence_reasons": [
+          {
+            "rule": "T6",
+            "detail": "molluscs: evidence quote carries no declaration marker (no contiene/allergens line, no legend key)"
+          },
+          {
+            "rule": "T1",
+            "detail": "inferred allergens: molluscs"
+          },
           {
             "rule": "T2",
             "detail": "no unambiguous price value"
@@ -360,13 +438,13 @@
         "allergens": [
           {
             "id": "milk",
-            "provenance": "declared",
+            "provenance": "inferred",
             "evidence_quote": "Tabla de quesos artesanos con nueces",
             "match_text": "Tabla de quesos artesanos con nueces"
           },
           {
             "id": "nuts",
-            "provenance": "declared",
+            "provenance": "inferred",
             "evidence_quote": "Tabla de quesos artesanos con nueces",
             "match_text": "Tabla de quesos artesanos con nueces"
           }
@@ -374,6 +452,18 @@
         "description": "Tabla de quesos artesanos con nueces",
         "description_provenance": "extracted",
         "confidence_reasons": [
+          {
+            "rule": "T6",
+            "detail": "milk: evidence quote carries no declaration marker (no contiene/allergens line, no legend key)"
+          },
+          {
+            "rule": "T6",
+            "detail": "nuts: evidence quote carries no declaration marker (no contiene/allergens line, no legend key)"
+          },
+          {
+            "rule": "T1",
+            "detail": "inferred allergens: milk, nuts"
+          },
           {
             "rule": "T4",
             "detail": "name not found in the source text"
@@ -406,6 +496,32 @@
         "review_status": "followup",
         "followup_note": "Pedir a cocina la ficha del postre del día.",
         "reviewed_at": "<timestamp>"
+      },
+      {
+        "position": 6,
+        "name": "Bogavante del día",
+        "price_raw": "1.250 €",
+        "price_value": null,
+        "allergens": [
+          {
+            "id": "crustaceans",
+            "provenance": "declared",
+            "evidence_quote": "(c, l)",
+            "match_text": "(c, l)"
+          }
+        ],
+        "description": "Bogavante del día (c, l)",
+        "description_provenance": "extracted",
+        "confidence_reasons": [
+          {
+            "rule": "T2",
+            "detail": "no unambiguous price value"
+          }
+        ],
+        "flag": "uncertain",
+        "review_status": "pending",
+        "followup_note": null,
+        "reviewed_at": null
       }
     ]
   }

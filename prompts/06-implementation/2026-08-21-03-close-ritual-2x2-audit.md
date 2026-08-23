@@ -5,6 +5,7 @@
 - **Model**: Claude Fable 5
 - **Phase**: 06-implementation (story 1-1-project-scaffold-foundations, close-out)
 - **Intent**: Run the standing session-close ritual (prompts log, DECISIONS, playbook sync, video highlights, commit) and audit the session with a 2×2 on consideration: right things considered, wrong things considered, right things missed, wrong things correctly ignored.
+- **In English**: Close ritual first, plus: A) was everything that should have been considered, considered? B) was something considered that should not have been? C) was something that should have been considered, missed? D) was something that should not have been considered, correctly left out?
 
 ## Prompt
 

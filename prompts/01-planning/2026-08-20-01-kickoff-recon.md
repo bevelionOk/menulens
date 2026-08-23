@@ -6,6 +6,7 @@
 - **Intent**: Before touching the challenge, get a clear view of the brief, rubric and
   auto-reject rules; verify local infrastructure; decide how to document prompts; and
   evaluate whether an existing multi-agent methodology fits or hurts the application.
+- **In English**: Hello — we are going to coordinate a challenge for a full-stack role. Before starting: get a clear view of the challenge, its goals and selection criteria; avoid penalties and over-engineering; document every prompt from now on, since that is part of the evaluation; tell me what else to document; make sure my machine has all the infrastructure and I am familiar with the methodology; flag anything I missed; evaluate whether our existing multi-agent methodology helps or is penalised; take your time, reconnaissance and planning matter most. Repo: github.com/roenschg/vibe-coder-challenge.
 
 ## Prompt (verbatim)
 

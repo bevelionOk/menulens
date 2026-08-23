@@ -5,6 +5,7 @@
 - **Phase**: Planning (master-plan review in progress)
 - **Intent**: Approve the two decisions flagged for explicit sign-off while reviewing
   the rest of the plan.
+- **In English**: Your two decisions approved: video in English, and documented gaps. Now I read the rest.
 
 ## Prompt (verbatim)
 

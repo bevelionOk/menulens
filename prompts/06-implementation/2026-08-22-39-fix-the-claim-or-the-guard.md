@@ -5,6 +5,7 @@
 - **Model**: Claude Opus 5
 - **Phase**: 06-implementation (story 1.8 review triage)
 - **Intent**: The review showed D26's argument overstated what the drift guard verified. Pablo refused the easy repair and asked the question underneath it.
+- **In English**: Yes, but should you correct the claim or correct the drift guard? What should it verify?
 
 ## Prompt
 
