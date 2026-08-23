@@ -15,6 +15,7 @@ import { afterAll, beforeAll, expect, test } from 'vitest';
 import type { z } from 'zod';
 import { buildApp } from '../src/app';
 import { normalizeForMatch } from '../src/core/normalize';
+import { verifyEvidence } from '../src/core/t6-verify';
 import { db, pool } from '../src/db/client';
 import { dishes, runs, sourceArtifacts } from '../src/db/schema';
 import { getArtifact } from '../src/db/source-artifacts-repo';
@@ -26,6 +27,12 @@ import { buildMenuPdf, MENU_LINES } from './fixtures/menu-pdf';
 // real upload through the real HTTP surface, real acquisition (pdfjs over real bytes),
 // the real arbiter, a real Drizzle transaction into a real Postgres, and the real read
 // path. The model seam is the only mock (AD-12) — no network, no OpenAI, no cost.
+//
+// The fixture is crafted so every arbiter rule T1–T6 fires at least once and pins three
+// register rows: B14 (a thousands group is not a price), B45 (a declared allergen needs a
+// declaration marker — prose or legend key — in its quote) and B10 (a `declared` entry on
+// a visual source is never `reliable`; the only branch this upload cannot reach, so it is
+// asserted on `verifyEvidence` directly, inside this same test).
 //
 // Everything asserted below is a claim about THIS run's own observable payload. Claims
 // that would need a different fixture, a different entry point or a failure injection
@@ -309,6 +316,34 @@ test('golden master: one menu upload, through the real API and Postgres, with on
     { id: 'milk', match: 'Tabla de quesos artesanos con nueces' },
     { id: 'nuts', match: 'Tabla de quesos artesanos con nueces' },
   ]);
+  // The other side of B45: a legend key IS a marker. Row 6 declares through `(c, l)` and
+  // keeps `declared` with offsets, with no T6; its T2 comes from the price alone (B14).
+  const bogavante = detail.dishes[6]!;
+  expect(bogavante.name).toBe('Bogavante del día');
+  expect(bogavante.confidence_reasons.map((reason) => reason.rule), 'legend key misread as no marker').toEqual(['T2']);
+  expect(bogavante.allergens.map((entry) => ({ id: entry.id, provenance: entry.provenance }))).toEqual([
+    { id: 'crustaceans', provenance: 'declared' },
+  ]);
+  expect(bogavante.flag).toBe('uncertain');
+  // The visual branch (B10), which no `text`-class upload reaches: a quote with a marker
+  // keeps `declared` (unverifiable, `match: null`) but still draws a T6 reason; a quote
+  // without one is downgraded exactly as on a text source.
+  const visual = verifyEvidence(
+    [
+      { id: 'milk', provenance: 'declared', evidence_quote: 'Contiene leche' },
+      { id: 'nuts', provenance: 'declared', evidence_quote: 'hazelnut' },
+    ],
+    'visual',
+    null,
+  );
+  expect(visual.allergens).toEqual([
+    { id: 'milk', provenance: 'declared', evidence_quote: 'Contiene leche', match: null },
+    { id: 'nuts', provenance: 'inferred', evidence_quote: 'hazelnut', match: null },
+  ]);
+  expect(visual.reasons).toEqual([
+    { rule: 'T6', detail: 'milk: declared on a visual source; quote not verifiable' },
+    { rule: 'T6', detail: expect.stringContaining('nuts: evidence quote carries no declaration marker') },
+  ]);
   const reliable = detail.dishes.filter((dish) => dish.flag === 'reliable');
   expect(reliable.map((dish) => dish.name), 'exactly one fixture row must survive triage unflagged').toEqual([
     'Tortilla de patatas',
@@ -349,6 +384,8 @@ test('golden master: one menu upload, through the real API and Postgres, with on
     { price_raw: '18 $', price_value: null, currency: 'non-EUR currency' },
     { price_raw: '14,00 €', price_value: 14, currency: 'eur or unmarked' },
     { price_raw: '5,00 €', price_value: 5, currency: 'eur or unmarked' },
+    // One separator followed by three digits is a thousands group, not a decimal (B14).
+    { price_raw: '1.250 €', price_value: null, currency: 'eur or unmarked' },
   ]);
 
   // --- the golden -------------------------------------------------------------------------------
@@ -368,7 +405,9 @@ test('golden master: one menu upload, through the real API and Postgres, with on
   // --- the review round-trip -----------------------------------------------------------------------
   const confirmed = detail.dishes[0]!;
   const reopened = detail.dishes[1]!;
-  const flagged = detail.dishes[detail.dishes.length - 1]!;
+  // Row 5, the self-flagged Postre — no longer the last row since row 6 arrived.
+  const flagged = detail.dishes[5]!;
+  expect(flagged.name).toBe('Postre del día');
   const reviewedDetail = body(
     runDetailSchema,
     await app.inject({
@@ -386,7 +425,7 @@ test('golden master: one menu upload, through the real API and Postgres, with on
     'POST /api/runs/:id/reviews',
   );
   const afterBatch = normalizeDetail(reviewedDetail, acquiredText);
-  expect(afterBatch.run.review_progress).toEqual({ resolved: 3, total: 6 });
+  expect(afterBatch.run.review_progress).toEqual({ resolved: 3, total: 7 });
   assertReviewTimestamps(reviewedDetail);
   // A review writes review fields and nothing else.
   expect(withoutReviewFields(afterBatch)).toEqual(withoutReviewFields(golden));
@@ -404,7 +443,7 @@ test('golden master: one menu upload, through the real API and Postgres, with on
     'POST /api/runs/:id/reviews (reopen)',
   );
   const afterReview = normalizeDetail(reopenedDetail, acquiredText);
-  expect(afterReview.run.review_progress, 'reopen did not move `resolved` back down').toEqual({ resolved: 2, total: 6 });
+  expect(afterReview.run.review_progress, 'reopen did not move `resolved` back down').toEqual({ resolved: 2, total: 7 });
   expect(afterReview.dishes[1], 'reopen left the verdict, the note or the timestamp behind').toEqual(
     golden.dishes[1],
   );

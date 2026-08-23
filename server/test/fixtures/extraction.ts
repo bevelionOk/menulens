@@ -13,6 +13,9 @@ import type { ExtractionResult } from '../../src/pipeline/extraction-adapter';
 //   3  Pulpo a la brasa             T3 (non-EUR marker) and the T2 it implies; T6/T1 as row 2
 //   4  Secreto ibérico a la parrilla T4 (name absent from the acquired text); T6/T1 as row 2
 //   5  Postre del día               T1 (empty allergen list) and T5 (model self-flag)
+//   6  Bogavante del día            T2 (`1.250` is a thousands group, refused — B14); T6 does
+//                                   NOT fire: `(c, l)` is a legend key, a declaration marker
+//                                   (B45), so `crustaceans` stays `declared` with offsets
 const DISHES: ModelDishSignal[] = [
   {
     name: 'Tortilla de patatas',
@@ -81,6 +84,15 @@ const DISHES: ModelDishSignal[] = [
     allergens: [],
     self_flag: true,
     self_flag_reason: 'El postre cambia a diario y la carta no lista sus ingredientes.',
+  },
+  {
+    name: 'Bogavante del día',
+    price_raw: '1.250 €',
+    description: 'Bogavante del día (c, l)',
+    description_provenance: 'extracted',
+    allergens: [{ id: 'crustaceans', provenance: 'declared', evidence_quote: '(c, l)' }],
+    self_flag: false,
+    self_flag_reason: null,
   },
 ];
 

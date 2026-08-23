@@ -8,10 +8,10 @@
       "stage": "saving",
       "failure_reason": null,
       "state": "done",
-      "dish_count": 6,
+      "dish_count": 7,
       "review_progress": {
         "resolved": 0,
-        "total": 6
+        "total": 7
       }
     },
     "dishes": [
@@ -102,11 +102,11 @@
         "confidence_reasons": [
           {
             "rule": "T6",
-            "detail": "mustard: evidence quote carries no declaration marker"
+            "detail": "mustard: evidence quote carries no declaration marker (no contiene/allergens line, no legend key)"
           },
           {
             "rule": "T6",
-            "detail": "sesame: evidence quote carries no declaration marker"
+            "detail": "sesame: evidence quote carries no declaration marker (no contiene/allergens line, no legend key)"
           },
           {
             "rule": "T1",
@@ -140,7 +140,7 @@
         "confidence_reasons": [
           {
             "rule": "T6",
-            "detail": "molluscs: evidence quote carries no declaration marker"
+            "detail": "molluscs: evidence quote carries no declaration marker (no contiene/allergens line, no legend key)"
           },
           {
             "rule": "T1",
@@ -184,11 +184,11 @@
         "confidence_reasons": [
           {
             "rule": "T6",
-            "detail": "milk: evidence quote carries no declaration marker"
+            "detail": "milk: evidence quote carries no declaration marker (no contiene/allergens line, no legend key)"
           },
           {
             "rule": "T6",
-            "detail": "nuts: evidence quote carries no declaration marker"
+            "detail": "nuts: evidence quote carries no declaration marker (no contiene/allergens line, no legend key)"
           },
           {
             "rule": "T1",
@@ -226,6 +226,32 @@
         "review_status": "pending",
         "followup_note": null,
         "reviewed_at": null
+      },
+      {
+        "position": 6,
+        "name": "Bogavante del día",
+        "price_raw": "1.250 €",
+        "price_value": null,
+        "allergens": [
+          {
+            "id": "crustaceans",
+            "provenance": "declared",
+            "evidence_quote": "(c, l)",
+            "match_text": "(c, l)"
+          }
+        ],
+        "description": "Bogavante del día (c, l)",
+        "description_provenance": "extracted",
+        "confidence_reasons": [
+          {
+            "rule": "T2",
+            "detail": "no unambiguous price value"
+          }
+        ],
+        "flag": "uncertain",
+        "review_status": "pending",
+        "followup_note": null,
+        "reviewed_at": null
       }
     ]
   },
@@ -237,10 +263,10 @@
     "stage": "saving",
     "failure_reason": null,
     "state": "done",
-    "dish_count": 6,
+    "dish_count": 7,
     "review_progress": {
       "resolved": 0,
-      "total": 6
+      "total": 7
     }
   },
   "after_review": {
@@ -252,10 +278,10 @@
       "stage": "saving",
       "failure_reason": null,
       "state": "done",
-      "dish_count": 6,
+      "dish_count": 7,
       "review_progress": {
         "resolved": 2,
-        "total": 6
+        "total": 7
       }
     },
     "dishes": [
@@ -346,11 +372,11 @@
         "confidence_reasons": [
           {
             "rule": "T6",
-            "detail": "mustard: evidence quote carries no declaration marker"
+            "detail": "mustard: evidence quote carries no declaration marker (no contiene/allergens line, no legend key)"
           },
           {
             "rule": "T6",
-            "detail": "sesame: evidence quote carries no declaration marker"
+            "detail": "sesame: evidence quote carries no declaration marker (no contiene/allergens line, no legend key)"
           },
           {
             "rule": "T1",
@@ -384,7 +410,7 @@
         "confidence_reasons": [
           {
             "rule": "T6",
-            "detail": "molluscs: evidence quote carries no declaration marker"
+            "detail": "molluscs: evidence quote carries no declaration marker (no contiene/allergens line, no legend key)"
           },
           {
             "rule": "T1",
@@ -428,11 +454,11 @@
         "confidence_reasons": [
           {
             "rule": "T6",
-            "detail": "milk: evidence quote carries no declaration marker"
+            "detail": "milk: evidence quote carries no declaration marker (no contiene/allergens line, no legend key)"
           },
           {
             "rule": "T6",
-            "detail": "nuts: evidence quote carries no declaration marker"
+            "detail": "nuts: evidence quote carries no declaration marker (no contiene/allergens line, no legend key)"
           },
           {
             "rule": "T1",
@@ -470,6 +496,32 @@
         "review_status": "followup",
         "followup_note": "Pedir a cocina la ficha del postre del día.",
         "reviewed_at": "<timestamp>"
+      },
+      {
+        "position": 6,
+        "name": "Bogavante del día",
+        "price_raw": "1.250 €",
+        "price_value": null,
+        "allergens": [
+          {
+            "id": "crustaceans",
+            "provenance": "declared",
+            "evidence_quote": "(c, l)",
+            "match_text": "(c, l)"
+          }
+        ],
+        "description": "Bogavante del día (c, l)",
+        "description_provenance": "extracted",
+        "confidence_reasons": [
+          {
+            "rule": "T2",
+            "detail": "no unambiguous price value"
+          }
+        ],
+        "flag": "uncertain",
+        "review_status": "pending",
+        "followup_note": null,
+        "reviewed_at": null
       }
     ]
   }

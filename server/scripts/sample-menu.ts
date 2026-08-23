@@ -7,4 +7,4 @@ import { buildMenuPdf, MENU_LINES } from '../test/fixtures/menu-pdf.ts';
 
 const out = process.argv[2] ?? 'la-parra.pdf';
 writeFileSync(out, buildMenuPdf([...MENU_LINES]));
-console.log(`wrote ${out} — 6 dishes: 2 reliable, 4 uncertain (T1, T2, T3)`);
+console.log(`wrote ${out} — 7 dishes: 2 reliable, 5 uncertain (T1, T2, T3)`);
