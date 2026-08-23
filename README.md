@@ -104,8 +104,9 @@ with a note, then go back to `/`. In the recent-runs list, **State** is the extr
 extracted columns never change; a review is a verdict, not an edit.
 
 A public URL that also works: `https://vox-restaurant.de/wp-content/uploads/2026/07/Vox-Speisekarte-Englisch-1.pdf`
-(34 dishes; every row `uncertain` on one run, 6 `reliable` on another — B42 and B45 under
-*What breaks in production*).
+(34 dishes; every row `uncertain` — B42 under *What breaks in production*. One run on the
+22nd gave 6 `reliable` rows on ingredient quotes, B45; the rule that closes it was added on
+the 23rd).
 
 **Port already in use?** Postgres is the usual clash. Change the host port in
 `docker-compose.yml` and the port in `DATABASE_URL` to match. For the API, set `PORT` in
@@ -135,14 +136,17 @@ shipped, the 11 deleted ones stay in the PRD, marked as cut.
 
 ### Next, in order
 
-1. The three `core/` fixes the business note names as stop-ship for an internal
-   deployment: B45 (a declaration needs a declaration marker), B10 (no `reliable` on visual
-   runs), B14 (refuse a thousands separator). Hours each; not made before submission on
-   purpose (D28).
+1. Read legend codes and icon keys as declarations (B42), so that a real menu can have
+   `reliable` rows: today the marker list accepts `(a, g)` and `1,3,7` inside a quote but
+   not a bare `A, C, G` line or a single code (`t6-verify.ts`, calibration data).
 2. The review actions cut from story 2.3: batch confirm, reopen, per-row notes.
 3. The evidence panel. Story 1.6 already persists the character offsets of every verified
    quote, so highlighting the source needs no re-matching.
 4. `_bmad-output/implementation-artifacts/deferred-work.md`, in that file's order.
+
+Done on 2026-08-23, after the final review (D29): B45 (a declaration needs a declaration
+marker), B10 (no `reliable` row on a visual source), B14 (a thousands separator is refused,
+not read as a decimal) — `server/src/core/`, re-measured, reviewed.
 
 ### Known limitations
 
@@ -151,9 +155,12 @@ shipped, the 11 deleted ones stay in the PRD, marked as cut.
 - **The recent-runs list is unpaginated.** It grows without bound.
 - **Evidence quotes are shown, not highlighted in the source.** The offsets are persisted;
   the panel that would use them is story 2.4.
-- **A `reliable` row can be wrong on a menu that names ingredients but declares no
-  allergens.** Measured: 6 of 34 on the Vox PDF (B45). The flag means no rule fired; one
-  rule is missing.
+- **The `reliable` set is not stable across runs (B46).** The same Vox PDF gave 0 of 34 and
+  6 of 34 on the 22nd (the 6 were ingredient quotes, B45, since fixed) and 0 of 34 on the
+  23rd; verdicts are keyed to a run.
+- **What counts as a declaration marker is a list** (`contiene`, `allergens`, `(a, g)`,
+  `1,3,7`, …): a single code or a bare letter line is not read, and `(M)` is. Calibration
+  data, in `t6-verify.ts`.
 - **Image and JS-rendered menus behind a URL come back `empty`.** Upload the menu as a PDF
   or a photo instead.
 
@@ -167,7 +174,7 @@ hostile-input sweep that checked it, is **D27**. By kind:
 |---|---|---|
 | Reaching the menu — URL fetch, SSRF, JS/image sites | 6 | JS or image menus come back `empty`; residual SSRF ranges; redirect stalls |
 | The model call — availability, cost, drift | 9 | A 429 fails the run; no char cap on billed text; no PDF page/time budget; SDK pinned to one version |
-| What the arbiter cannot see | 11 | Every row is `uncertain` on a menu that declares no allergens in prose; an ingredient word quoted as a declaration passes as `reliable`; the `reliable` set changes between runs; visual sources pass unverified; hidden HTML text verifies |
+| What the arbiter cannot see | 11 | Every row is `uncertain` on a menu that declares no allergens in prose; the `reliable` set changes between runs; hidden HTML text verifies; an ingredient word quoted as a declaration passed as `reliable` and visual sources passed unverified until the 23rd (B45, B10 fixed) |
 | Lifecycle and clocks | 8 | Non-atomic seriality gate; two timeouts that can disagree; DB and Node clocks on one anchor |
 | One process, no bounds | 2 | Unpaginated list; unbounded strings |
 | Copy and contract drift | 8 | The screen says something other than what the server did |
@@ -175,10 +182,6 @@ hostile-input sweep that checked it, is **D27**. By kind:
 
 The ones I would fix first:
 
-- **An ingredient word passes as an allergen declaration (B45).** Measured on the Vox PDF: 6
-  of 34 rows `reliable`, each on a quote like `Lobster tail` or `hazelnut`, on a menu that
-  declares no allergens. The arbiter checks that the quote exists, not that it declares
-  anything. Fix: T1 downgrades a `declared` entry whose quote has no declaration marker.
 - **DNS rebinding (B2).** The SSRF guard validates the resolved address, then Node's `fetch`
   resolves again; a hostile host can answer with a private IP on the second lookup. Fix: a
   pinned-address dispatcher.
@@ -189,9 +192,12 @@ The ones I would fix first:
   phrase exists in the page text, not that a diner could see it. Fix: drop hidden elements
   in the stripper.
 - **No retry on a transient 429 (B6).** A rate limit fails the run and a human resubmits.
-- **Visual sources cannot be machine-verified (B10).** With no ground text, an evidence
-  quote passes through unverified.
-- **`"1.250 €"` parses as 1.25 (B14).** Fix: refuse the value and flag the row.
+
+Fixed on 2026-08-23 (D29), after being the first three on this list: **B45** — an ingredient
+word quoted as a declaration (`Lobster tail`, `hazelnut`; 6 of 34 rows `reliable` on the Vox
+PDF) now fails T6 for lack of a declaration marker; **B10** — a `declared` allergen on a
+photo or scan fires T6, so no visual row is `reliable`; **B14** — `"1.250 €"` is refused (T2)
+instead of being stored as 1.25.
 
 ## The one test
 
