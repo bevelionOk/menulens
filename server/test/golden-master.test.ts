@@ -286,15 +286,28 @@ test('golden master: one menu upload, through the real API and Postgres, with on
         `so ${rule} has stopped firing`,
     ).toContain(rule);
   }
-  // T6 must downgrade, not merely complain: the unproven `declared` entry becomes
-  // `inferred` with no match, and the allergen gate then fires on it.
+  // T6 must downgrade, not merely complain: every unproven `declared` entry becomes
+  // `inferred`, and the allergen gate then fires on it. A quote absent from the text has
+  // no match; a quote found but carrying no declaration marker (B45, D28 §8) keeps its
+  // offsets — the evidence panel still highlights the ingredient word the model relied on.
   const downgraded = detail.dishes.flatMap((dish) =>
     dish.confidence_reasons.some((reason) => reason.rule === 'T6')
       ? dish.allergens.filter((entry) => entry.provenance === 'inferred')
       : [],
   );
-  expect(downgraded.map((entry) => ({ id: entry.id, match: entry.match })), 'T6 did not downgrade').toEqual([
+  expect(
+    downgraded.map((entry) => ({
+      id: entry.id,
+      match: entry.match === null ? null : acquiredText.slice(entry.match.start, entry.match.end),
+    })),
+    'T6 did not downgrade',
+  ).toEqual([
     { id: 'gluten', match: null },
+    { id: 'mustard', match: 'Aliño con mostaza y semillas de sésamo' },
+    { id: 'sesame', match: 'Aliño con mostaza y semillas de sésamo' },
+    { id: 'molluscs', match: 'Pulpo a la brasa' },
+    { id: 'milk', match: 'Tabla de quesos artesanos con nueces' },
+    { id: 'nuts', match: 'Tabla de quesos artesanos con nueces' },
   ]);
   const reliable = detail.dishes.filter((dish) => dish.flag === 'reliable');
   expect(reliable.map((dish) => dish.name), 'exactly one fixture row must survive triage unflagged').toEqual([

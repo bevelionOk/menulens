@@ -8,9 +8,10 @@ import type { ExtractionResult } from '../../src/pipeline/extraction-adapter';
 //
 //   0  Tortilla de patatas          reliable — verified quotes, clean EUR price, traceable name
 //   1  Croquetas de jamón ibérico   T6 (declared quote absent ⇒ inferred) then T1 (inferred)
-//   2  Ensalada de la casa          T2 ("desde" ⇒ no unambiguous value), EUR so no T3
-//   3  Pulpo a la brasa             T3 (non-EUR marker) and the T2 it implies
-//   4  Secreto ibérico a la parrilla T4 (name absent from the acquired text)
+//   2  Ensalada de la casa          T2 ("desde" ⇒ no unambiguous value), EUR so no T3;
+//                                   T6 (quote found, no declaration marker ⇒ inferred, B45) then T1
+//   3  Pulpo a la brasa             T3 (non-EUR marker) and the T2 it implies; T6/T1 as row 2
+//   4  Secreto ibérico a la parrilla T4 (name absent from the acquired text); T6/T1 as row 2
 //   5  Postre del día               T1 (empty allergen list) and T5 (model self-flag)
 const DISHES: ModelDishSignal[] = [
   {
