@@ -4,6 +4,26 @@ Trade-offs, alternatives considered, and cuts — recorded as they happen, not r
 at the end. Format per entry: context → options → decision → why. Open questions are
 marked **OPEN** and resolved by a later entry or a BMAD artifact.
 
+## Index — the entries that shape the submission
+
+| # | Date | What it settles |
+|---|---|---|
+| D2 | 08-20 | BMAD is the visible method; the custom multi-agent loop stays out of the build |
+| D4 | 08-20 → 21 | The flag is derived by deterministic rules T1–T6, not by the model's confidence |
+| D8 | 08-20 | Ship on 2026-08-25 with documented gaps; never slip |
+| D10 | 08-20 | "Under a minute" retracted to ~3 minutes per menu |
+| D13 | 08-21 | Persist-first run, polling, one technical timeout |
+| D16 | 08-21 | The one test: an integration golden-master over the real stack |
+| D18 | 08-21 | Normalization order pinned after a reviewer caught the accent-stripping bug |
+| D24 | 08-22 | Scope cut: 3 stories merged, 2 deleted, 11 ACs removed; 73 of 84 shipped |
+| D25 | 08-22 | What the one test asserts and the four checks that stay manual |
+| D26 | 08-22 | The CI migration guard replaced after its first claim proved false |
+| D27 | 08-22 | Phase 4: one adversarial pass, 18-input hostile sweep, B28–B41 |
+| D28 | 08-22 | Model tier closed on luna; B45/B46 measured; €2; would-you-ship-it in three answers |
+| D29 | 08-23 | Price revised to €0.50; B45, B10, B14 fixed and re-measured; ruling of prompt 52 reversed |
+
+D21–D23 are build-session triage records; the rest are listed in order below.
+
 ---
 
 ## D1 · 2026-08-20 — Prompt logging from day zero, verbatim
