@@ -9,6 +9,40 @@ menu text it saw it in; deterministic code verifies those quotes against the sou
 marks each row `reliable` or `uncertain`, naming the rule that fired. A row is `reliable`
 only when no rule fired.
 
+## How to read this repo
+
+| What | Where |
+|---|---|
+| The app | Quick start, below |
+| The one test, and why that one | `server/test/golden-master.test.ts`; D16, D25 |
+| BMAD artifacts | `_bmad-output/planning-artifacts/` (brief → PRD → architecture → epics); `_bmad-output/implementation-artifacts/` (one spec per story, `sprint-status.yaml`) |
+| Prompts | `prompts/` — 134 entries, plus the runtime extraction prompt |
+| Decisions | [`DECISIONS.md`](DECISIONS.md), index at the top |
+| Business | [`BUSINESS.md`](BUSINESS.md) |
+| What breaks in production | [`plan/production-breaks.md`](plan/production-breaks.md) |
+| Videos | Section below |
+| Vendored BMAD skills (not my code) | `.claude/skills/`, `_bmad/` |
+
+Ten minutes: [`BUSINESS.md`](BUSINESS.md), [`DECISIONS.md`](DECISIONS.md) (D4, D19, D24, D27, D28), the PRD at
+`_bmad-output/planning-artifacts/prds/prd-full-stack-challenge-2026-08-21/prd.md`, and
+`prompts/06-implementation/`.
+
+| Path | What it is |
+|---|---|
+| `BUSINESS.md` | What I would charge, why, and whether I would ship it — one paragraph. The analysis behind it: `_bmad-output/planning-artifacts/business/`. |
+| `docs/challenge/` | The brief, pinned verbatim, and how I read it (`INTERPRETATION.md`). |
+| `_bmad-output/planning-artifacts/` | PRD, architecture spine, epics, and the review of each. |
+| `_bmad-output/implementation-artifacts/` | One spec per story, plus the deferred-work register. |
+| `prompts/` | Every prompt I wrote, verbatim, in order, plus the runtime extraction prompt. |
+| `plan/` | How I ran the five days. Working notes. |
+
+## Videos
+
+| Video | Link |
+|---|---|
+| Walkthrough (5–10 min) | link pending — recorded 2026-08-24 |
+| Personal (3–5 min) | link pending — recorded 2026-08-24 |
+
 ## Quick start
 
 Requirements: **Node ≥ 22.13**, **Docker** (for Postgres), and an **OpenAI API key**.
@@ -60,8 +94,9 @@ proxies `/api` to the server).
 
 Open the UI, choose *upload* and pick `la-parra.pdf` from the repo root (`open -R
 la-parra.pdf` reveals it in Finder). It is the same PDF the test uploads: six dishes; two,
-sometimes three, come back `reliable` (the model is not deterministic — B46), the rest
-`uncertain` with the rule named under each row.
+sometimes three, come back `reliable` (the automated test mocks the model and fixes one
+`reliable` row; live runs give two or three — B46), the rest `uncertain` with the rule named
+under each row.
 
 What to try on the result: confirm a `reliable` row, mark an `uncertain` one as follow-up
 with a note, then go back to `/`. In the recent-runs list, **State** is the extraction
@@ -79,8 +114,8 @@ read `.env`.
 
 ## Scope
 
-Planned with BMAD: a PRD with 36 requirements and 84 acceptance criteria, broken into
-three epics and 13 stories (8 + 4 + 1). After the first six stories I measured what each
+Planned with BMAD: a PRD with 36 functional requirements and 5 non-functional, 84 acceptance
+criteria, broken into three epics and 13 stories (8 + 4 + 1). After the first six stories I measured what each
 had cost and cut scope ([`DECISIONS.md`](DECISIONS.md), **D24**): 1.7, 2.1 and 2.2 merged
 into one deliverable, 2.3 and 2.4 deleted, 3.1 folded into the submit page, the test
 surface capped at one test. 11 stories delivered, 2 cut; 73 of the 84 acceptance criteria
@@ -158,22 +193,6 @@ The ones I would fix first:
   quote passes through unverified.
 - **`"1.250 €"` parses as 1.25 (B14).** Fix: refuse the value and flag the row.
 
-## How to read this repo
-
-Ten minutes: [`BUSINESS.md`](BUSINESS.md), [`DECISIONS.md`](DECISIONS.md) (D4, D19, D24, D27, D28), the PRD at
-`_bmad-output/planning-artifacts/prds/prd-full-stack-challenge-2026-08-21/prd.md`, and
-`prompts/06-implementation/`.
-
-| Path | What it is |
-|---|---|
-| `BUSINESS.md` | What I would charge, why, and whether I would ship it — one paragraph. The analysis behind it: `_bmad-output/planning-artifacts/business/`. |
-| `docs/challenge/` | The brief, pinned verbatim, and how I read it (`INTERPRETATION.md`). |
-| `_bmad-output/planning-artifacts/` | PRD, architecture spine, epics, and the review of each. |
-| `_bmad-output/implementation-artifacts/` | One spec per story, plus the deferred-work register. |
-| `prompts/` | Every prompt I wrote, verbatim, in order, plus the runtime extraction prompt. |
-| `plan/` | How I ran the five days. Working notes. |
-| `.claude/skills/` | Vendored BMAD v6.11.0. Not my code. |
-
 ## The one test
 
 The brief asks for exactly one automated test and a justification of the choice. It is a
@@ -191,7 +210,8 @@ to start against any database whose name does not end in `_test`.
 It builds the app with the model seam as its only mock, POSTs a fixture through the real
 HTTP surface, polls the run to completion against real Postgres, and compares the payload
 to one committed golden. The fixture makes every triage rule T1–T6 fire at least once and
-leaves one row `reliable`; each rule is asserted by its id, so a regression names the rule
+leaves one row `reliable` (the mock fixes the model output; live runs of the same PDF give
+two or three — B46); each rule is asserted by its id, so a regression names the rule
 that stopped firing. Why this test and not another, and the four behaviours it does not
 cover, are in **D25**.
 
@@ -246,3 +266,7 @@ POST /api/runs ──▶ fetching_source ──▶ extracting ──▶ validati
 | `prompts/` | Every prompt used to build this, logged verbatim, plus the runtime extraction prompt. |
 | `docs/`, `plan/`, `_bmad-output/` | The BMAD trail: brief, PRD, architecture, epics, per-story specs. |
 | `DECISIONS.md` | Every ratified decision, including what was cut and why. |
+
+## Contact
+
+Pablo Javier — pablo@bevelion.com — github.com/bevelionOk
