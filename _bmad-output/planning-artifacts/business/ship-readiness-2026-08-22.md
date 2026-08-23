@@ -1,6 +1,6 @@
 # Ship-readiness analysis — MenuLens
 
-Amendment 2026-08-23: the price in §5 was revised to €0.50 per menu (D29); the cost figures stand.
+Amendment 2026-08-23: the price in §5 was revised to €0.50 per menu (D29); the cost figures stand. The volume arithmetic in §5 and assumptions A1/A2 below still compute against €2, and A11 ("the golden is unaffected") was wrong — the golden changed (D29 §2). Read them as the 22 August record.
 
 **Date**: 2026-08-22 · **Session**: `bmad-agent-analyst` (Mary), branch `docs/business-md` ·
 **Asked by Pablo** (prompt 51): before answering *would you ship it*, analyse in depth why the

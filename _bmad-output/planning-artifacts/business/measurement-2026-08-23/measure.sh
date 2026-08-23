@@ -2,7 +2,9 @@
 # Re-measurement after the B10/B14/B45 core fixes: luna only (D3 closed the tier on luna).
 # Adapted from ../measurement-2026-08-22/measure.sh.
 set -u
-S=/private/tmp/claude-501/-Users-pablojavier-dev-full-stack-challenge/ec26fb9f-3572-466c-903a-a30d6304889b/scratchpad
+# $S is a scratch folder with results/ and menus/: la-parra.pdf from `npx tsx server/scripts/sample-menu.ts`,
+# german.pdf and no-prices.pdf from the heredoc in plan/guides/manual-test-guide.md (hostile set).
+S=${S:-/tmp/menulens-measure}
 REPO=/Users/pablojavier/dev/full-stack-challenge
 DB=postgres://postgres:postgres@localhost:5433/menu_extraction
 API=http://localhost:3100/api/runs

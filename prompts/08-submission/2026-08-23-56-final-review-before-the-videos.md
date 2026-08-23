@@ -70,7 +70,7 @@ Five reviewers ran in parallel; their reports are committed at
 4. **Score.** Reviewer A 78/100 (→ ~83 with the videos); skeptic 67.5/95 (→ ~72). Both
    discounted the three unfixed `core/` rules. Pablo reversed the prompt-52 ruling — the
    fixes had looked out of scope; they are in scope: B45, B10, B14 made (`e9e5eee`,
-   `c5e1e0f`), re-measured (`632c623`), reviewed with `bmad-code-review` — 14 findings, 8
+   `c5e1e0f`), re-measured (`632c623`), reviewed with `bmad-code-review` — 12 findings after dedupe, 8
    patched (`1035f97`: prices inside a quote are not legend codes; marker check on visual
    sources; wider word list; actionable T6 detail; web label "found" not "verified"), 3
    deferred; one fixture row pins B14 and the legend key, a pure assertion pins the visual

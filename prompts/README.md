@@ -15,7 +15,7 @@ Grouped by phase:
 | `04-bmad-epics-stories/` | BMAD epic & story breakdown |
 | `05-bmad-sprint-planning/` | BMAD readiness gate + sprint tracking |
 | `06-implementation/` | Dev prompts (backend, frontend, LLM extraction), code reviews and scope decisions, in sequence |
-| `07-hardening/` | Phase 4: whole-repo review (the one multi-agent pass, D2), hostile-input sweep, failure modes, prompt-log audit |
+| `07-hardening/` | Phase 4: whole-repo review (the first multi-agent pass, D2; the second is the final review, D29), hostile-input sweep, failure modes, prompt-log audit |
 | `08-submission/` | Phases 5–6: the business note (BUSINESS.md), videos, submission |
 | `runtime/` | Versioned runtime prompts the server loads at boot (e.g. `extraction-v1.md`) — not session prompts |
 
@@ -48,7 +48,7 @@ in (mostly Spanish). Each entry's metadata, `Intent`/`In English` line and outco
   as the decision record. Three `.memlog.md` files under `_bmad-output/` are the BMAD
   skills' working memory, written in the chat language (Spanish); they are not deliverables.
 
-### Prompts that carry judgment
+### Prompts that decide something
 
 | File | Gloss |
 |---|---|

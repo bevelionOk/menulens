@@ -20,7 +20,7 @@ marked **OPEN** and resolved by a later entry or a BMAD artifact.
 | D26 | 08-22 | The CI migration guard replaced after its first claim proved false |
 | D27 | 08-22 | Phase 4: one adversarial pass, 18-input hostile sweep, B28–B41 |
 | D28 | 08-22 | Model tier closed on luna; B45/B46 measured; €2; would-you-ship-it in three answers |
-| D29 | 08-23 | Price revised to €0.50; B45, B10, B14 fixed and re-measured; ruling of prompt 52 reversed |
+| D29 | 08-23 | Price revised to €0.50; B45, B10, B14 fixed, B45 re-measured, the other two pinned in the test; ruling of prompt 52 reversed |
 
 D21–D23 are build-session triage records; the rest are listed in order below.
 
@@ -638,7 +638,7 @@ fail one way:
 - **`empty` and `failed` are unobserved.** The mocked seam always returns six dishes (seven since 2026-08-23, D29) and
   never throws, so the zero-dish E9 branch and both failure paths never run. Deleting the
   zero-dish guard yields a `done` run with no rows — the exact state AD-5 forbids — and the
-  golden, which has six dishes, notices nothing.
+  golden, which has six dishes (seven since D29), notices nothing.
 
 The 409 seriality gate was in this list until the review; it moved into the test, because a
 second POST during the live run is an assertion about *this* run's own behaviour and
@@ -791,7 +791,7 @@ What breaks when this leaves the laptop, and what the system does about it today
 
 Secret scan over the working tree and the full history (`git log -p --all` against key,
 token and private-key patterns, plus every path ever added): nothing but `.env.example`
-with placeholders. Prompt-log audit: 122 entries, every one with an outcome; 64 Spanish
+with placeholders. Prompt-log audit: 122 entries at the time, every one with an outcome; 64 Spanish
 prompts had no English line, and an evaluator who scored the log 13/20 said they could
 not assess it — every entry now carries an `In English` summary next to the verbatim
 prompt. That was the "optional" item of plan 04, made mandatory.
@@ -899,8 +899,8 @@ item: three `core/` rules described as "hours each" and left unmade.
    carries the new number.
 
 2. **B45, B10 and B14 fixed** (`e9e5eee`, `c5e1e0f`, review patches `1035f97`), re-measured
-   (`measurement-2026-08-23/`), reviewed with `bmad-code-review` (four layers, 14 findings:
-   8 patched, 3 deferred, spec 1.6 *Review Findings*). Pablo reversed prompt 52's "document,
+   (`measurement-2026-08-23/`), reviewed with `bmad-code-review` (four layers, 12 findings after
+   dedupe: 1 decision, 8 patched, 3 deferred — spec 1.6 *Review Findings*). Pablo reversed prompt 52's "document,
    don't fix": he had chosen it because the fixes looked out of scope; they are in scope and
    recommended (prompt 56). Deviations from D28 §8, accepted at review: the rule lives in
    `core/t6-verify.ts` as a T6 reason (T6 is the only rule that mutates provenance; T1 stays
@@ -912,13 +912,14 @@ item: three `core/` rules described as "hours each" and left unmade.
    entries quoting ingredient phrases, which are the B45 shape; rows 2–4 gained T6 + T1
    reasons, the `reliable` set did not move. One fixture row was added to pin B14 (`1.250 €`
    → T2) and the legend-key marker (`(c, l)` stays `declared`); a pure assertion on the visual
-   branch sits in the same test. Still one test.
+   branch sits in the same test. Still one test. B10 and B14 had no input in the
+   re-measurement; they are pinned by the test, not by a run.
 
 3. **Re-measurement**: luna, same four inputs, 18:31–18:32. Vox 0 of 34 `reliable` — but the
    model returned every allergen `inferred` this run (B46), so the new rule had nothing to
    check live; it is shown deterministically on the 19 `declared` quotes of the 08-22 payload
    (`replay-0822-vox.txt`: 0 markers, 0 of 34). On la-parra the rule fired live twice
-   (`Aliño con mostaza y semillas de sésamo` → inferred). Cost unchanged ($0.0063 for Vox).
+   (`Aliño con mostaza y semillas de sésamo` → inferred). Cost $0.0063 for Vox against $0.0069 the day before.
    No new failure mode; next register row stays B47.
 
 4. **Repo consistency** (the audit's 6 blockers and 29 minor findings): phase dates and

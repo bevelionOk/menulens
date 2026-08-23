@@ -39,6 +39,8 @@ marker check the arbiter now applies (`hasDeclarationMarker`, no model call);
 
 ## la-parra
 
+6 rows at run time: the seventh fixture row (`Bogavante del día 1.250 € (c, l)`) was added after this measurement, in `9cce65b`.
+
 The B45 rule fired on a live run: `Ensalada de la casa`, quote `Aliño con mostaza y
 semillas de sésamo`, `mustard` and `sesame` `declared` → `inferred`, T6 ×2, T1. The row
 was already `uncertain` (T2, `desde 6 €`). The two `reliable` rows (`Tortilla de patatas`,

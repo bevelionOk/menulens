@@ -64,7 +64,7 @@ Collected by build reviews for later focused attention. Append-only.
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-6-triage-core-the-deterministic-arbiter.md`
   summary: Decide (Ask-First) how an ambiguous decimal/thousands separator is treated — `"1.250 €"` currently parses to `1.25` and `"12,345 €"` to `12.35`, both able to reach Ana as `reliable`.
-  evidence: Verified in the scratchpad matrix. The spec's Ask-First list names "thousands-separator heuristics", so the arbiter cannot widen the rule on its own; the honest fix is to refuse (T2) when the single separator is followed by exactly three digits or more than two decimals, which is a refusal rather than a guess. — closed 2026-08-23 (B14 fix)
+  evidence: Verified in the scratchpad matrix. The spec's Ask-First list names "thousands-separator heuristics", so the arbiter cannot widen the rule on its own; the fix is to refuse (T2) when the single separator is followed by exactly three digits or more than two decimals, which is a refusal rather than a guess. — closed 2026-08-23 (B14 fix)
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-6-triage-core-the-deterministic-arbiter.md`
   summary: Decide (Ask-First) whether the pinned normalization chain should drop default-ignorable characters (soft hyphen U+00AD, ZWSP U+200B, BOM U+FEFF) before matching.

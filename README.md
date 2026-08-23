@@ -23,7 +23,7 @@ only when no rule fired.
 | Videos | Section below |
 | Vendored BMAD skills (not my code) | `.claude/skills/`, `_bmad/` |
 
-Ten minutes: [`BUSINESS.md`](BUSINESS.md), [`DECISIONS.md`](DECISIONS.md) (D4, D19, D24, D27, D28), the PRD at
+Ten minutes: [`BUSINESS.md`](BUSINESS.md), [`DECISIONS.md`](DECISIONS.md) (D4, D19, D24, D25, D28, D29), the PRD at
 `_bmad-output/planning-artifacts/prds/prd-full-stack-challenge-2026-08-21/prd.md`, and
 `prompts/06-implementation/`.
 
@@ -40,8 +40,8 @@ Ten minutes: [`BUSINESS.md`](BUSINESS.md), [`DECISIONS.md`](DECISIONS.md) (D4, D
 
 | Video | Link |
 |---|---|
-| Walkthrough (5–10 min) | link pending — recorded 2026-08-24 |
-| Personal (3–5 min) | link pending — recorded 2026-08-24 |
+| Walkthrough (5–10 min) | link pending — to be recorded 2026-08-24 |
+| Personal (3–5 min) | link pending — to be recorded 2026-08-24 |
 
 ## Quick start
 
@@ -93,7 +93,7 @@ The API listens on **http://localhost:3000** and the UI on **http://localhost:51
 proxies `/api` to the server).
 
 Open the UI, choose *upload* and pick `la-parra.pdf` from the repo root (`open -R
-la-parra.pdf` reveals it in Finder). It is the same PDF the test uploads: six dishes; two,
+la-parra.pdf` reveals it in Finder). It is the same PDF the test uploads: seven dishes; two,
 sometimes three, come back `reliable` (the automated test mocks the model and fixes one
 `reliable` row; live runs give two or three — B46), the rest `uncertain` with the rule named
 under each row.
@@ -106,7 +106,8 @@ extracted columns never change; a review is a verdict, not an edit.
 A public URL that also works: `https://vox-restaurant.de/wp-content/uploads/2026/07/Vox-Speisekarte-Englisch-1.pdf`
 (34 dishes; every row `uncertain` — B42 under *What breaks in production*. One run on the
 22nd gave 6 `reliable` rows on ingredient quotes, B45; the rule that closes it was added on
-the 23rd).
+the 23rd — shown by replaying that run's 19 quotes, since the live run of the 23rd returned
+every allergen `inferred`, B46).
 
 **Port already in use?** Postgres is the usual clash. Change the host port in
 `docker-compose.yml` and the port in `DATABASE_URL` to match. For the API, set `PORT` in
@@ -146,7 +147,8 @@ shipped, the 11 deleted ones stay in the PRD, marked as cut.
 
 Done on 2026-08-23, after the final review (D29): B45 (a declaration needs a declaration
 marker), B10 (no `reliable` row on a visual source), B14 (a thousands separator is refused,
-not read as a decimal) — `server/src/core/`, re-measured, reviewed.
+not read as a decimal) — `server/src/core/`, reviewed; B45 re-measured, B10 and B14 pinned
+in the one test.
 
 ### Known limitations
 

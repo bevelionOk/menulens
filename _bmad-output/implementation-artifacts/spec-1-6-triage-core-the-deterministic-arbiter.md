@@ -88,17 +88,17 @@ context:
 
 ### Review Findings
 
-Code review 2026-08-23 (`bmad-code-review`, four layers) over the B45/B10/B14 diff.
+Code review 2026-08-23 (`bmad-code-review`, four layers) over the B45/B10/B14 diff — 12 findings after dedupe; `[x]` = applied (`1035f97`, `9cce65b`) or deferred as marked.
 
-- [ ] [Review][Decision] Web label "(verified in the source text)" beside a T6 no-marker reason — resolved: wording changed to "(found in the source text)" [web/src/components/reasons-list.tsx:45]
-- [ ] [Review][Patch] Digit-code marker matches a bare decimal price (`Pulpo a la brasa 12,50`) — strip decimal and currency-marked numbers before the test [server/src/core/t6-verify.ts:29-32]
-- [ ] [Review][Patch] `visual` branch returns before the marker check [server/src/core/t6-verify.ts:51-54]
-- [ ] [Review][Patch] Legend-key marker accepts diet/size tags `(v)`, `(M)`; comma lists `(a, g)` not accepted [server/src/core/t6-verify.ts:27]
-- [ ] [Review][Patch] Declaration words missing: `contient`, `contienen`, `conté`, `contém`, `contain`, `contener`, `trazas`/`traces`/`spuren`, `enthalten` [server/src/core/t6-verify.ts:25]
-- [ ] [Review][Patch] B14 and the legend-key marker are pinned by nothing: add one fixture row (`1.250 €`, legend quote) and a pure `verifyEvidence(…, 'visual', null)` assertion inside the single test [server/test/fixtures/extraction.ts; server/test/golden-master.test.ts]
-- [ ] [Review][Patch] T6 no-marker detail does not say what a marker is [server/src/core/t6-verify.ts:61]
-- [ ] [Review][Patch] `arbiter.ts` header comment no longer describes the visual path [server/src/core/arbiter.ts:6-9]
-- [ ] [Review][Patch] D28 §8 deviations (T6 placement, golden changed, single digit code narrowed) unrecorded; README "not made on purpose" stale [DECISIONS.md; README.md]
+- [x] [Review][Decision] Web label "(verified in the source text)" beside a T6 no-marker reason — resolved: wording changed to "(found in the source text)" [web/src/components/reasons-list.tsx:45]
+- [x] [Review][Patch] Digit-code marker matches a bare decimal price (`Pulpo a la brasa 12,50`) — strip decimal and currency-marked numbers before the test [server/src/core/t6-verify.ts:29-32]
+- [x] [Review][Patch] `visual` branch returns before the marker check [server/src/core/t6-verify.ts:51-54]
+- [x] [Review][Patch] Legend-key marker accepts diet/size tags `(v)`, `(M)`; comma lists `(a, g)` not accepted [server/src/core/t6-verify.ts:27]
+- [x] [Review][Patch] Declaration words missing: `contient`, `contienen`, `conté`, `contém`, `contain`, `contener`, `trazas`/`traces`/`spuren`, `enthalten` [server/src/core/t6-verify.ts:25]
+- [x] [Review][Patch] B14 and the legend-key marker are pinned by nothing: add one fixture row (`1.250 €`, legend quote) and a pure `verifyEvidence(…, 'visual', null)` assertion inside the single test [server/test/fixtures/extraction.ts; server/test/golden-master.test.ts]
+- [x] [Review][Patch] T6 no-marker detail does not say what a marker is [server/src/core/t6-verify.ts:61]
+- [x] [Review][Patch] `arbiter.ts` header comment no longer describes the visual path [server/src/core/arbiter.ts:6-9]
+- [x] [Review][Patch] D28 §8 deviations (T6 placement, golden changed, single digit code narrowed) unrecorded; README "not made on purpose" stale [DECISIONS.md; README.md]
 - [x] [Review][Defer] A single legend code (`Pulpo 14`) or bare letter codes (`A, C, G`) are not markers [server/src/core/t6-verify.ts:29] — deferred, calibration (B42 legend reading)
 - [x] [Review][Defer] Negated declaration in a quote (`no contiene gluten`) passes the marker test [server/src/core/t6-verify.ts:25] — deferred, the runtime prompt forbids the entry; no observed case
 - [x] [Review][Defer] `text` class with `ground === null` reports "quote not found" [server/src/core/t6-verify.ts:56] — deferred, pre-existing
@@ -135,7 +135,7 @@ Code review 2026-08-23 (`bmad-code-review`, four layers) over the B45/B10/B14 di
 
 **T6 before the gate (AC4/AC6)**
 
-- No quote ⇒ `inferred` on every class; quote not found on a `text` run ⇒ `inferred`; `visual` passes through.
+- No quote ⇒ `inferred` on every class; quote not found on a `text` run ⇒ `inferred`; `visual` passed through until 2026-08-23 — now T6 fires on every `declared` entry and a marker-less quote is `inferred` (Spec Change Log).
   [`t6-verify.ts:16`](../../server/src/core/t6-verify.ts#L16)
 
 **The arbiter (AC3/AC7)**
