@@ -6,6 +6,7 @@
 - **Intent**: Pablo spotted "GitHub Actions" while re-reading the challenge material and
   wants everything GitHub-related audited and left correctly configured before starting
   the PRD.
+- **In English**: Before continuing with the PRD, review and correctly configure something I saw in the requirements: GitHub Actions and everything GitHub-related. Make sure all that is needed is configured and ready to operate, and note it in memory.
 
 ## Prompt (verbatim)
 

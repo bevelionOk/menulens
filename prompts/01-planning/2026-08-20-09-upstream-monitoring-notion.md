@@ -5,6 +5,7 @@
 - **Phase**: Planning (master-plan review)
 - **Intent**: Stay informed of publicly answered candidate questions; evaluate using
   Notion (which Pablo has) to organize the submission presentation.
+- **In English**: Keep me informed if questions get answered upstream. And it says the submission can be attached in Notion — I have Notion; we could organise it there for tidiness. What do you think?
 
 ## Prompt (verbatim)
 

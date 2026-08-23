@@ -5,6 +5,7 @@
 - **Model**: Claude Opus 5
 - **Phase**: 06-implementation (Epic 1 exit gate)
 - **Intent**: Confirm the expectation held where it counts — on GitHub, not on a laptop.
+- **In English**: So now, when pushing and merging the branch, CI should pass with the test included, right? Then: yes, it passed! Already merged.
 
 ## Prompts
 

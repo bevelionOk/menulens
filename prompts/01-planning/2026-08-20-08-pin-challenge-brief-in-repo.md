@@ -6,6 +6,7 @@
 - **Intent**: Ensure the challenge statement itself lives in the repo — not only as a
   derived checklist — pinned to a known version, with our interpretation recorded
   separately.
+- **In English**: Where in the repo is the challenge STATEMENT? That is fundamental. Is looking at their repo enough, or should it be a separate note file, explained with recommendations?
 
 ## Prompt (verbatim)
 

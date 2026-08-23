@@ -5,6 +5,7 @@
 - **Model**: Claude Opus 5
 - **Phase**: 06-implementation (story 1.8 planning)
 - **Intent**: R8 is a hard submission requirement and the easiest one to violate by accident; make the guarantee mechanical instead of declarative.
+- **In English**: Verify that it is ONE test!
 
 ## Prompt
 

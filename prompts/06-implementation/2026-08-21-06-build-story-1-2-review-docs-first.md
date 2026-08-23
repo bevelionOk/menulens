@@ -5,6 +5,7 @@
 - **Model**: Claude Fable 5
 - **Phase**: 06-implementation (story 1-2-shared-contract-data-layer)
 - **Intent**: Open the second build session — invoke the official build workflow for Story 1.2 after re-reading every pertinent document (memory, sprint status, epics, spine, deferred work, previous spec).
+- **In English**: Hi! We continue with the second part of "/bmad-build" for 1-2-shared-contract-data-layer — review all the pertinent documentation first!
 
 ## Prompt
 

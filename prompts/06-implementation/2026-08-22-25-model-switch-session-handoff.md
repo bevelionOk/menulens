@@ -5,6 +5,7 @@
 - **Model**: Claude Fable 5 → next session Claude Opus 5
 - **Phase**: 06-implementation (process: session handoff)
 - **Intent**: Pablo is running out of weekly usage on the current model and asks whether to close the conversation and start a new one with a different model, or switch in place — without the new model burning its quota re-reading the whole context.
+- **In English**: I need to change model because I am running out of weekly usage. Tell me whether it is better to close the conversation here and start a new one with the other model, or whether we can switch without Opus 5 consuming all its context re-reading everything, or whether it inherits it. Then: perfect, we do it that way.
 
 ## Prompt
 

@@ -5,6 +5,7 @@
 - **Model**: Claude Opus 5
 - **Phase**: 06-implementation (story 1.6 — Triage Core: the Deterministic Arbiter)
 - **Intent**: Pick the story up in the worktree the previous session left `in-review` and finish the workflow — adversarial review, triage, presentation, PR.
+- **In English**: "/bmad-build 1-6-triage-core-the-deterministic-arbiter" — resume in the existing worktree bmad/build-1-6 (already implemented, spec in-review): do the review, present, push and PR.
 
 ## Prompt
 

@@ -5,6 +5,7 @@
 - **Model**: Claude Fable 5
 - **Phase**: 06-implementation (story 1-3-persist-first-run-lifecycle-api, close-out)
 - **Intent**: Release the session-close ritual after the workflow completed: decision record, highlights, playbook sync, prompt log, then push and PR.
+- **In English**: Good — close ritual!
 
 ## Prompt
 

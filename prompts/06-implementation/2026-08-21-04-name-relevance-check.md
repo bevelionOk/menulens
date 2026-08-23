@@ -5,6 +5,7 @@
 - **Model**: Claude Fable 5
 - **Phase**: 06-implementation (story 1-1-project-scaffold-foundations, close-out)
 - **Intent**: Resolve the one open item from the 2×2 audit — verify whether the app's name matters for the challenge; if not, ratify keeping "MenuLens".
+- **In English**: Good, all resolved. I think the name is not important for the challenge — verify that; if it is not, we keep the current name.
 
 ## Prompt
 

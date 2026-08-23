@@ -6,6 +6,7 @@
 - **Intent**: confirm decisions/artifacts/trade-offs are all tracked and committed,
   then commit the sprint status on the branch and open the PR, leaving main clean for
   the build phase (which starts in a fresh conversation).
+- **In English**: Green light then. bmad-build will run in a new conversation; here we close planning. Are the decisions tracked, all artifacts committed, and the trade-offs? If something changes during build I come back to this conversation to re-run the skill. Once confirmed, commit the sprint status on the branch and I send the PR, leaving it clean to start implementation.
 
 ## Prompt (verbatim)
 

@@ -5,6 +5,7 @@
 - **Model**: Claude Fable 5
 - **Phase**: 06-implementation (story 1-5-extraction-adapter-the-openai-seam, spec approval)
 - **Intent**: Challenge the spec's most debatable decision (`done` deferred to 1.6 although story 1.5's AC8 claims it) and confirm the model tiers match BUSINESS.md; then approve.
+- **In English**: Point 1: why was `done` placed in 1.5 if it actually goes to 1.6? For the real OpenAI API, are the models defined according to BUSINESS.md? Then: perfect! K A (keep whole, approve).
 
 ## Prompt
 

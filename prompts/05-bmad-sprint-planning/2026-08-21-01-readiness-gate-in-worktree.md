@@ -5,6 +5,7 @@
 - **Phase**: BMAD — sprint planning (readiness gate + tracking generation)
 - **Intent**: run the `/bmad-sprint-planning` skill in an isolated worktree, with the
   explicit instruction to ground the readiness evaluation in the actual artifacts.
+- **In English**: "/bmad-sprint-planning" — start in a new worktree for this task; take into account the files and documentation needed to make the relevant evaluations.
 
 ## Prompt (verbatim)
 

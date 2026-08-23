@@ -5,6 +5,7 @@
 - **Model**: Claude Fable 5
 - **Phase**: 06-implementation (story 1-2-shared-contract-data-layer, close-out)
 - **Intent**: Understand the concrete project value of narrowing `apiErrorCodeSchema` before deciding; then sequence the close — analyze the four consideration questions before pushing, push for CI, run the close ritual.
+- **In English**: What is the benefit for the project of the reviewer's suggestion to narrow apiErrorCodeSchema, if I accept it? After that is clear and I answer, push for checks and the close ritual plus the four key questions, analysed before the push: A) did I consider what I had to? B) did I consider something I should not have? C) did I miss something I had to consider? D) did I leave out what should be left out?
 
 ## Prompt
 

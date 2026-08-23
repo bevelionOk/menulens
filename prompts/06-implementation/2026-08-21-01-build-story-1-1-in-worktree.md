@@ -5,6 +5,7 @@
 - **Model**: Claude Fable 5
 - **Phase**: 06-implementation (story 1-1-project-scaffold-foundations)
 - **Intent**: Open the implementation phase — invoke the official build workflow, isolate the session in a dedicated git worktree, and start with the first sprint story.
+- **In English**: Let's start the implementation: "/bmad-build" — create the dedicated worktree and we begin with 1-1.
 
 ## Prompt
 

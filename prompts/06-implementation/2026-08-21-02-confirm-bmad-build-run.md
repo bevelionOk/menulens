@@ -5,6 +5,7 @@
 - **Model**: Claude Fable 5
 - **Phase**: 06-implementation (story 1-1-project-scaffold-foundations)
 - **Intent**: Process verification while the implementation subagent ran — confirm the session is executing the official BMAD build workflow, not an ad-hoc path.
+- **In English**: You are running this from bmad-build, right?
 
 ## Prompt
 

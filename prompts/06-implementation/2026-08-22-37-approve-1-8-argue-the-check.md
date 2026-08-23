@@ -5,6 +5,7 @@
 - **Model**: Claude Opus 5
 - **Phase**: 06-implementation (story 1.8 Checkpoint 1)
 - **Intent**: Keep the spec whole, approve it, and let the schema-drift guard into CI — provided the reason it is not a second test is written down rather than assumed.
+- **In English**: K A (keep whole, approve) — argue it please: the check, and not a test.
 
 ## Prompt
 

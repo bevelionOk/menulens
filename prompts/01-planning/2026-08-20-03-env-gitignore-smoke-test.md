@@ -6,6 +6,7 @@
 - **Intent**: Verify the freshly created `.env` is correctly placed, make ignoring it
   mandatory before any commit exists, and validate the OpenAI key end-to-end
   (JSON mode + vision) without the key ever entering the chat context.
+- **In English**: Done, the API key is in the repo's `.env` — check the file is in the right place and add it to `.gitignore`, mandatory!
 
 ## Prompt (verbatim)
 
