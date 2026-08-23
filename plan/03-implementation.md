@@ -1,4 +1,4 @@
-# Phase 3 — Implementation via BMAD Build Loop (Aug 22–23)
+# Phase 3 — Implementation via BMAD Build Loop (Aug 21–22)
 
 **Goal**: working app, story by story through `/bmad-build`
 (clarify → plan → implement → review → present), committed per story.
@@ -21,7 +21,7 @@
 
 ## Standing rules for this phase
 
-- Every `/bmad-build` session prompt → `prompts/04-implementation/`.
+- Every `/bmad-build` session prompt → `prompts/06-implementation/`.
 - Idiomatic-stack checklist while coding: Zod schemas shared FE/BE, Drizzle query style,
   Fastify plugins/hooks properly, no `any`, shadcn composition not custom CSS.
 - Assemble a small **test-menu set** (2 real menu URLs, 1 PDF, 1 photo, 1 hostile case:

@@ -1,4 +1,4 @@
-# Phase 2 — BMAD Planning (Aug 21)
+# Phase 2 — BMAD Planning (Aug 20–21)
 
 **Goal**: complete the full BMAD planning chain with real decisions, ending in a
 PASS at the sprint-planning gate. These artifacts are the 25%-weight deliverable.

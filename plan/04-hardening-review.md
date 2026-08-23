@@ -1,4 +1,4 @@
-# Phase 4 — Hardening & Adversarial Review (Aug 23–24)
+# Phase 4 — Hardening & Adversarial Review (Aug 22; planned 23–24)
 
 **Goal**: find what's wrong before the reviewer does, and produce the
 "what breaks in production" material (an auto-reject if we can't answer it).
@@ -17,11 +17,11 @@
 
 | # | Status |
 |---|---|
-| 4.1 | **Done** — three parallel reviewers (correctness / security / stack), 29 findings → 19 deduplicated → 4 fixed, 14 registered (B28–B41). Method and results in D27; prompts in `prompts/07-hardening/` |
+| 4.1 | **Done** — three parallel reviewers (correctness / security / stack), 29 findings → 19 deduplicated: 4 fixed, 14 registered as B28–B41 (two of the 19 were already in the register). Method and results in D27; prompts in `prompts/07-hardening/` |
 | 4.2 | **Done** — commit `466dc29`; the one test and typecheck green |
 | 4.3 | **Done** — 18 inputs, results table in D27; the generator for the hostile set is in the manual-test guide |
 | 4.4 | **Done** — D27 "Production failure modes" |
-| 4.5 | **Done 2026-08-22** — fresh clone, README only, unaided: first pass **3:00** to the UI open, **3:38** to the sample run `done`; second pass on the corrected README, **3:00 including the sample run**. Four README defects found and fixed on the way (#19 the `.env` edit as a command; #20 where the sample file lands; #21 the clone folder name; this PR: generate the sample before `npm run dev`). One UI finding, B44. One false start discounted — a leftover test container of mine with the clone's project name |
+| 4.5 | **Done 2026-08-22** — fresh clone, README only, unaided: first pass **3:00** to the UI open, **3:38** to the sample run `done`; second pass on the corrected README, **3:00 including the sample run**. Four README defects found and fixed on the way (#19 the `.env` edit as a command; #20 where the sample file lands; #21 the clone folder name; PR #22: generate the sample before `npm run dev`). One UI finding, B44. One false start discounted — a leftover test container of mine with the clone's project name |
 | 4.6 | **Done** — clean; D27 |
 | 4.7 | **Done** — 64 English summaries added; "optional" became mandatory |
 

@@ -25,8 +25,8 @@ Re-read before every phase; every task must map to a line here or it gets cut.
 
 ## 2. Deliverables (all required)
 
-- ☑ Repo with runnable app + README — the timed fresh-clone run (plan 4.5) is Pablo's, still pending
-- ☑ `DECISIONS.md` — trade-offs, alternatives considered, what was cut and why (D1–D28)
+- ☑ Repo with runnable app + README — the timed fresh-clone run (plan 4.5) was done 2026-08-22: 3:38 and 3:00
+- ☑ `DECISIONS.md` — trade-offs, alternatives considered, what was cut and why (D1–D29)
 - ☑ BMAD artifacts — product brief / PRD / architecture / stories / per-story specs
 - ☑ `prompts/` — organized so a reviewer can follow the thought sequence (English summaries: plan 4.7)
 - ☐ Personal video (3–5 min) — who, why this role, why a fit
@@ -56,7 +56,7 @@ The brief: *"Effort is your call. We want to see judgment, not hours."* We will 
 - Custom design system — stock shadcn/ui components
 - Speculative features (menu editing, i18n, exports, …) unless the PRD justifies them
 
-**Writing rule (2026-08-23), for every document a reviewer reads — README, DECISIONS, prompt
+**Writing rule (2026-08-22), for every document a reviewer reads — README, DECISIONS, prompt
 outcomes, BUSINESS.md, video scripts:**
 
 - A statement of fact carries no justifying coda ("because…", "— which is…", "rather than…").
@@ -94,12 +94,12 @@ outcomes, BUSINESS.md, video scripts:**
 
 ## 7. Pre-submission checklist
 
-- ☐ Fresh-clone test on a clean checkout: README steps < 5 min to running app
-- ☐ Secret scan over working tree **and git history**
-- ☐ `prompts/` complete, ordered, with outcomes
-- ☐ BMAD output folders committed (not gitignored)
+- ☑ Fresh-clone test on a clean checkout: README steps < 5 min to running app — 2026-08-22, 3:38 and 3:00
+- ☑ Secret scan over working tree **and git history** — 2026-08-22, clean (D27); gitleaks runs over the history in CI
+- ☑ `prompts/` complete, ordered, with outcomes — 2026-08-22 (plan 4.7)
+- ☑ BMAD output folders committed (not gitignored) — 2026-08-22
 - ☐ Both videos recorded, uploaded, linked and playable in incognito
-- ☐ DECISIONS.md covers: single-test justification, confidence-flag logic, production failure modes, cuts
+- ☑ DECISIONS.md covers: single-test justification, confidence-flag logic, production failure modes, cuts — 2026-08-22 (D16, D4, D27, D24)
 - ☑ BUSINESS.md exactly one paragraph
 - ☐ All repo documents in English (prompts stay verbatim in their original language)
 - ☐ Single link opens to everything; submission email sent

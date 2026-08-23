@@ -10,7 +10,7 @@ Beat tags — Walkthrough video: `[WHY]` what we built and why · `[JUDGMENT]` t
 cuts, course-corrections · `[BREAKS]` what breaks in production · `[NEXT]` what would come
 next. Personal video: `[PERSONAL]` who I am / how I work.
 
-**Tone rule for the scripts (2026-08-23).** Entries below were written as they happened
+**Tone rule for the scripts (2026-08-22).** Entries below were written as they happened
 and carry the habits of the tool that wrote them. When distilling: state the fact, the
 number and the date; drop the sentence that explains why the fact is admirable; no
 "camera line" aphorisms; no management vocabulary (judgment, thesis, deliverable, honest,
@@ -225,6 +225,10 @@ meaningful automated test") is a *hard* submission requirement, not a P1. Story 
 now the Epic 1 exit gate, never cuttable under the ladder. Next: the sprint-planning
 gate (readiness verdict + sprint-status file), then build story by story.
 
+---
+
+## Session 5 — Sprint Planning gate (2026-08-21)
+
 **31. The gate that added nothing — and why that's the point** `[JUDGMENT]` `[WHY]`
 The sprint-planning readiness gate ran as a skeptic reading a handoff: could a developer
 build these 13 stories without inventing a single unrecorded decision? Verdict: PASS with
@@ -242,6 +246,10 @@ noise. Judgment stayed where the script can't go: the readiness verdict, and aud
 parser's two warnings (both benign — summary headings, not lost stories). Planning phase
 closed; next conversation is `bmad-build` on Story 1.1, and if epics change mid-build,
 the skill re-runs and refreshes tracking without downgrading any story already in flight.
+
+---
+
+## Session 6 — Story 1.1: Project Scaffold & Foundations (2026-08-21)
 
 **33. The spec is the only thing the implementer ever saw** `[WHY]` `[JUDGMENT]`
 First build session (Story 1.1, worktree `bmad/build-1-1`). The build workflow's shape:
@@ -363,7 +371,7 @@ the implementer's map, and it has to agree with the intent above it.
 
 ---
 
-## Session 7 · 2026-08-22 — Story 1.6 review, the scope audit (D24), and M1
+## Session 11 · 2026-08-22 — Story 1.6 review, the scope audit (D24), and M1
 
 **45. The bug that only an emoji could find** `[BREAKS]` `[JUDGMENT]`
 The evidence offsets — the thing that lets the UI point at the exact words the model
@@ -439,7 +447,7 @@ my own spec (three dependency entries where it says two) and recorded it as an a
 rather than let it slide; and the anti-progress-bar grep I wrote as a verification command
 now returns twenty false positives, so it no longer distinguishes a violation from noise.
 Not-considered-and-rightly: deleting the evidence offsets, the seriality gate and the
-review columns — surgery on untested code two days out, explained in writing instead.
+review columns — surgery on untested code three days before the deadline, explained in writing instead.
 
 ---
 
@@ -534,7 +542,7 @@ BUSINESS.md says all of it in one breath.
 **67. "You had the hours"** `[JUDGMENT]` `[BREAKS]`
 The elicitation pass on the business note, from the evaluator's seat: the strongest attack
 on "three fixes measured in hours, not made" had no written answer. Now it does (D28 §6):
-the brief scores the explanation, the deadline is two days out, the one test does not cover
+the brief scores the explanation, the deadline is three days away, the one test does not cover
 the visual path, the fixes are first under *Next*. Two more things the pass found: the UI
 copy says 9–12 seconds and the Vox menu takes 25 (B25 — do not time it on camera), and the
 B45 run lived only in a scratch database — its payloads are now committed next to the

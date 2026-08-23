@@ -12,10 +12,10 @@
 | # | Phase | Plan file | Target date | Status |
 |---|---|---|---|---|
 | 1 | Foundation & infrastructure | [01-foundation.md](01-foundation.md) | Aug 20 | ✅ DONE |
-| 2 | BMAD planning (brief → sprint gate) | [02-bmad-planning.md](02-bmad-planning.md) | Aug 21 | ✅ DONE |
-| 3 | Implementation (BMAD build loop) | [03-implementation.md](03-implementation.md) | Aug 22–23 | ✅ DONE — 11 stories delivered, 2 cut (D24); the one test green in CI |
-| 4 | Hardening & adversarial review | [04-hardening-review.md](04-hardening-review.md) | Aug 23–24 | 🔄 next up |
-| 5 | Communication: the two videos | [05-communication-videos.md](05-communication-videos.md) | Aug 24 | ⬜ proposed |
+| 2 | BMAD planning (brief → sprint gate) | [02-bmad-planning.md](02-bmad-planning.md) | Aug 20–21 | ✅ DONE |
+| 3 | Implementation (BMAD build loop) | [03-implementation.md](03-implementation.md) | Aug 21–22 | ✅ DONE — 11 stories delivered, 2 cut (D24); the one test green in CI |
+| 4 | Hardening & adversarial review | [04-hardening-review.md](04-hardening-review.md) | Aug 22 (planned 23–24) | ✅ done — D27 |
+| 5 | Communication: the two videos | [05-communication-videos.md](05-communication-videos.md) | Aug 24 | 🔄 in progress — scripts in videos/ |
 | 6 | Submission | [06-submission.md](06-submission.md) | Aug 25 | ⬜ proposed |
 
 Aug 25 is deliberately kept as buffer + submission only. If implementation slips,
@@ -45,7 +45,7 @@ scope is cut (and the cut documented in DECISIONS.md) — the date does not move
 | `prompts/` | Continuous |
 | Personal video (3–5 min) | Phase 5 |
 | Walkthrough video (5–10 min) | Phase 5 (inputs from 4) |
-| BUSINESS.md (one paragraph) | Draft exists; distilled in 6 |
+| BUSINESS.md (one paragraph) | Done 2026-08-22 (D28); price revised 2026-08-23 (D29) |
 | Public repo + submission email | Phase 6 |
 
 ## Detailed guides
@@ -58,3 +58,5 @@ The phase files above are at-a-glance checklists. Depth lives in:
   what each BMAD skill asks, example exchanges, positions to bring, scenarios and moves
 - [guides/implementation-playbook.md](guides/implementation-playbook.md) — Phase 3:
   build-loop mechanics, technical baseline, story DoD, iteration protocol, cut ladder
+- [guides/manual-test-guide.md](guides/manual-test-guide.md) — Phase 4: the fresh-clone
+  test, the hostile-input generator, and what each input should show

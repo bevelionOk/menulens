@@ -1,5 +1,7 @@
 # Ship-readiness analysis — MenuLens
 
+Amendment 2026-08-23: the price in §5 was revised to €0.50 per menu (D29); the cost figures stand.
+
 **Date**: 2026-08-22 · **Session**: `bmad-agent-analyst` (Mary), branch `docs/business-md` ·
 **Asked by Pablo** (prompt 51): before answering *would you ship it*, analyse in depth why the
 system fails in production and which ideal conditions were discarded as out of scope.
@@ -164,7 +166,7 @@ D3 (luna $0.20/$1.20, terra $2/$12 per M tokens).
 
 What the rows say:
 
-- **Cost**: terra is 5–9× luna; both stay under a dime per menu. Vox on luna, the one real
+- **Cost**: terra is 6–18× luna (9× on the 34-dish menu); both stay under a dime per menu. Vox on luna, the one real
   34-dish menu, costs $0.0069 — the number BUSINESS.md uses.
 - **Neither tier delivers the gate alone.** Luna's 6 `reliable` rows on Vox are all
   ingredient quotes (`Lobster tail`, `hazelnut`, `Mozzarella di Bufala`) labelled
