@@ -37,8 +37,9 @@ Each step runnable from the repo root on current `main`. Stop at any ☐ that fa
 4. ☐ Hostile set (`menus/` is git-ignored, so it must be regenerated): run the *hostile set*
    heredoc from [../guides/manual-test-guide.md](../guides/manual-test-guide.md) — it writes
    `menus/injection.pdf` among others.
-5. ☐ Locate the phone photo — Pablo's own file, outside the repo (a printed Italian lunch
-   card, ~43 KB). No photo, no photo beat: drop it per the script's "if long" cut.
+5. ☐ Locate the phone photo — `menu-example.jpg`, Pablo's own file, outside the repo (a
+   printed Italian lunch card, ~43 KB, the 22 Aug real run). No photo, no photo beat: drop
+   it per the script's "if long" cut.
 6. ☐ Seed three runs, in this order, and leave every one at `0 of N resolved`:
    1. URL `https://www.casalucio.es/carta/` → expect `empty` (the site must still serve the
       same page; if not, say on camera what it returned).
