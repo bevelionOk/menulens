@@ -29,7 +29,7 @@ Re-read before every phase; every task must map to a line here or it gets cut.
 - ☑ `DECISIONS.md` — trade-offs, alternatives considered, what was cut and why (D1–D29)
 - ☑ BMAD artifacts — product brief / PRD / architecture / stories / per-story specs
 - ☑ `prompts/` — organized so a reviewer can follow the thought sequence (English summaries: plan 4.7)
-- ☐ Personal video (3–5 min) — who, why this role, why a fit
+- ☑ Personal video (3–5 min) — who, why this role, why a fit — https://youtu.be/xOdAmo6ocsA (2026-08-23, unlisted, checked in incognito)
 - ☐ Walkthrough video (5–10 min) — what, why, what's next, **what breaks in production**
 - ☑ `BUSINESS.md` — one paragraph: price, why, would-I-ship-it (2026-08-22, D28; price revised 2026-08-23, D29; analysis in `_bmad-output/planning-artifacts/business/`)
 - ☐ Single link containing everything + working email → gerdrn+hiring@gmail.com, **by 2026-08-25**

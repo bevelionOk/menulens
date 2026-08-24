@@ -41,7 +41,7 @@ Ten minutes: [`BUSINESS.md`](BUSINESS.md), [`DECISIONS.md`](DECISIONS.md) (D4, D
 | Video | Link |
 |---|---|
 | Walkthrough (5–10 min) | link pending — to be recorded 2026-08-24 |
-| Personal (3–5 min) | link pending — to be recorded 2026-08-24 |
+| Personal (3–5 min) | [youtu.be/xOdAmo6ocsA](https://youtu.be/xOdAmo6ocsA) |
 
 ## Quick start
 
