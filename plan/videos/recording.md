@@ -23,9 +23,41 @@ Scripts: [walkthrough.md](walkthrough.md) (5–10 min, target 8:15) and [persona
 - Repo vocabulary — `reliable`, `uncertain`, `declared`, `inferred`, T1–T6 — said as written, pointed at on screen.
 - If the app does something other than what the script expects, say what it did; do not stop the take.
 
-## Pre-recording state — walkthrough
-Seed, in order, before pressing record, leave all at `0 of N resolved`: the casalucio URL `https://www.casalucio.es/carta/` (`empty` — the site must still serve the same page; if it does not, say what it returned), the phone photo (Pablo's own file, outside the repo — locate it first; the rows and rules it gives are re-seeded live and may differ from earlier runs, B46: say what the screen shows), `menus/injection.pdf` (3 rows, no PWNED — `menus/` is git-ignored; generate it with the heredoc in `plan/guides/manual-test-guide.md`, *hostile set*). Live on camera: only `la-parra.pdf` (7 rows since 2026-08-23; regenerate it with `npx tsx server/scripts/sample-menu.ts` from the current branch). Open: browser at 125 %; editor ≥ 16 pt on README, DECISIONS D24, production-breaks *By category*, `arbiter.ts`, `golden-master.test.ts`, the luna Vox payload of the 22nd (`measurement-2026-08-22/gpt-5.6-luna--vox.json`), `measurement-2026-08-23/replay-0822-vox.txt` and `compare.txt`, BUSINESS.md, DECISIONS D29; GitHub CI log at `Tests 1 passed (1)` and `[i] No changes detected`. Never show `.env`. Recount prompts: `find prompts -name '*.md' -not -name README.md -not -path '*/runtime/*' | wc -l`.
+## Pre-recording — walkthrough, in order
 
+Each step runnable from the repo root on current `main`. Stop at any ☐ that fails; fix before recording.
+
+1. ☐ `git checkout main && git pull` — the take shows today's state (7-row fixture, D29).
+2. ☐ App up, per the README quick start: `docker compose up -d --wait`, `npm install`,
+   `npm run -w server db:migrate`, `npm run dev`. Port clash → README *Port already in use?*.
+3. ☐ Sample menu (7 rows since 2026-08-23):
+   ```bash
+   npx tsx server/scripts/sample-menu.ts
+   ```
+4. ☐ Hostile set (`menus/` is git-ignored, so it must be regenerated): run the *hostile set*
+   heredoc from [../guides/manual-test-guide.md](../guides/manual-test-guide.md) — it writes
+   `menus/injection.pdf` among others.
+5. ☐ Locate the phone photo — `menu-example.jpg`, Pablo's own file, outside the repo (a
+   printed Italian lunch card, ~43 KB, the 22 Aug real run). No photo, no photo beat: drop
+   it per the script's "if long" cut.
+6. ☐ Seed three runs, in this order, and leave every one at `0 of N resolved`:
+   1. URL `https://www.casalucio.es/carta/` → expect `empty` (the site must still serve the
+      same page; if not, say on camera what it returned).
+   2. The phone photo → rows and rules are whatever this run gives (B46): say what the
+      screen shows.
+   3. `menus/injection.pdf` → expect 3 rows, no PWNED.
+   Live on camera goes only `la-parra.pdf`.
+7. ☐ Open, browser at 125 %, editor ≥ 16 pt: README; DECISIONS D24 and D29;
+   production-breaks *By category*; `arbiter.ts`; `golden-master.test.ts`;
+   `measurement-2026-08-22/gpt-5.6-luna--vox.json` at a `declared` row;
+   `measurement-2026-08-23/replay-0822-vox.txt` and `compare.txt`; BUSINESS.md;
+   the GitHub CI log at `Tests 1 passed (1)` and `[i] No changes detected`.
+8. ☐ Never on screen: `.env`, this scripts folder, the agent harness.
+9. ☐ Recount prompts for the §3 line:
+   ```bash
+   find prompts -name '*.md' -not -name README.md -not -path '*/runtime/*' | wc -l
+   ```
+10. ☐ Audio: one 30 s test clip, listened back. Then record — max two takes.
 
 ## Pre-recording state — personal
 
@@ -33,6 +65,8 @@ Nothing on screen. A card with the beat names and the dates is enough; reading a
 
 ## After recording
 
-1. Export 1080p; upload both as unlisted — titles `MenuLens — walkthrough` and `MenuLens — personal`.
-2. Open each link in an incognito window; check length against the brief (5–10, 3–5).
-3. Links into `README.md` (top) and the submission page; tick the two video rows in `REQUIREMENTS.md` §2.
+1. Both done: `MenuLens — walkthrough` https://youtu.be/zbw2f94V02Q (2026-08-25);
+   `MenuLens — personal` https://youtu.be/xOdAmo6ocsA (2026-08-23).
+2. Both links checked in incognito, lengths inside the brief's ranges.
+3. Links in `README.md` *Videos*; both rows ticked in `REQUIREMENTS.md` §2. Remaining:
+   the submission page (Phase 6).

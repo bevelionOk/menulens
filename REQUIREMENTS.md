@@ -29,8 +29,8 @@ Re-read before every phase; every task must map to a line here or it gets cut.
 - ☑ `DECISIONS.md` — trade-offs, alternatives considered, what was cut and why (D1–D29)
 - ☑ BMAD artifacts — product brief / PRD / architecture / stories / per-story specs
 - ☑ `prompts/` — organized so a reviewer can follow the thought sequence (English summaries: plan 4.7)
-- ☐ Personal video (3–5 min) — who, why this role, why a fit
-- ☐ Walkthrough video (5–10 min) — what, why, what's next, **what breaks in production**
+- ☑ Personal video (3–5 min) — who, why this role, why a fit — https://youtu.be/xOdAmo6ocsA (2026-08-23, unlisted, checked in incognito)
+- ☑ Walkthrough video (5–10 min) — what, why, what's next, **what breaks in production** — https://youtu.be/zbw2f94V02Q (2026-08-25, unlisted, checked in incognito)
 - ☑ `BUSINESS.md` — one paragraph: price, why, would-I-ship-it (2026-08-22, D28; price revised 2026-08-23, D29; analysis in `_bmad-output/planning-artifacts/business/`)
 - ☐ Single link containing everything + working email → gerdrn+hiring@gmail.com, **by 2026-08-25**
 
@@ -98,8 +98,8 @@ outcomes, BUSINESS.md, video scripts:**
 - ☑ Secret scan over working tree **and git history** — 2026-08-22, clean (D27); gitleaks runs over the history in CI
 - ☑ `prompts/` complete, ordered, with outcomes — 2026-08-22 (plan 4.7)
 - ☑ BMAD output folders committed (not gitignored) — 2026-08-22
-- ☐ Both videos recorded, uploaded, linked and playable in incognito
+- ☑ Both videos recorded, uploaded, linked and playable in incognito (2026-08-23 / 2026-08-25)
 - ☑ DECISIONS.md covers: single-test justification, confidence-flag logic, production failure modes, cuts — 2026-08-22 (D16, D4, D27, D24)
 - ☑ BUSINESS.md exactly one paragraph
-- ☐ All repo documents in English (prompts stay verbatim in their original language)
+- ☑ All repo documents in English (prompts stay verbatim in their original language) — language audit 2026-08-23, `_bmad-output/planning-artifacts/reviews/final-review-2026-08-23/language-audit.md`
 - ☐ Single link opens to everything; submission email sent
