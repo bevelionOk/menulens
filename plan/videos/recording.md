@@ -65,9 +65,8 @@ Nothing on screen. A card with the beat names and the dates is enough; reading a
 
 ## After recording
 
-1. Export 1080p; upload as unlisted — title `MenuLens — walkthrough` (personal: done
-   2026-08-23, `MenuLens — personal`, https://youtu.be/xOdAmo6ocsA).
-2. Open the link in an incognito window; check length against the brief (walkthrough 5–10;
-   personal 3–5 ✓).
-3. Link into `README.md` *Videos* and the submission page; tick the walkthrough row in
-   `REQUIREMENTS.md` §2 (personal row ticked 2026-08-23).
+1. Both done: `MenuLens — walkthrough` https://youtu.be/zbw2f94V02Q (2026-08-25);
+   `MenuLens — personal` https://youtu.be/xOdAmo6ocsA (2026-08-23).
+2. Both links checked in incognito, lengths inside the brief's ranges.
+3. Links in `README.md` *Videos*; both rows ticked in `REQUIREMENTS.md` §2. Remaining:
+   the submission page (Phase 6).
