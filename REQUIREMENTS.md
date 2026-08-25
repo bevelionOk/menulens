@@ -101,5 +101,5 @@ outcomes, BUSINESS.md, video scripts:**
 - ☑ Both videos recorded, uploaded, linked and playable in incognito (2026-08-23 / 2026-08-25)
 - ☑ DECISIONS.md covers: single-test justification, confidence-flag logic, production failure modes, cuts — 2026-08-22 (D16, D4, D27, D24)
 - ☑ BUSINESS.md exactly one paragraph
-- ☐ All repo documents in English (prompts stay verbatim in their original language)
+- ☑ All repo documents in English (prompts stay verbatim in their original language) — language audit 2026-08-23, `_bmad-output/planning-artifacts/reviews/final-review-2026-08-23/language-audit.md`
 - ☐ Single link opens to everything; submission email sent
